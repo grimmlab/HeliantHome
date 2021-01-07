@@ -1,0 +1,13 @@
+numpy==1.16.6
+scipy==1.2.3
+matplotlib==2.2.5
+seaborn==0.9.1
+pandas==0.24.2
+h5py==.2.10.0
+Pillow==6.2.2
+django==3.1.5
+celery==5.0.5
+python-decouple==3.4
+djangorestframework==3.12.2
+markdown==3.3.3
+django-filter==2.4.0
