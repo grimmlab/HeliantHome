@@ -153,10 +153,13 @@ Phenotype model
 class Phenotype(models.Model):
     name = models.CharField(max_length=255, db_index=True) #phenotype name
     type = models.PositiveSmallIntegerField(choices=PHENOTYPE_TYPE, blank=True, null=True,  db_index=True) #type/category of the phenotype
+    description = models.TextField(blank=True, null=True)
+    method = models.TextField(blank=True, null=True) #how was the scoring of the phenotype done
+    category = models.CharField(max_length=255, blank=True,null=True)
     shapiro_test_statistic = models.FloatField(blank=True, null=True) #Shapiro Wilk test for normality
     shapiro_p_value = models.FloatField(blank=True, null=True) #p-value of Shapiro Wilk test
     integration_date = models.DateTimeField(auto_now_add=True) #date of phenotype integration/submission
-    eo_term = models.ForeignKey('OntologyTerm', related_name='eo_term', null=True, blank=True, on_delete=models.CASCADE)
+    #eo_term = models.ForeignKey('OntologyTerm', related_name='eo_term', null=True, blank=True, on_delete=models.CASCADE)
     uo_term = models.ForeignKey('OntologyTerm', related_name='uo_term', null=True, blank=True, on_delete=models.CASCADE)
     to_term = models.ForeignKey('OntologyTerm', related_name='to_term', null=True, blank=True, on_delete=models.CASCADE)
     species = models.ForeignKey('Species', on_delete=models.CASCADE)
@@ -174,6 +177,17 @@ class Phenotype(models.Model):
             return u"%s (Phenotype)" % (mark_safe(self.name))
         else:
             return u"%s (Phenotype, TO: %s ( %s ))" % (mark_safe(self.name), mark_safe(self.to_term.name), mark_safe(self.to_term.id))
+
+
+"""
+Image
+"""
+class PlantImage(models.Model):
+    image_id = models.CharField(max_length=255, db_index=True, primary_key=True)
+    filename = models.CharField(max_length=255)
+    thumb_filename = models.CharField(max_length=255)
+
+    individual = models.ForeignKey("Individual", on_delete=models.CASCADE)
 
 
 """
