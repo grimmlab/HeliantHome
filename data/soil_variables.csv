@@ -1,0 +1,16 @@
+﻿Abbreviation;Soil variable
+OM;organic matter (%)
+P1;phosphorus, weak Bray (ppm)
+P2 ;phosphorus, strong Bray (ppm)
+BICARB;sodium bicarbonate (ppm)
+K;potassium (ppm)
+MG;magnesium (ppm)
+CA;calcium (ppm)
+NA;sodium (ppm)
+PH;soil pH
+CEC;cation exchange capacity (meq/100g)
+PERCENT_K;percent base saturation K (%)
+PERCENT_MG;percent base saturation Mg (%)
+PERCENT_CA;percent base saturation Ca (%)
+PERCENT_NA;percent base saturation Na (%)
+SOL_SALTS;soluble salts (mmhos/cm)

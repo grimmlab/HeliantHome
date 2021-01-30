@@ -1,0 +1,26 @@
+﻿Abbreviation;Topo-climatic variable
+Latitude;Latitude (˚)
+Longitude;Longitude (˚)
+Elevation ;Elevation (m)
+MAT;mean annual temperature (°C)
+MWMT;mean warmest month temperature (°C)
+MCMT;mean coldest month temperature (°C)
+TD;temperature difference between MWMT and MCMT, or continentality (°C)
+MAP;mean annual precipitation (mm)
+MSP;May to September precipitation (mm)
+AHM;annual heat-moisture index (MAT+10)/(MAP/1000))
+SHM;summer heat-moisture index ((MWMT)/(MSP/1000))
+DD_0;degree-days below 0°C, chilling degree-days
+DD5;degree-days above 5°C, growing degree-days
+DD_18;degree-days below 18°C, heating degree-days
+DD18;degree-days above 18°C, cooling degree-days
+NFFD;the number of frost-free days
+FFP;frost-free period
+bFFP;the day of the year on which FFP begins
+eFFP;the day of the year on which FFP ends
+PAS;precipitation as snow (mm) between August in previous year and July in current year
+EMT;extreme minimum temperature over 30 years
+EXT;extreme maximum temperature over 30 years
+Eref;Hargreaves reference evaporation (mm)
+CMD;Hargreaves climatic moisture deficit (mm)
+RH;mean annual relative humidity (%)

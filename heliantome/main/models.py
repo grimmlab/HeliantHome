@@ -115,17 +115,29 @@ class Population(models.Model):
 Climate Variables
 """
 class ClimateVariable(models.Model):
-    short_desc = models.CharField(max_length=20)
+    id = models.CharField(max_length=20,primary_key=True)
     description = models.CharField(max_length=255)
+
+"""
+Climate Variable Value
+"""
+class ClimateVariableValue(models.Model):
     value = models.FloatField()
-    
+    climate_variable = models.ForeignKey("ClimateVariable",on_delete=models.CASCADE)
+
 """
 Soil Variables
 """
 class SoilVariable(models.Model):
-    short_desc = models.CharField(max_length=20)
+    id = models.CharField(max_length=20,primary_key=True)
     description = models.CharField(max_length=255)
+
+"""
+Soil Variable Value
+"""
+class ClimateVariableValue(models.Model):
     value = models.FloatField()
+    soil_variable = models.ForeignKey("SoilVariable",on_delete=models.CASCADE)
     
 """
 Individuals
@@ -156,12 +168,12 @@ class Phenotype(models.Model):
     description = models.TextField(blank=True, null=True)
     method = models.TextField(blank=True, null=True) #how was the scoring of the phenotype done
     category = models.CharField(max_length=255, blank=True,null=True)
+    sub_category = models.CharField(max_length=255, blank=True,null=True)
     shapiro_test_statistic = models.FloatField(blank=True, null=True) #Shapiro Wilk test for normality
     shapiro_p_value = models.FloatField(blank=True, null=True) #p-value of Shapiro Wilk test
     integration_date = models.DateTimeField(auto_now_add=True) #date of phenotype integration/submission
-    #eo_term = models.ForeignKey('OntologyTerm', related_name='eo_term', null=True, blank=True, on_delete=models.CASCADE)
-    uo_term = models.ForeignKey('OntologyTerm', related_name='uo_term', null=True, blank=True, on_delete=models.CASCADE)
-    to_term = models.ForeignKey('OntologyTerm', related_name='to_term', null=True, blank=True, on_delete=models.CASCADE)
+    ontology = models.ForeignKey('OntologyTerm', null=True, blank=True, on_delete=models.CASCADE)
+    
     species = models.ForeignKey('Species', on_delete=models.CASCADE)
     study = models.ForeignKey('Study', on_delete=models.CASCADE)
     population = models.ForeignKey('Population', on_delete=models.CASCADE)
@@ -176,7 +188,7 @@ class Phenotype(models.Model):
         if self.to_term is None:
             return u"%s (Phenotype)" % (mark_safe(self.name))
         else:
-            return u"%s (Phenotype, TO: %s ( %s ))" % (mark_safe(self.name), mark_safe(self.to_term.name), mark_safe(self.to_term.id))
+            return u"%s (Phenotype, TO: %s ( %s ))" % (mark_safe(self.name), mark_safe(self.to_term.name), mark_safe(self.ontology.id))
 
 
 """
@@ -191,51 +203,17 @@ class PlantImage(models.Model):
 
 
 """
-Custom OntologyTerm QuerySet
-"""
-class OntologyTermQuerySet(models.QuerySet):
-    def to_terms(self):
-        """Retrieve Trait-Ontology terms."""
-        return self.filter(source_id=1)
-    def eo_terms(self):
-        """Retrieve Environment-Ontology terms."""
-        return self.filter(source_id=2)
-    def uo_terms(self):
-        """Retrieve Unit-Ontology terms."""
-        return self.filter(source_id=3)
-
-
-"""
 OntologyTerm model
 """
 class OntologyTerm(models.Model):
     id = models.CharField(max_length=50, primary_key=True)
     name = models.CharField(max_length=255)
-    definition = models.TextField(blank=True, null=True)
-    comment = models.TextField(blank=True, null=True)
-    source = models.ForeignKey('OntologySource',on_delete=models.CASCADE)
-    children = models.ManyToManyField('self', related_name='parents', symmetrical=False)
-
-    objects = OntologyTermQuerySet.as_manager()
 
     def __unicode__(self):
         return '%s (%s)' % (self.name, self.id)
-
+    
     def get_info_url(self):
         """return the url for more information about the OntologyTerm"""
-        return 'https://bioportal.bioontology.org/ontologies/%s?p=classes&conceptid=http://purl.obolibrary.org/obo/%s' % (self.source.acronym, self.id.replace(':', '_'))
+        return 'https://bioportal.bioontology.org/ontologies/PTO?p=classes&conceptid=http://purl.obolibrary.org/obo/%s' % self.id
 
 
-
-"""
-OntologySource model
-Type of the ontology (Trait, Environment, etc)
-"""
-class OntologySource(models.Model):
-    acronym = models.CharField(max_length=50)
-    name = models.CharField(max_length=255)
-    url = models.URLField()
-    description = models.TextField(null=True)
-
-    def __unicode__(self):
-        return '%s (%s)' % (self.name, self.acronym)
