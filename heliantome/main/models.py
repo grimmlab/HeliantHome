@@ -94,8 +94,7 @@ Population model
 class Population(models.Model):
     population_id = models.CharField(max_length=20, db_index=True, primary_key=True) #Population ID
     voucher_number = models.CharField(max_length=20, blank=True,null=True) 
-    herbarium = models.CharField(max_length=20, blank=True,null=True) 
-    individuals_samples = models.IntegerField(blank=True, null=True) #Number of individuals sampled
+    individuals_sampled = models.IntegerField(blank=True, null=True) #Number of individuals sampled
     collection_date = models.DateTimeField(null=True, blank=True)
     country = models.CharField(max_length=255, blank=True, null=True)
     sitename = models.TextField(blank=True, null=True) #name of site if available

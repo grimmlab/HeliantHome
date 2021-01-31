@@ -1,6 +1,7 @@
 import h5py
 import numpy as np
 from main.models import ClimateVariable, SoilVariable, Population, Individual
+from datetime import datetime
 
 TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus argophyllus":73275,
@@ -73,8 +74,19 @@ def store_populations(filename):
                 pop.population_id = sv[0].strip()
                 pop.voucher_number = sv[1].strip()
                 pop.individuals_sampled = int(sv[4].strip())
-                pop.collection_date = 
+                pop.collection_date = datetime.strptime(sv[5].strip(),'%d. %b %y')
+                pop.country = sv[6].strip()
+                pop.sitename = sv[7].strip()
+                pop.location_description = sv[9].strip()
+                pop.elevation = int(sv[10].strip())
+                pop.latitude = float(sv[11].strip().replace(",","."))
+                pop.longitude = float(sv[12].strip().replace(",","."))
+                pop.ecology_description = sv[13].strip()
+                pop.woody_plant = sv[14].strip()
+                #Abundance and Form is missing sv[15]
+                pop.pop_size_est = int(sv[16].strip().replace(".",""))
                 #Individual sv[2]
+                
 
                 #Species sv[3]
     f.close()
