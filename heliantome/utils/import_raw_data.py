@@ -70,23 +70,43 @@ def store_populations(filename):
             header_list = list(map(lambda s: s.replace(".","").replace(" (m)","").replace(" ","_"),sv))
         else:
             pop = Population()
-            for elem in sv:
-                pop.population_id = sv[0].strip()
-                pop.voucher_number = sv[1].strip()
-                pop.individuals_sampled = int(sv[4].strip())
-                pop.collection_date = datetime.strptime(sv[5].strip(),'%d. %b %y')
-                pop.country = sv[6].strip()
-                pop.sitename = sv[7].strip()
-                pop.location_description = sv[9].strip()
-                pop.elevation = int(sv[10].strip())
-                pop.latitude = float(sv[11].strip().replace(",","."))
-                pop.longitude = float(sv[12].strip().replace(",","."))
-                pop.ecology_description = sv[13].strip()
-                pop.woody_plant = sv[14].strip()
-                #Abundance and Form is missing sv[15]
-                pop.pop_size_est = int(sv[16].strip().replace(".",""))
-                #Individual sv[2]
-                
+            pop.population_id = sv[0].strip()
+            pop.voucher_number = sv[1].strip()
+            pop.individuals_sampled = int(sv[4].strip())
+            pop.collection_date = datetime.strptime(sv[5].strip(),'%d. %b %y')
+            pop.country = sv[6].strip()
+            pop.sitename = sv[7].strip()
+            pop.location_description = sv[9].strip()
+            pop.elevation = int(sv[10].strip())
+            pop.latitude = float(sv[11].strip().replace(",","."))
+            pop.longitude = float(sv[12].strip().replace(",","."))
+            pop.ecology_description = sv[13].strip()
+            pop.woody_plant = sv[14].strip()
+            #Abundance and Form is missing sv[15]
+            pop.pop_size_est = int(sv[16].strip().replace(".",""))
+            #Species sv[3]
+            try:
+                species = Species.objects.get(species=sv[3].strip())
+            except:
+                species = Species()
+                species.species = sv[3].strip()
+                species.ncbi_id = TAXONOMY[sv[3].strip()]
+                species.save()
+            
+            pop.species = species
+            #Add climate variables
+            for j in range(17,len(sv)):
+                try:
+                    cv = ClimateVariable.objects.get(id=header_list[j])
+                except:
+                    print("[WARNING]: Climate Variable %s does not exist" % sv[j])
+                cvv = ClimateVariableValue(value=float(sv[j].strip()),climate_variable=cv)
+            #Add soil variables
+            
+            pop.save()
 
-                #Species sv[3]
+            #Individual sv[2]   
+            try:
+                ind = Individual.objects.get()
+
     f.close()
