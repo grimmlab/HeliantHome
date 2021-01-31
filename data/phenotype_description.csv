@@ -87,26 +87,3 @@ Seed traits;Seed shape;seed shape;http://purl.obolibrary.org/obo/TO_0000484;Seed
 Seed traits;Seed shape;seed shape;http://purl.obolibrary.org/obo/TO_0000484;Seed_distal_eccentricity;;The ratio of the height of the internal ellipse to the distance between the top of the ellipse and the bottom of the seed;"At least three inflorescences for each plant were bagged before anthesis and manually crossed to another individual from the same population of origin. Seeds were let to dry on the plant, collected, cleaned and store in an hermetically sealed box containing silica gel. Eigth seeds from each plant were imaged using a high resolution scanner, at a resolution of 2400 dpi. A size and colour standard was included in each picture. Images were analyed using Tomato Analyzer (Rodrigues. et al. 2010); object boundaries in Tomato Analyzer were manually adjusted to exclude seed hair.";ANN_seeds: eg. ANN0801_seedsF1
 Seed traits;Seed shape;seed shape;http://purl.obolibrary.org/obo/TO_0000484;Seed_shape_index_internal;;The ratio of the internal ellipse’s height to its width;"At least three inflorescences for each plant were bagged before anthesis and manually crossed to another individual from the same population of origin. Seeds were let to dry on the plant, collected, cleaned and store in an hermetically sealed box containing silica gel. Eigth seeds from each plant were imaged using a high resolution scanner, at a resolution of 2400 dpi. A size and colour standard was included in each picture. Images were analyed using Tomato Analyzer (Rodrigues. et al. 2010); object boundaries in Tomato Analyzer were manually adjusted to exclude seed hair.";ANN_seeds: eg. ANN0801_seedsF1
 Seed traits;Seed shape;seed shape;http://purl.obolibrary.org/obo/TO_0000484;Seed_eccentricity_area_index;;The ratio of the area of the seed outside the ellipse to the total area of the seed;"At least three inflorescences for each plant were bagged before anthesis and manually crossed to another individual from the same population of origin. Seeds were let to dry on the plant, collected, cleaned and store in an hermetically sealed box containing silica gel. Eigth seeds from each plant were imaged using a high resolution scanner, at a resolution of 2400 dpi. A size and colour standard was included in each picture. Images were analyed using Tomato Analyzer (Rodrigues. et al. 2010); object boundaries in Tomato Analyzer were manually adjusted to exclude seed hair.";ANN_seeds: eg. ANN0801_seedsF1
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;
-;;;;;;;;

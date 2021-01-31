@@ -1,6 +1,6 @@
 import h5py
 import numpy as np
-from main.models import ClimateVariable, SoilVariable
+from main.models import ClimateVariable, SoilVariable, Population, Individual
 
 TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus argophyllus":73275,
@@ -36,15 +36,26 @@ def store_soil_variables(filename="../data/soil_variables.csv"):
     print("Stored Soil Variables")
 
 """
-Read and Store Phenotype Descriptions
+Load Phenotype Descriptions
 """
-def store_phenotype_descriptions(filename):
+def load_phenotype_descriptions(filename="../data/phenotype_description.csv"):
     f = open(filename,"r",encoding="utf-8")
+    phenotypes = {}
     for i,line in enumerate(f):
         if i!=0:
             sv = line.strip().split(";")
-            print(sv)
+            phenotype = {'category':sv[0].strip(),
+                         'sub_category':sv[1].strip(),
+                         'ontology_name':sv[2].strip(),
+                         'ontology_id':sv[3].strip().split("/")[-1],
+                         'name':sv[4].strip(),
+                         'unit':sv[5].strip(),
+                         'description':sv[6].strip(),
+                         'method':sv[7].strip(),
+                         'image':sv[8].strip()}
+            phenotypes[sv[4].strip()] = phenotype
     f.close()
+    return phenotypes
 
 """
 Read and Store Populations & Individuals
@@ -57,6 +68,13 @@ def store_populations(filename):
         if i==0:
             header_list = list(map(lambda s: s.replace(".","").replace(" (m)","").replace(" ","_"),sv))
         else:
+            pop = Population()
             for elem in sv:
-                pass
+                pop.population_id = sv[0].strip()
+                pop.voucher_number = sv[1].strip()
+                pop.individuals_sampled = int(sv[4].strip())
+                pop.collection_date = 
+                #Individual sv[2]
+
+                #Species sv[3]
     f.close()
