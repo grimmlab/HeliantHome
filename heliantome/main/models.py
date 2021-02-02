@@ -114,7 +114,7 @@ class Population(models.Model):
 Climate Variables
 """
 class ClimateVariable(models.Model):
-    id = models.CharField(max_length=20,primary_key=True)
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
 """
@@ -128,7 +128,7 @@ class ClimateVariableValue(models.Model):
 Soil Variables
 """
 class SoilVariable(models.Model):
-    id = models.CharField(max_length=20,primary_key=True)
+    name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
 
 """

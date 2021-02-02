@@ -97,7 +97,7 @@ def store_populations(filename):
             #Add climate variables
             for j in range(17,len(sv)):
                 try:
-                    cv = ClimateVariable.objects.get(id=header_list[j])
+                    cv = ClimateVariable.objects.get(name=header_list[j])
                 except:
                     print("[WARNING]: Climate Variable %s does not exist" % sv[j])
                 cvv = ClimateVariableValue(value=float(sv[j].strip()),climate_variable=cv)
