@@ -33,7 +33,7 @@ class Publication(models.Model):
     doi = models.CharField(max_length=255, db_index=True, blank=True, null=True) #doi
     pubmed_id = models.CharField(max_length=255, db_index=True, blank=True, null=True) #pubmed id
 
-    authors = models.ManyToManyField("Author", null=True, blank=True) #author link
+    authors = models.ManyToManyField("Author", blank=True) #author link
 
     @property
     def author_order_as_list(self):
@@ -89,6 +89,35 @@ class Species(models.Model):
         return u"%s (%s): %s" % (self.species, self.ncbi_id, self.description)
 
 """
+Climate Variables
+"""
+class ClimateVariable(models.Model):
+    name = models.CharField(max_length=255,primary_key=True)
+    description = models.CharField(max_length=255)
+
+"""
+Climate Variable Value
+"""
+class ClimateVariableValue(models.Model):
+    value = models.FloatField()
+    climate_variable = models.ForeignKey("ClimateVariable",on_delete=models.CASCADE)
+
+"""
+Soil Variables
+"""
+class SoilVariable(models.Model):
+    name = models.CharField(max_length=255,primary_key=True)
+    description = models.CharField(max_length=255)
+
+"""
+Soil Variable Value
+"""
+class SoilVariableValue(models.Model):
+    value = models.FloatField()
+    soil_variable = models.ForeignKey("SoilVariable",on_delete=models.CASCADE)
+    
+
+"""
 Population model
 """
 class Population(models.Model):
@@ -107,37 +136,11 @@ class Population(models.Model):
     pop_size_est = models.IntegerField(blank=True, null=True) #population size estimate
 
     species = models.ForeignKey("Species",on_delete=models.CASCADE) #foreign key to species
-    climate_variables = models.ManyToManyField("ClimateVariable", null=True, blank=True)
-    soil_variables = models.ManyToManyField("SoilVariable", null=True, blank=True)
+    climate_variables = models.ManyToManyField("ClimateVariableValue",  blank=True)
+    soil_variables = models.ManyToManyField("SoilVariableValue",  blank=True)
 
-"""
-Climate Variables
-"""
-class ClimateVariable(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
 
-"""
-Climate Variable Value
-"""
-class ClimateVariableValue(models.Model):
-    value = models.FloatField()
-    climate_variable = models.ForeignKey("ClimateVariable",on_delete=models.CASCADE)
 
-"""
-Soil Variables
-"""
-class SoilVariable(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-
-"""
-Soil Variable Value
-"""
-class ClimateVariableValue(models.Model):
-    value = models.FloatField()
-    soil_variable = models.ForeignKey("SoilVariable",on_delete=models.CASCADE)
-    
 """
 Individuals
 """
@@ -187,7 +190,7 @@ class Phenotype(models.Model):
         if self.to_term is None:
             return u"%s (Phenotype)" % (mark_safe(self.name))
         else:
-            return u"%s (Phenotype, TO: %s ( %s ))" % (mark_safe(self.name), mark_safe(self.to_term.name), mark_safe(self.ontology.id))
+            return u"%s (Phenotype, TO: %s ( %s ))" % (mark_safe(self.name), mark_safe(self.ontology.name), mark_safe(self.ontology.id))
 
 
 """

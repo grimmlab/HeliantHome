@@ -13,7 +13,7 @@ TAXONOMY = {"Helianthus annuus":4232,
 """
 Read and Store Climate Variables
 """
-def store_climate_variables(filename="../data/climate_variables.csv"):
+def get_climate_variables(filename="../data/climate_variables.csv"):
     f = open(filename,"r",encoding="utf-8")
     for i,line in enumerate(f):
         if i!=0:
@@ -92,21 +92,34 @@ def store_populations(filename):
                 species.species = sv[3].strip()
                 species.ncbi_id = TAXONOMY[sv[3].strip()]
                 species.save()
-            
             pop.species = species
-            #Add climate variables
+            
+            #Add climate & soil variables
             for j in range(17,len(sv)):
                 try:
                     cv = ClimateVariable.objects.get(name=header_list[j])
+                    cvv = ClimateVariableValue(value=float(sv[j].strip()),climate_variable=cv)
+                    cvv.save()
+                    pop.climate_variables.add(cvv)
                 except:
-                    print("[WARNING]: Climate Variable %s does not exist" % sv[j])
-                cvv = ClimateVariableValue(value=float(sv[j].strip()),climate_variable=cv)
-            #Add soil variables
-            
+                    cv = SoilVariable.objects.get(name=header_list[j])
+                    cvv = SoilVariableValue(value=float(sv[j].strip()),soil_variable=cv)
+                    cvv.save()
+                    pop.soil_variables.add(cvv)
+            #Save Model   
             pop.save()
 
-            #Individual sv[2]   
-            try:
-                ind = Individual.objects.get()
-
+            #Individual sv[2]
+            idv = sv[2].strip().split("-")
+            start = int(idv[0][-4:])
+            end = int(idv[1])
+            for i in range(end-start):
+                ind_id = idv[0][:3] + f'{start+i:04d}'
+                try:
+                    ind = Individual.objects.get(individual_id=ind_id)
+                    print("[Warning]: Species already exists and linked to Population: %s" % ind_id)
+                except:
+                    ind = Individual(individual_id=ind_id,species=species,population=pop)
+                    ind.save()
     f.close()
+    print("[Done]: Stored Populations successfully")
