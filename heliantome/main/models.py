@@ -56,7 +56,7 @@ class Study(models.Model):
     name = models.CharField(max_length=255) #name of study/experiment
     description = models.TextField(blank=True, null=True) #short study description
 
-    species = models.ForeignKey("Species",on_delete=models.CASCADE) #foreign key to species
+    species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     publications = models.ManyToManyField("Publication", blank=True)
     update_date = models.DateTimeField(default=None, null=True, blank=True)
 
@@ -123,6 +123,7 @@ Population model
 class Population(models.Model):
     population_id = models.CharField(max_length=20, db_index=True, primary_key=True) #Population ID
     voucher_number = models.CharField(max_length=20, blank=True,null=True) 
+    herbarium = models.CharField(max_length=20, blank=True,null=True) 
     individuals_sampled = models.IntegerField(blank=True, null=True) #Number of individuals sampled
     collection_date = models.DateTimeField(null=True, blank=True)
     country = models.CharField(max_length=255, blank=True, null=True)
@@ -135,7 +136,7 @@ class Population(models.Model):
     woody_plant = models.TextField(blank=True, null=True) #Major associated woody plant genera
     pop_size_est = models.IntegerField(blank=True, null=True) #population size estimate
 
-    species = models.ForeignKey("Species",on_delete=models.CASCADE) #foreign key to species
+    species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     climate_variables = models.ManyToManyField("ClimateVariableValue",  blank=True)
     soil_variables = models.ManyToManyField("SoilVariableValue",  blank=True)
 
@@ -148,9 +149,17 @@ class Individual(models.Model):
     individual_id = models.CharField(max_length=20, db_index=True,primary_key=True)
     genotype_id = models.CharField(max_length=20, null=True, blank=True)
     
-    species = models.ForeignKey("Species",on_delete=models.CASCADE) #foreign key to species
-    population = models.ForeignKey("Population",on_delete=models.CASCADE) #foreign key to population
+    species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
+    population = models.ForeignKey("Population",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
 
+
+"""
+PhenotypeLink model
+Link Phenotype Values to Individuals
+"""
+class PhenotypeLink(models.Model):
+    individual = models.ForeignKey('Individual',blank=True,null=True,on_delete=models.CASCADE)
+    study = models.ForeignKey('Study',blank=True,null=True,on_delete=models.CASCADE)
 
 """
 PhenotypeValue model
@@ -159,6 +168,7 @@ The indivudal phenotype values. Connected to Phenotype and ObservationUnit
 class PhenotypeValue(models.Model):
     value = models.FloatField()
     phenotype = models.ForeignKey('Phenotype',on_delete=models.CASCADE)
+    phenotype_link = models.ForeignKey('PhenotypeLink',blank=True,null=True,on_delete=models.CASCADE)
 
 
 """
@@ -176,15 +186,14 @@ class Phenotype(models.Model):
     integration_date = models.DateTimeField(auto_now_add=True) #date of phenotype integration/submission
     ontology = models.ForeignKey('OntologyTerm', null=True, blank=True, on_delete=models.CASCADE)
     
-    species = models.ForeignKey('Species', on_delete=models.CASCADE)
-    study = models.ForeignKey('Study', on_delete=models.CASCADE)
-    population = models.ForeignKey('Population', on_delete=models.CASCADE)
+    species = models.ForeignKey('Species',blank=True,null=True, on_delete=models.CASCADE)
+    study = models.ForeignKey('Study',blank=True, null=True,on_delete=models.CASCADE)
 
     def get_values_for_acc(self,individual_id):
         """
         Retrieves the phenotype value for a specific accession
         """
-        return self.phenotypevalue_set.filter(obs_unit__individual_id=individual_id).values_list("value", flat=True)
+        return self.phenotypevalue_set.filter(phenotype_link__individual=individual_id).values_list("value", flat=True)
 
     def __unicode__(self):
         if self.to_term is None:
@@ -201,7 +210,7 @@ class PlantImage(models.Model):
     filename = models.CharField(max_length=255)
     thumb_filename = models.CharField(max_length=255)
 
-    individual = models.ForeignKey("Individual", on_delete=models.CASCADE)
+    individual = models.ForeignKey("Individual",blank=True,null=True, on_delete=models.CASCADE)
 
 
 """
