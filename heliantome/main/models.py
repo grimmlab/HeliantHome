@@ -84,6 +84,7 @@ class Species(models.Model):
     ncbi_id = models.IntegerField(blank=True, null=True) #NCBI Taxonomy ID
     species = models.CharField(max_length=255) #Species name
     description = models.TextField(blank=True, null=True) #short species description
+    species_image = models.CharField(max_length=255, blank=True,null=True) #Species image
 
     def __unicode__(self):
         return u"%s (%s): %s" % (self.species, self.ncbi_id, self.description)

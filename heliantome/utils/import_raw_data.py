@@ -10,6 +10,13 @@ TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus petiolaris subsp. petiolaris":74151,
             "Helianthus niveus subsp. canescens":74145}
 
+SPECIES_IMAGES = {"Helianthus annuus":"/static/images/species/helianthus_annuus.jpg",
+                  "Helianthus argophyllus":"/static/images/species/helianthus_argophyllus.jpg",
+                  "Helianthus annuus subsp. texanus":"/static/images/species/helianthus_annuus_subsp_texanus.jpg",
+                  "Helianthus petiolaris subsp. fallax":"/static/images/species/helianthus_petiolaris_subsp_fallax.jpg",
+                  "Helianthus petiolaris subsp. petiolaris":"/static/images/species/helianthus_petiolaris_subsp_petiolaris.jpg",
+                  "Helianthus niveus subsp. canescens":"/static/images/species/helianthus_niveus_subsp_canescens.jpg"}
+
 """
 Read and Store Climate Variables
 """

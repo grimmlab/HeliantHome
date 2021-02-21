@@ -2,7 +2,8 @@
 {% load static %}
 <html>
 	<head>
-		<title>HeliantHome - A public server for sunflower phenotypes</title>
+		<title>{% block title %}HeliantHome - A public server for sunflower phenotype{% endblock title%}</title>
+                <link rel="icon" type="image/png" href="/static/img/heliantome_logo.png">
 		<link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css" media="screen,projection"/>
 		<link type="text/css" rel="stylesheet" href="/static/css/jquery-jvectormap-2.0.5.css" media="screen,projection"/>
 		<link rel="stylesheet" href="/static/css/bootstrap-icons.css"/>

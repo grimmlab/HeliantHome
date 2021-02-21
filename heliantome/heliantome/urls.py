@@ -17,9 +17,13 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from base import views as base
+from main import views as main
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',base.landing_page, name="landing_page"),
     url(r'^about/',base.about_page, name="about_page"),
+    url(r'^species/',main.species_overview, name="species_overview"),
 ]
+
