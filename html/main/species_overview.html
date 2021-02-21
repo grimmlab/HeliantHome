@@ -5,7 +5,7 @@
 {% block content %}
 
 <nav class="navbar navbar-light bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-  <ol class="breadcrumb ms-1">
+  <ol class="breadcrumb ms-3 fw-bolder fs-6 mt-2">
     <li class="breadcrumb-item"><a href="/">Home</a></li>
     <li class="breadcrumb-item active" aria-current="page">Species Overview</li>
   </ol>
@@ -28,7 +28,7 @@
     <br># Populations: {{sp.population_set.count}}
     <br># Individuals: {{sp.individual_set.count}}
     <br># Phenotypes: {{sp.phenotype_set.count}}</small></p>
-    <p class="card-text">{{sp.description}}</p>
+    <!--<p class="card-text">{{sp.description}}</p>-->
     <a href="#" class="btn btn-secondary position-absolute bottom-0 end-0 mb-3 me-3">See details ...</a>
   </div>
 </div>
