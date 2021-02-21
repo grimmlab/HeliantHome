@@ -2,10 +2,14 @@
 {% load static %}
 <html>
 	<head>
-		<title>HeliantOME - A public server for sunflower phenotypes</title>
+		<title>HeliantHome - A public server for sunflower phenotypes</title>
 		<link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css" media="screen,projection"/>
+		<link type="text/css" rel="stylesheet" href="/static/css/jquery-jvectormap-2.0.5.css" media="screen,projection"/>
 		<link rel="stylesheet" href="/static/css/bootstrap-icons.css"/>
 		<script type="text/javascript" src="/static/js/bootstrap.bundle.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-3.5.1.slim.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-jvectormap-2.0.5.min.js"></script>
+		<script type="text/javascript" src="/static/js/jquery-jvectormap-us-aea.js"></script>
 	</head>
 
 
@@ -38,7 +42,7 @@
      <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Populations</a>
@@ -57,7 +61,7 @@
      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item float-end">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="/about/">About</a>
         </li>
         <li class="nav-item float-end">
           <a class="nav-link" href="#">FAQ</a>
@@ -74,9 +78,11 @@
         {% block content %}{% endblock content %}
 	</div>
 	<div class="footer">
+	    <div class="container-fluid">
     		<hr>
-		    HeliantOME is a public database for sunflower phenotypes (&copy 2021)
-	</div>
+		    HeliantHome is a public database for sunflower phenotypes (&copy 2021)
+	    </div>
+        </div>
 
 	</body>
 </html>

@@ -5,8 +5,8 @@
 <div class="mask" style="background-color: rgba(0, 0, 0, 0.4);height: 100%">
       <div class="d-flex justify-content-center align-items-center h-100">
         <div class="text-white">
-          <h1 class="mb-3">HeliantOME</h1>
-          <h4 class="mb-3">HeliantOME is a public database collection of different sunflower species phenotypes</h4>
+          <h1 class="mb-3">HeliantHome</h1>
+          <h4 class="mb-3">HeliantHome is a public database collection of different sunflower species phenotypes</h4>
           <a class="btn btn-outline-light btn-lg" href="#!" role="button"
             >Guided Tour</a
           >
@@ -21,19 +21,27 @@
 <div class="container px-4">
 <div class="row justify-content-md-center gx-5">
 
-<div class="col col-sm-auto">
+<div class="col col-sm">
     <div class="card">
       <div class="card-header">
         <h4>Summary Statistics</h4>
       </div>
       <div class="card-body">
-         <div class="icon">
-             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-flower3 text-success fs-3 me-3"></i>{{ number_species }} Species</span><br>
-             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-globe text-primary fs-3 me-3"></i>{{ number_populations }} Populations</span><br>
-             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-people fs-3 me-3"></i>{{ number_individuals }} Individuals</span><br>
-             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-rulers text-secondary fs-3 me-3"></i>{{ number_phenotypes }} Phenotypes</span><br>
-             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-images text-danger fs-3 me-3"></i>{{ number_images }} Images</span><br>
-        </div>
+             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-flower3 text-success fs-3 me-3"></i>{{ number_species }} Species
+             <a href="/species/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-globe text-primary fs-3 me-3"></i>{{ number_populations }} Populations
+             <a href="/populations/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-people fs-3 me-3"></i>{{ number_individuals }} Individuals
+             <a href="/individuals/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-rulers text-secondary fs-3 me-3"></i>{{ number_phenotypes }} Phenotypes
+             <a href="/phenotypes"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-4"><i class="bi bi-images text-danger fs-3 me-3"></i>{{ number_images }} Images
+             <a href="/images/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
       </div>
     </div>
 </div>
@@ -43,8 +51,7 @@
       <div class="card-header">
         <h4>Population Map</h4>
       </div>
-      <div class="card-body">
-
+      <div class="card-body mh-100" id="world-map" style="height:400px">
       </div>
     </div>
 </div>
@@ -52,6 +59,28 @@
 </div>
 </div>
 
+<script>
+    $(function(){
+        $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
+            regionStyle: {
+                initial: {
+                    fill: '#999999'
+                },
+            },
+            scaleColors: ['#C8EEFF', '#0071A4'],
+            normalizeFunction: 'polynomial',
+            hoverOpacity: 0.7,
+            hoverColor: false,
+            markerStyle: {
+                initial: {
+                    fill: '#F8E23B',
+                    stroke: '#383f47'
+                }
+            },
+            markers: {{ map_data|safe }}
+        });
+    });
+</script>
 
 
 

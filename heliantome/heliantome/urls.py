@@ -20,5 +20,6 @@ from base import views as base
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url('',base.landing_page, name="landing_page"),
+    url(r'^$',base.landing_page, name="landing_page"),
+    url(r'^about/',base.about_page, name="about_page"),
 ]
