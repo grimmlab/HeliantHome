@@ -27,6 +27,10 @@ urlpatterns = [
     url(r'^species/$',main.species_overview, name="species_overview"),
     url(r'^species/(?P<ncbi_id>[0-9]+)/$',main.species_details, name="species_details"),
     url(r'^populations/$',main.population_overview, name="population_overview"),
-    url(r'^populations/(?P<population_id>.*)/$',main.population_detail, name="population_detail"),
+    url(r'^population/(?P<population_id>.*)/$',main.population_detail, name="population_detail"),
+    url(r'^phenotypes/$',main.phenotype_overview, name="phenotype_overview"),
+    url(r'^phenotype/(?P<id>[0-9]+)/$',main.phenotype_detail, name="phenotype_detail"),
+    url(r'^individuals/$',main.individuals_overview, name="individuals_overview"),
+    url(r'^individual/(?P<individual_id>.*)/$',main.individual_detail, name="individual_detail"),
 ]
 

@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.db.models import Count
 from django_tables2 import RequestConfig
 import django_tables2 as tables
 
+
 from main.models import Species, Population
-from main.tables import PopulationTable
+from main.models import Phenotype, Individual
+from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 
 import json
 
@@ -48,6 +51,49 @@ def population_overview(request):
 Population Detail Page
 '''
 def population_detail(request,population_id):
+    pop = Population.objects.get(population_id=population_id)
+    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
+    vdata = {}
+    vdata['map_data'] = json.dumps(data)
+    return render(request,'main/population_detail.html',vdata)
+
+'''
+Phenotype Overview Page
+'''
+def phenotype_overview(request):
+    obs = Phenotype.objects.all()
+    table = PhenotypeTable(obs, order_by="id")
+    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    vdata = {}
+    vdata['table'] = table
+    return render(request,'main/phenotype_overview.html',vdata)
+
+'''
+Phenotype Detail Page
+'''
+def phenotype_detail(request,id):
+    pop = Population.objects.get(population_id=population_id)
+    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
+    vdata = {}
+    vdata['map_data'] = json.dumps(data)
+    return render(request,'main/population_detail.html',vdata)
+
+'''
+Individual Overview Page
+'''
+def individuals_overview(request):
+    #.objects.annotate(count_phenotypes=Count('observationunit__phenotypevalue__phenotype', distinct=True)).prefetch_related('genotype_set').all()
+    obs = Individual.objects.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
+    table = IndividualsTable(obs, order_by="individual_id")
+    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    vdata = {}
+    vdata['table'] = table
+    return render(request,'main/individuals_overview.html',vdata)
+
+'''
+Individual Detail Page
+'''
+def individual_detail(request,individual_id):
     pop = Population.objects.get(population_id=population_id)
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
     vdata = {}
