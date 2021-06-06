@@ -1,8 +1,105 @@
 {% extends "base.html" %}
 
-{% block title %} HeliantHome - About{% endblock title %}
+{% block title %} HeliantHome - Species Details for {{species.species}}{% endblock title %}
 
 {% block content %}
+<nav class="navbar navbar-light bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb ms-3 fw-bolder fs-6 mt-2">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/species/">Species Overview</a></li>
+    {% ifequal message "no_species" %}
+    <li class="breadcrumb-item active" aria-current="page">No species found</li>
+    {% else %}
+    <li class="breadcrumb-item active" aria-current="page">Details for {{species.species}}</li>
+    {% endifequal %}
+  </ol>
+</nav>
+
+<br>
+
+{% ifequal message "no_species" %}
+
+<div class="container px-4">
+<div class="row justify-content-md-center gx-5">
+
+<div class="alert alert-warning d-flex align-items-center" role="alert">
+  <span style="white-space:nowrap" ><i class="bi bi-exclamation-triangle me-3">
+    Species with NCBI ID {{ncbi_id}} not found!
+  </i></span>
+</div>
+
+</div>
+</div>
+
+{% else %}
+
+<div class="container">
+<div class="card">
+    <div class="card-header">
+        <h4>Detailed Information for <em>{{species.species}}</em></h4>
+    </div>
+
+<div class="row m-3">
+ <div class="col">
+<div class="row g-0">
+<div class="col-md-4">
+  <img src="{{species.species_image}}" class="card-img-top" alt="{{species.species}}">
+  </div>
+  <div class="col-md-8">
+  <div class="card-body">
+    <h5 class="card-title">{{species.species}}</h5>
+    <p class="card-text"><small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{species.ncbi_id}}" target="_blank">{{species.ncbi_id}}</a>
+    <br># Populations: {{species.population_set.count}}
+    <br># Individuals: {{species.individual_set.count}}
+    <br># Phenotypes: {{species.phenotype_set.count}}</small></p>
+    <!--<p class="card-text">{{species.description}}</p>-->
+  </div>
+</div>
+  {% ifnotequal species.description None  %}
+  <h5 class="mt-2">Description</h5><br>
+  {{species.description}}
+  {% endifnotequal %}
+</div>
+
+</div>
+<div class="col">
+
+    <div class="card">
+      <div class="card-header">
+        <h4>Population Map for <em>{{species.species}}</em></h4>
+      </div>
+      <div class="card-body mh-100" id="world-map" style="height:400px">
+      </div>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+{% endifequal %}
+
+<script>
+    $(function(){
+        $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
+            regionStyle: {
+                initial: {
+                    fill: '#999999'
+                },
+            },
+            scaleColors: ['#C8EEFF', '#0071A4'],
+            normalizeFunction: 'polynomial',
+            hoverOpacity: 0.7,
+            hoverColor: false,
+            markerStyle: {
+                initial: {
+                    fill: '#F8E23B',
+                    stroke: '#383f47'
+                }
+            },
+            markers: {{ map_data|safe }}
+        });
+    });
+</script>
 
 
 {% endblock content %}
