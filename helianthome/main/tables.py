@@ -17,7 +17,7 @@ class PopulationTable(tables.Table):
     pop_size_est = tables.Column(accessor="pop_size_est", verbose_name="Population Size Estimate")
 
     class Meta:
-        attrs = {"class": "table table-striped table-hover"}
+        attrs = {"class": "table table-striped table-hover table-light"}
 
 class IndividualsTable(tables.Table):
     """
@@ -42,6 +42,16 @@ class PhenotypeTable(tables.Table):
     category = tables.Column(accessor="category", verbose_name="Category")
     sub_category = tables.Column(accessor="sub_category", verbose_name="Subcategory")
     ontology = tables.Column(accessor="ontology.name", verbose_name="Ontology")
+
+    class Meta:
+        attrs = {"class": "table table-striped table-hover"}
+
+class ImageTable(tables.Table):
+    """
+    Table that is displayed in the image overview
+    """
+    individual_id = tables.LinkColumn("individual_detail",args=[A('individual.individual_id')], verbose_name="Individual ID", order_by="individual.individual_id")
+    species = tables.LinkColumn("species_details",args=[A('individual.species.ncbi_id')], text=lambda record: record.individual.species.species, verbose_name="Species", order_by="individual.species.species")
 
     class Meta:
         attrs = {"class": "table table-striped table-hover"}

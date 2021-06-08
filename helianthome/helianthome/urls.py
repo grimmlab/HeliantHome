@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 from base import views as base
 from main import views as main
@@ -32,5 +34,6 @@ urlpatterns = [
     url(r'^phenotype/(?P<id>[0-9]+)/$',main.phenotype_detail, name="phenotype_detail"),
     url(r'^individuals/$',main.individuals_overview, name="individuals_overview"),
     url(r'^individual/(?P<individual_id>.*)/$',main.individual_detail, name="individual_detail"),
-]
+    url(r'^images/$',main.image_overview, name="image_overview"),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

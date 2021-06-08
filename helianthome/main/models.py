@@ -207,8 +207,7 @@ class Phenotype(models.Model):
 Image
 """
 class PlantImage(models.Model):
-    image_id = models.CharField(max_length=255, db_index=True, primary_key=True)
-    filename = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
     thumb_filename = models.CharField(max_length=255)
 
     individual = models.ForeignKey("Individual",blank=True,null=True, on_delete=models.CASCADE)

@@ -1,5 +1,6 @@
 import h5py
 import numpy as np
+import os
 from main.models import *
 from datetime import datetime
 
@@ -10,12 +11,12 @@ TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus petiolaris subsp. petiolaris":74151,
             "Helianthus niveus subsp. canescens":74145}
 
-SPECIES_IMAGES = {"Helianthus annuus":"/static/images/species/helianthus_annuus.jpg",
-                  "Helianthus argophyllus":"/static/images/species/helianthus_argophyllus.jpg",
-                  "Helianthus annuus subsp. texanus":"/static/images/species/helianthus_annuus_subsp_texanus.jpg",
-                  "Helianthus petiolaris subsp. fallax":"/static/images/species/helianthus_petiolaris_subsp_fallax.jpg",
-                  "Helianthus petiolaris subsp. petiolaris":"/static/images/species/helianthus_petiolaris_subsp_petiolaris.jpg",
-                  "Helianthus niveus subsp. canescens":"/static/images/species/helianthus_niveus_subsp_canescens.jpg"}
+SPECIES_IMAGES = {"Helianthus annuus":"/media/images/species/helianthus_annuus.jpg",
+                  "Helianthus argophyllus":"/media/images/species/helianthus_argophyllus.jpg",
+                  "Helianthus annuus subsp. texanus":"/media/images/species/helianthus_annuus_subsp_texanus.jpg",
+                  "Helianthus petiolaris subsp. fallax":"/media/images/species/helianthus_petiolaris_subsp_fallax.jpg",
+                  "Helianthus petiolaris subsp. petiolaris":"/media/images/species/helianthus_petiolaris_subsp_petiolaris.jpg",
+                  "Helianthus niveus subsp. canescens":"/media/images/species/helianthus_niveus_subsp_canescens.jpg"}
 
 """
 Read and Store Climate Variables
@@ -77,6 +78,7 @@ def store_populations(filename):
                 species = Species()
                 species.species = sv[4].strip()
                 species.ncbi_id = TAXONOMY[sv[4].strip()]
+                species.species_image = SPECIES_IMAGES[sv[4].strip()]
                 species.save()
             pop.species = species
             #Save Model   
@@ -205,6 +207,43 @@ def store_phenotype_values(filename):
     f.close()
     print("Successfully stored %s phenotypes" % filename)
 
+def store_images(filename):
+    f = open(filename,"r",encoding="utf-8")
+    media = "/media/images/thumbnails/"
+    for i,line in enumerate(f):
+        if i!=0:
+            sv = line.strip().split(",")
+            ind = Individual.objects.get(individual_id=sv[0].strip())
+            for img in sv[1:]:
+                if img.strip()=="nan":
+                    continue
+                elif img.strip().split("_")[-1]=="flower":
+                    pimg = PlantImage(category="flower",thumb_filename=os.path.join(media,os.path.join("flower",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="leafbottom":
+                    pimg = PlantImage(category="leafbottom",thumb_filename=os.path.join(media,os.path.join("leafbottom",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="leaftop":
+                    pimg = PlantImage(category="leaftop",thumb_filename=os.path.join(media,os.path.join("leaftop",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="plantside":
+                    pimg = PlantImage(category="plantside",thumb_filename=os.path.join(media,os.path.join("plantside",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="planttop":
+                    pimg = PlantImage(category="planttop",thumb_filename=os.path.join(media,os.path.join("planttop",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="primarybranch":
+                    pimg = PlantImage(category="primarybranch",thumb_filename=os.path.join(media,os.path.join("primarybranch",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="seed":
+                    pimg = PlantImage(category="seed",thumb_filename=os.path.join(media,os.path.join("seed",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+                elif img.strip().split("_")[-1]=="leafstrip":
+                    pimg = PlantImage(category="leafstrip",thumb_filename=os.path.join(media,os.path.join("leafstrip",img.strip() + ".jpg")),individual=ind)
+                    pimg.save()
+    f.close()
+    print("Successfully stored %s thumbnails" % filename)
+
 def integrate():
     store_climate_variables(filename="../data/climate_variables.csv")
     store_soil_variables(filename="../data/soil_variables.csv")
@@ -214,3 +253,4 @@ def integrate():
     store_phenotype_values(filename="../data/phenotypes_h_n_canescens.csv")
     store_phenotype_values(filename="../data/phenotypes_h_p_fallax.csv")
     store_phenotype_values(filename="../data/phenotypes_h_p_petiolaris.csv")
+    store_images(filename="../data/thumbnails.txt")

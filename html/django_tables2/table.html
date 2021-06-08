@@ -15,7 +15,7 @@
             {% if "#Phenotypes" in column.header %}
             <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
             {% else %}
-            <th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a></th>
+            <th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}" class="link-secondary">{{ column.header }}</a></th>
             {% endif %}
             {% else %}
             <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
@@ -30,7 +30,7 @@
         {% block table.tbody.row %}
         <tr class="{{ row.tr_class }}">
             {% for column, cell in row.items %}
-                <td {{ column.attrs.td.as_html }}>{{ cell }}</td>
+                <td {{ column.attrs.td.as_html }} class="link-dark">{{ cell }}</td>
             {% endfor %}
         </tr>
         {% endblock table.tbody.row %}

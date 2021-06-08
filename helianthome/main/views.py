@@ -6,7 +6,9 @@ import django_tables2 as tables
 
 from main.models import Species, Population
 from main.models import Phenotype, Individual
+from main.models import PlantImage
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
+from main.tables import ImageTable
 
 import json
 
@@ -94,8 +96,22 @@ def individuals_overview(request):
 Individual Detail Page
 '''
 def individual_detail(request,individual_id):
-    pop = Population.objects.get(population_id=population_id)
+    ind = Individual.objects.get(individual_id=individual_id)
+    pop = ind.population
+    print(ind.plantimage_set.all())
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
     vdata = {}
     vdata['map_data'] = json.dumps(data)
-    return render(request,'main/population_detail.html',vdata)
+    vdata['ind'] = ind
+    return render(request,'main/individual_detail.html',vdata)
+
+'''
+Image Overview Page
+'''
+def image_overview(request):
+    images = PlantImage.objects.all()
+    table = ImageTable(images, order_by="individual_id")
+    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    vdata = {}
+    vdata['table'] = table
+    return render(request,'main/image_overview.html',vdata)
