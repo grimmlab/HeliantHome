@@ -14,14 +14,87 @@
   </ol>
 </nav>
 
-<div class="container mt-2">
+<div class="container mt-2 container-fluid content-row">
 
 <div class="row">
 
 <div class="col">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
-        Details for {{ind.individual_id}}
+        Details for Individual: <span class="fw-bold">{{ind.individual_id}}</span>
+      </div>
+  
+      <div class="card-body p-0 m-2">
+        <p class="card-text">
+        <!--<small class="text-muted">-->
+        <div class="container p-0 m-0">
+        <div class="row">
+        <div class="col">
+        Individual ID:
+        </div>
+        <div class="col">
+        {{ind.individual_id}}
+        </div>
+        </div>
+        
+        <div class="row">
+        <div class="col">
+        Genotype ID:
+        </div>
+        <div class="col">
+        {{ind.genotype_id}}
+        </div>
+        </div>
+
+        <div class="row pt-3">
+        <div class="col">
+        Species:
+        </div>
+        <div class="col">
+        <a href="/species/{{ind.species.ncbi_id}}/"><em>{{ind.species.species}}</em></a>
+        </div>
+        </div>
+        
+        <div class="row">
+        <div class="col">
+        Species NCBI-ID:
+        </div>
+        <div class="col">
+        <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{ind.species.ncbi_id}}" target="_blank">{{ind.species.ncbi_id}}</a>
+        </div>
+        </div>
+        
+        <div class="row pt-3">
+        <div class="col">
+        Population:
+        </div>
+        <div class="col">
+        <a href="/population/{{ind.population.population_id}}/">{{ind.population.population_id}}</a>
+        </div>
+        </div>
+
+        <div class="row pt-3">
+        <div class="col">
+        Measured Phenotypes:
+        </div>
+        <div class="col">
+        {{ind.phenotypelink_set.count}}
+        </div>
+        </div>
+        
+        <div class="row pt-3">
+        <div class="col">
+        Images:
+        </div>
+        <div class="col">
+        {{ind.plantimage_set.count}}
+        </div>
+        </div>
+        
+
+        </div>
+        <!--</small>-->
+        </p>
       </div>
 
       
@@ -49,26 +122,29 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Imaging Data Overview
+                <strong>Images for Individual {{ind.individual_id}}</strong>
               </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body">
+              <div class="text-center">
               {% for im in ind.plantimage_set.all %}
-                    {{im.category}}
-                    <img src="{{im.thumb_filename}}" class="rounded-1" alt="{{im.category}}">
+                    <figure class="figure m-2 p-2">
+                     <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
+                     <figcaption class="figure-caption">Image shows <strong>{{im.category}}</strong></figcaption>
+                    </figure>
                 {% endfor %}
-
+                </div>
               </div>
             </div>
           </div>
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingTwo">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Measured Phenotypes
+                <strong>Measured Phenotypes</strong>
               </button>
             </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
               </div>

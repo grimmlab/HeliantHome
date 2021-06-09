@@ -4,6 +4,8 @@
 	<head>
 		<title>{% block title %}HeliantHome - A public server for sunflower phenotype{% endblock title%}</title>
                 <link rel="icon" type="image/png" href="/static/img/helianthome_logo.png">
+                <link rel="apple-touch-icon-precomposed" type="image/png" href="/static/img/helianthome_logo.png">
+                <link rel="apple-touch-icon" type="image/png" href="/static/img/helianthome_logo.png">
 		<link type="text/css" rel="stylesheet" href="/static/css/bootstrap.min.css" media="screen,projection"/>
 		<link type="text/css" rel="stylesheet" href="/static/css/jquery-jvectormap-2.0.5.css" media="screen,projection"/>
 		<link rel="stylesheet" href="/static/css/bootstrap-icons.css"/>
@@ -11,6 +13,7 @@
 		<script type="text/javascript" src="/static/js/jquery-3.5.1.slim.min.js"></script>
 		<script type="text/javascript" src="/static/js/jquery-jvectormap-2.0.5.min.js"></script>
 		<script type="text/javascript" src="/static/js/jquery-jvectormap-us-aea.js"></script>
+                <meta name="viewport" content="width=device.width, initial-scale=1">
 	</head>
 
 
@@ -40,6 +43,9 @@
         <span class="navbar-brand mb-0 h1">
             <img src="/static/img/helianthome_logo.png" alt="" width="24" height="24" class="d-inline-block align-top">HeliantHome</img>
         </span>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+        </button>
      <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">

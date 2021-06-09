@@ -11,16 +11,16 @@
   </ol>
 </nav>
 
-<div class="container pt-2">
-<div class="row justify-content-md-center gx-5">
+<div class="container pt-2 container-fluid content-row">
+<div class="row justify-content-md-center ">
 
 {% for sp in species %}
 <div class="card p-2 m-2" style="max-width: 600px;">
-<div class="row g-0">
-<div class="col-md-4">
+<div class="row">
+<div class="col-sm-4">
   <img src="{{sp.species_image}}" class="card-img-top rounded-3" alt="{{sp.species}}">
   </div>
-  <div class="col-md-8">
+  <div class="col-sm-8">
   <div class="card-body">
     <h5 class="card-title"><em>{{sp.species}}</em></h5>
     <p class="card-text"><small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{sp.ncbi_id}}" target="_blank">{{sp.ncbi_id}}</a>

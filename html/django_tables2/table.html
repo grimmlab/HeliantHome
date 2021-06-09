@@ -2,7 +2,7 @@
 {% load querystring from django_tables2 %}
 {% load trans blocktrans from i18n %}
 {% if table.page %}
-<div class="table-container">
+<div class="table-responsive">
 
 
 {% block table %}
@@ -12,11 +12,7 @@
         <tr>
         {% for column in table.columns %}
             {% if column.orderable %}
-            {% if "#Phenotypes" in column.header %}
-            <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
-            {% else %}
-            <th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}" class="link-secondary">{{ column.header }}</a></th>
-            {% endif %}
+            <th {{ column.attrs.th.as_html }}><a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}" class="link-secondary">{{ column.header }}<i class="bi bi-chevron-expand"></i></a></th>
             {% else %}
             <th {{ column.attrs.th.as_html }}>{{ column.header }}</th>
             {% endif %}
@@ -30,7 +26,7 @@
         {% block table.tbody.row %}
         <tr class="{{ row.tr_class }}">
             {% for column, cell in row.items %}
-                <td {{ column.attrs.td.as_html }} class="link-dark">{{ cell }}</td>
+                <td {{ column.attrs.td.as_html }} class="link-dark fw-light">{{ cell }}</td>
             {% endfor %}
         </tr>
         {% endblock table.tbody.row %}
