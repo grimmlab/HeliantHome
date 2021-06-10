@@ -76,10 +76,14 @@ Phenotype Detail Page
 def phenotype_detail(request,id):
     try:
         pheno = Phenotype.objects.get(id=id)
+        message = "ok"
     except:
         pheno = None
+        message = "no_pheno"
     vdata = {}
     vdata['pheno'] = pheno
+    vdata['pid'] = id
+    vdata['message'] = message
     return render(request,'main/phenotype_detail.html',vdata)
 
 '''

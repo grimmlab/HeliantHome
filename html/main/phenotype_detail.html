@@ -14,6 +14,22 @@
   </ol>
 </nav>
 
+{% ifequal message "no_pheno" %}
+
+<div class="container mt-2 container-fluid content-row">
+<div class="row">
+
+<div class="alert alert-warning d-flex align-items-center" role="alert">
+  <span style="white-space:nowrap" ><i class="bi bi-exclamation-triangle me-3">
+    Phenotype with ID={{pid}} not found!
+  </i></span>
+</div>
+
+</div>
+</div>
+
+{% else %}
+
 <div class="container mt-2 container-fluid content-row">
 <div class="row">
 
@@ -28,19 +44,19 @@
         <!--<small class="text-muted">-->
             <div class="row">
                 <div class="col">
-                Individual ID:
+                Phenotype ID:
                 </div>
                 <div class="col">
-                {{ind.individual_id}}
+                {{pheno.id}}
                 </div>
             </div>
         
             <div class="row">
                 <div class="col">
-                Genotype ID:
+                Name:
                 </div>
                 <div class="col">
-                {{ind.genotype_id}}
+                {{pheno.name}}
                 </div>
             </div>
 
@@ -49,7 +65,7 @@
                 Species:
                 </div>
                 <div class="col">
-                <a href="/species/{{ind.species.ncbi_id}}/"><em>{{ind.species.species}}</em></a>
+                <a href="/species/{{pheno.species.ncbi_id}}/" class="fw-lighter text-decoration-none"><em>{{pheno.species.species}}</em></a>
                 </div>
             </div>
         
@@ -58,34 +74,48 @@
                 Species NCBI-ID:
                 </div>
                 <div class="col">
-                <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{ind.species.ncbi_id}}" target="_blank">{{ind.species.ncbi_id}}</a>
+                <span style="white-space:nowrap"><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{pheno.species.ncbi_id}}" target="_blank" class="fw-lighter text-decoration-none">{{pheno.species.ncbi_id}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
         
             <div class="row pt-3">
                 <div class="col">
-                Population:
+                Category:
                 </div>
                 <div class="col">
-                <a href="/population/{{ind.population.population_id}}/">{{ind.population.population_id}}</a>
+                    {{pheno.category}}
                 </div>
             </div>
 
-            <div class="row pt-3">
+            <div class="row">
                 <div class="col">
-                Measured Phenotypes:
+                Sub-Category:
                 </div>
                 <div class="col">
-                {{ind.phenotypelink_set.count}}
+                {{pheno.sub_category}}
                 </div>
             </div>
         
-            <div class="row pt-3">
+            <div class="row">
                 <div class="col">
-                Images:
+                Type:
                 </div>
                 <div class="col">
-                {{ind.plantimage_set.count}}
+                {% if pheno.type == 0 %}
+                    Quantitative
+                {% elif pheno.type == 1 %}
+                    Categorical
+                {% else %}
+                    Binary
+                {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                Ontology:
+                </div>
+                <div class="col">
+                <span style="white-space:nowrap"><a href="{{pheno.ontology.get_info_url}}" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.ontology.name}} (ID: {{pheno.ontology.id}}) <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
         
@@ -150,7 +180,7 @@
 
 <!--container end-->
 </div>
-
+{% endifequal %}
 <script>
     $(function(){
         $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
