@@ -8,7 +8,7 @@ from main.models import Species, Population
 from main.models import Phenotype, Individual
 from main.models import PlantImage
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
-from main.tables import ImageTable
+from main.tables import ImageTable, IndividualPhenotypeTable
 
 import json
 
@@ -74,11 +74,13 @@ def phenotype_overview(request):
 Phenotype Detail Page
 '''
 def phenotype_detail(request,id):
-    pop = Population.objects.get(population_id=population_id)
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
+    try:
+        pheno = Phenotype.objects.get(id=id)
+    except:
+        pheno = None
     vdata = {}
-    vdata['map_data'] = json.dumps(data)
-    return render(request,'main/population_detail.html',vdata)
+    vdata['pheno'] = pheno
+    return render(request,'main/phenotype_detail.html',vdata)
 
 '''
 Individual Overview Page
@@ -98,11 +100,17 @@ Individual Detail Page
 def individual_detail(request,individual_id):
     ind = Individual.objects.get(individual_id=individual_id)
     pop = ind.population
-    print(ind.plantimage_set.all())
+    phenotype_values = ind.phenotypelink_set.values("individual__species__ncbi_id","individual__species__species",
+                                                    "phenotypevalue__phenotype__name","phenotypevalue__value",
+                                                    "phenotypevalue__phenotype__category","phenotypevalue__phenotype__sub_category",
+                                                    "phenotypevalue__phenotype__type","phenotypevalue__phenotype_id")
+    table = IndividualPhenotypeTable(phenotype_values, order_by="individual_phenotypevalue__phenotype__name")
+    RequestConfig(request, paginate={"per_page":100}).configure(table)
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
     vdata = {}
     vdata['map_data'] = json.dumps(data)
     vdata['ind'] = ind
+    vdata['table'] = table
     return render(request,'main/individual_detail.html',vdata)
 
 '''

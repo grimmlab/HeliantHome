@@ -2,6 +2,10 @@ import django_tables2 as tables
 from django_tables2.utils import A
 from django.utils.safestring import mark_safe
 
+PHENOTYPE_TYPE = {0:'Quantitative',
+                  1:'Categorical',
+                  2:'Binary'}
+
 class PopulationTable(tables.Table):
     """
     Table that is displayed in the population overview
@@ -62,3 +66,25 @@ class ImageTable(tables.Table):
 
     class Meta:
         attrs = {"class": "table table-striped table-hover"}
+
+class IndividualPhenotypeTable(tables.Table):
+    """
+    Display Individual Phenotype Values
+    """
+    species = tables.LinkColumn("species_details",args=[A('individual__species__ncbi_id')], text=lambda record: record['individual__species__species'], verbose_name="Species", order_by="individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
+    id = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="ID", order_by="phenotypevalue__phenotype_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotypevalue__phenotype_id'])
+    name = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="Phenotype Name", order_by="phenotypevalue__phenotype__name",attrs={"a": {"class": "text-decoration-none"}}, text=lambda record: record['phenotypevalue__phenotype__name'])
+    value = tables.Column(accessor="phenotypevalue__value", verbose_name="Value")
+    category = tables.Column(accessor="phenotypevalue__phenotype__category", verbose_name="Category")
+    sub_category = tables.Column(accessor="phenotypevalue__phenotype__sub_category", verbose_name="Subcategory")
+    type = tables.Column(accessor="phenotypevalue__phenotype__type", verbose_name="Type")
+    
+    def render_type(self,record):
+        try:
+            return PHENOTYPE_TYPE[record['phenotypevalue__phenotype__type']]
+        except:
+            return record['phenotypevalue__phenotype__type']
+
+    class Meta:
+        attrs = {"class": "table table-striped table-hover"}
+
