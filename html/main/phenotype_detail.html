@@ -39,7 +39,7 @@
         Details for Phenotype: <span class="fw-bold">{{pheno.name}} (ID: {{pheno.id}})</span>
       </div>
   
-      <div class="card-body p-0 m-2">
+      <div class="card-body p-0 m-2" style="font-size:10.5pt">
         <p class="card-text">
         <!--<small class="text-muted">-->
             <div class="row">
@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="row pt-3">
+            <div class="row pt-2">
                 <div class="col">
                 Species:
                 </div>
@@ -78,7 +78,7 @@
                 </div>
             </div>
         
-            <div class="row pt-3">
+            <div class="row pt-2">
                 <div class="col">
                 Category:
                 </div>
@@ -118,7 +118,36 @@
                 <span style="white-space:nowrap"><a href="{{pheno.ontology.get_info_url}}" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.ontology.name}} (ID: {{pheno.ontology.id}}) <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
-        
+            
+            <div class="row pt-2">
+                <div class="col">
+                Samples:
+                </div>
+                <div class="col">
+                {{pheno.phenotypevalue_set.count}}
+                </div>
+            </div>
+            
+            <div class="row pt-2">
+                <div class="col">
+                    <strong>Phenotype Description</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                {{pheno.description}}
+                </div>
+            </div>
+            <div class="row pt-2">
+                <div class="col">
+                    <strong>Phenotype Scoring</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                {{pheno.method}}
+                </div>
+            </div>
         <!--</small>-->
         </p>
       </div>
@@ -126,11 +155,12 @@
 </div>
 
 <div class="col-sm-12 col-md-6 pt-2">
-    <div class="card" style="border-color:#9FC4E1;">
+    <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
-        {{ind.population.country}} – {{ind.population.sitename}} <span class="fw-lighter">(Lat={{ind.population.latitude}}° Long={{ind.population.longitude}}°)</span>
+        Population Map
       </div>
-      <div class="card-body mh-100" id="world-map" style="height:300px">
+      <div class="card-body">
+      <div id="world-map" style="height:400px"></div>
       </div>
     </div>
 </div>
@@ -146,7 +176,7 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
               <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <strong>Images for Individual {{ind.individual_id}}</strong>
+                <strong>Plots for Phenotype {{pheno.name}}</strong>
               </button>
             </h2>
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -166,11 +196,12 @@
           <div class="accordion-item">
             <h2 class="accordion-header" id="headingTwo">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                <strong>{{ind.phenotypelink_set.count}} Measured Phenotypes for Individual with ID: {{ind.individual_id}}</strong>
+                <strong>Phenotype Values</strong>
               </button>
             </h2>
             <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
               <div class="accordion-body">
+                {% render_table table %}
               </div>
             </div>
           </div>

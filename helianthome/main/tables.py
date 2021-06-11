@@ -74,7 +74,7 @@ class IndividualPhenotypeTable(tables.Table):
     species = tables.LinkColumn("species_details",args=[A('individual__species__ncbi_id')], text=lambda record: record['individual__species__species'], verbose_name="Species", order_by="individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
     id = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="ID", order_by="phenotypevalue__phenotype_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotypevalue__phenotype_id'])
     name = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="Phenotype Name", order_by="phenotypevalue__phenotype__name",attrs={"a": {"class": "text-decoration-none"}}, text=lambda record: record['phenotypevalue__phenotype__name'])
-    value = tables.Column(accessor="phenotypevalue__value", verbose_name="Value")
+    value = tables.Column(accessor="phenotypevalue__value", verbose_name="Phenotype Value")
     category = tables.Column(accessor="phenotypevalue__phenotype__category", verbose_name="Category")
     sub_category = tables.Column(accessor="phenotypevalue__phenotype__sub_category", verbose_name="Subcategory")
     type = tables.Column(accessor="phenotypevalue__phenotype__type", verbose_name="Type")
@@ -84,6 +84,23 @@ class IndividualPhenotypeTable(tables.Table):
             return PHENOTYPE_TYPE[record['phenotypevalue__phenotype__type']]
         except:
             return record['phenotypevalue__phenotype__type']
+
+    class Meta:
+        attrs = {"class": "table table-striped table-hover"}
+
+class PhenotypeValueTable(tables.Table):
+    """
+    Display Phenotype Values
+    """
+    species = tables.LinkColumn("species_details",args=[A('phenotype_link__individual__species__ncbi_id')], text=lambda record: record['phenotype_link__individual__species__species'], verbose_name="Species", order_by="phenotype_link__individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
+    population_id = tables.LinkColumn("population_detail",args=[A('phenotype_link__individual__population_id')], verbose_name="Population ID", order_by="phenotype_link__individual__population_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__population_id'])
+    individual_id = tables.LinkColumn("individual_detail",args=[A('phenotype_link__individual__individual_id')], verbose_name="Individual ID", order_by="phenotype_link__individual__individual_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__individual_id'])
+    value = tables.Column(accessor="value", verbose_name="Phenotype Value")
+    country = tables.Column(accessor="phenotype_link__individual__population__country", verbose_name="Country")
+    sitename = tables.Column(accessor="phenotype_link__individual__population__sitename", verbose_name="Sitename")
+    latitude = tables.Column(accessor="phenotype_link__individual__population__latitude", verbose_name="Latitude")
+    longitude = tables.Column(accessor="phenotype_link__individual__population__longitude", verbose_name="Longitude")
+    
 
     class Meta:
         attrs = {"class": "table table-striped table-hover"}

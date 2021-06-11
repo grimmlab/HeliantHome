@@ -8,7 +8,7 @@ from main.models import Species, Population
 from main.models import Phenotype, Individual
 from main.models import PlantImage
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
-from main.tables import ImageTable, IndividualPhenotypeTable
+from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
 
 import json
 
@@ -74,16 +74,37 @@ def phenotype_overview(request):
 Phenotype Detail Page
 '''
 def phenotype_detail(request,id):
+    vdata = {}
     try:
         pheno = Phenotype.objects.get(id=id)
         message = "ok"
+        vdata['pheno'] = pheno
+        value_set = pheno.phenotypevalue_set.values("phenotype_link__individual__individual_id",
+                                                    "phenotype_link__individual__population_id",
+                                                    "phenotype_link__individual__population__latitude",
+                                                    "phenotype_link__individual__population__longitude",
+                                                    "phenotype_link__individual__population__country",
+                                                    "phenotype_link__individual__population__sitename","value",
+                                                    "phenotype_link__individual__species__species",
+                                                    "phenotype_link__individual__species__ncbi_id")
+        
+        data = [{"latLng": [elem['phenotype_link__individual__population__latitude'], 
+                            elem["phenotype_link__individual__population__longitude"]], 
+                 "name": elem["phenotype_link__individual__species__species"] + ": " + 
+                         elem['phenotype_link__individual__population_id'] + " (" + 
+                         elem['phenotype_link__individual__population__country'] + ", " + 
+                         elem['phenotype_link__individual__population__sitename'] + ")"} for elem in value_set]   
+        
+        vdata['map_data'] = json.dumps(data)
+        
+        table = PhenotypeValueTable(value_set, order_by="phenotype_link__individual__individual_id")
+        RequestConfig(request, paginate={"per_page":50}).configure(table)
+        vdata['table'] = table
     except:
-        pheno = None
         message = "no_pheno"
-    vdata = {}
-    vdata['pheno'] = pheno
     vdata['pid'] = id
     vdata['message'] = message
+
     return render(request,'main/phenotype_detail.html',vdata)
 
 '''

@@ -157,7 +157,7 @@ def store_phenotype_values(filename):
                 if pn in pd:
                     p = pd[pn]
                     pheno = Phenotype()
-                    pheno.name = pn
+                    pheno.name = pn.remove("_"," ")
                     pheno.type = p['type']
                     pheno.description = p['description']
                     pheno.method = p['method']
