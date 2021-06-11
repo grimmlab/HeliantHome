@@ -3,7 +3,7 @@ from django.db.models import Count
 from django_tables2 import RequestConfig
 import django_tables2 as tables
 
-
+from base.views import marker_color
 from main.models import Species, Population
 from main.models import Phenotype, Individual
 from main.models import PlantImage
@@ -93,7 +93,8 @@ def phenotype_detail(request,id):
                  "name": elem["phenotype_link__individual__species__species"] + ": " + 
                          elem['phenotype_link__individual__population_id'] + " (" + 
                          elem['phenotype_link__individual__population__country'] + ", " + 
-                         elem['phenotype_link__individual__population__sitename'] + ")"} for elem in value_set]   
+                         elem['phenotype_link__individual__population__sitename'] + ")",
+                 "style": {"fill": marker_color(elem["phenotype_link__individual__species__species"]),"r":4}} for elem in value_set]   
         
         vdata['map_data'] = json.dumps(data)
         
