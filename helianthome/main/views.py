@@ -11,7 +11,8 @@ from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
 
 import json
-
+import numpy as np
+from scipy.stats import norm, probplot
 '''
 Species Overview Page
 '''
@@ -75,7 +76,8 @@ Phenotype Detail Page
 '''
 def phenotype_detail(request,id):
     vdata = {}
-    try:
+    #try:
+    if 1:
         pheno = Phenotype.objects.get(id=id)
         message = "ok"
         vdata['pheno'] = pheno
@@ -87,7 +89,13 @@ def phenotype_detail(request,id):
                                                     "phenotype_link__individual__population__sitename","value",
                                                     "phenotype_link__individual__species__species",
                                                     "phenotype_link__individual__species__ncbi_id")
-        
+        pop_set = value_set.values("phenotype_link__individual__population_id",
+                                   "phenotype_link__individual__population__latitude",
+                                   "phenotype_link__individual__population__longitude",
+                                   "phenotype_link__individual__population__country",
+                                   "phenotype_link__individual__population__sitename",
+                                   "phenotype_link__individual__species__species",
+                                   "phenotype_link__individual__species__ncbi_id").distinct()
         data = [{"latLng": [elem['phenotype_link__individual__population__latitude'], 
                             elem["phenotype_link__individual__population__longitude"]], 
                  "name": elem["phenotype_link__individual__species__species"] + ": " + 
@@ -97,12 +105,46 @@ def phenotype_detail(request,id):
                  "style": {"fill": marker_color(elem["phenotype_link__individual__species__species"]),"r":4}} for elem in value_set]   
         
         vdata['map_data'] = json.dumps(data)
+        vdata['pop_size'] = len(pop_set)
+        values = value_set.values_list("value",flat=True)
+        #compute hist
+        hist, bins = np.histogram(values,bins=30,density=True)
+        #fit normal curve
+        mu, std = norm.fit(values)
+        x = np.linspace(min(bins), max(bins), len(bins))
+        p = norm.pdf(x, mu, std)
+        vdata['hist'] = json.dumps(list(np.array(hist,dtype="float")))
+        vdata['bins'] = json.dumps(list(np.array(np.round(bins,2),dtype="float")))
+        vdata['p'] = json.dumps(list(np.array(p,dtype="float")))
+        vdata['mu'] = np.round(mu,2)
+        vdata['std'] = np.round(std)
         
+        #qq-plot
+        #ndist = norm.rvs(loc=mu, scale=std,size = len(values))
+        #ndist = np.array([ norm.ppf(i / len(values),loc=mu,scale=std) for i in range(1, len(values)) ])
+        #ndist = np.arange(0,len(values)+1)
+        #ndist.sort()
+        osm, osr = probplot(values)
+        ndist = osm[0]
+        vdata['ndist'] = json.dumps(list(np.array(ndist,dtype="float")))
+        #vsort = np.sort(values)
+        vsort = osm[1]
+        vdata['vsort'] = json.dumps(list(np.array(vsort,dtype="float")))
+        y_min_value = min(vsort)
+        y_max_value = max(vsort)
+        x_min_value = min(ndist)
+        x_max_value = max(ndist)
+        vdata['x_min_value'] = x_min_value
+        vdata['x_max_value'] = x_max_value
+        vdata['y_min_value'] = y_min_value
+        vdata['y_max_value'] = y_max_value
+        diagonal = np.interp(ndist, [x_min_value,x_max_value], [y_min_value,y_max_value])
+        vdata['diagonal_qq'] = json.dumps(list(np.array(diagonal,dtype="float")))
         table = PhenotypeValueTable(value_set, order_by="phenotype_link__individual__individual_id")
         RequestConfig(request, paginate={"per_page":50}).configure(table)
         vdata['table'] = table
-    except:
-        message = "no_pheno"
+    #except:
+    #    message = "no_pheno"
     vdata['pid'] = id
     vdata['message'] = message
 

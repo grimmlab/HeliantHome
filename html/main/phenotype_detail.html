@@ -121,10 +121,18 @@
             
             <div class="row pt-2">
                 <div class="col">
-                Samples:
+                #Samples:
                 </div>
                 <div class="col">
                 {{pheno.phenotypevalue_set.count}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                #Populations:
+                </div>
+                <div class="col">
+                {{pop_size}}
                 </div>
             </div>
             
@@ -157,7 +165,7 @@
 <div class="col-sm-12 col-md-6 pt-2">
     <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
-        Population Map
+        Population Map <span class="fw-lighter">({{pop_size}} Populations with {{pheno.phenotypevalue_set.count}} Individuals)</span>
       </div>
       <div class="card-body">
       <div id="world-map" style="height:400px"></div>
@@ -182,13 +190,15 @@
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body">
               <div class="text-center">
-              {% for im in ind.plantimage_set.all %}
-                    <figure class="figure m-2 p-2">
-                     <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
-                     <figcaption class="figure-caption">Image shows <strong>{{im.category}}</strong></figcaption>
-                    </figure>
-                {% endfor %}
-
+                <div class="container">
+                    <div class="row">
+                    <div class="col-sm-12 col-md-6 mh-100">
+                        <canvas style="min-height:150px"  id="phenotype_histogram"></canvas>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <canvas style="min-height:150px" id="phenotype_qqplot"></canvas>
+                    </div>
+                    </div>
                 </div>
               </div>
             </div>
@@ -214,6 +224,101 @@
 {% endifequal %}
 <script>
     $(function(){
+
+        const ctx = document.getElementById('phenotype_histogram').getContext('2d');
+        const chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: {{bins}},
+            datasets: [{
+              label: 'Phenotype Measurments',
+              data: {{hist}},
+              backgroundColor: "rgba(250,30,60,0.5)",
+            },
+            {
+                label: "Fitted Gaussian (\u03BC={{mu}} \u03C3={{std}})",
+                data: {{p}},
+                type: "line",
+                backgroundColor: "rgba(26,87,225,0.5)"
+            }]
+          },
+          options: {
+            scales: {
+              x: {
+                display: true,
+                ticks: {
+                  autoSkip: true,
+                  max: 2,
+                  maxRotation: 0,
+                  minRotation: 0
+                }
+              },
+              y: {
+                ticks: {
+                  beginAtZero: true,
+                },
+                title: {
+                  display: true,
+                  text: 'Density'
+                }
+              }
+            }
+          }
+        });
+        
+
+        const ctxqq = document.getElementById('phenotype_qqplot').getContext('2d');
+        const qqplot = new Chart(ctxqq, {
+          type: 'scatter',
+          data: {
+            labels: {{ndist}},
+            datasets: [{
+              label: "Data Points",  
+              data: {{vsort}},
+              backgroundColor: "rgba(139,193,93,0.5)",
+            },
+            {
+               data:{{diagonal_qq}},
+               type:"line",
+              label: "Optimal Line",  
+               pointRadius: 0,
+               borderColor: "rgba(0,0,0,0.5)",
+               borderDash: [1]
+            },
+            ]
+          },
+          options: {
+            plugins: {
+                legend: {
+                display: true,
+                },
+            },
+            scales: {
+              x: {
+                display: true,
+                min: {{x_min_value}},
+                max: {{x_max_value}},
+                ticks: {
+                  maxRotation: 0,
+                  minRotation: 0
+                },
+                title: {
+                  display: true,
+                  text: 'Theoretical Quantiles'
+                }
+              },
+              y: {
+                min: {{y_min_value}},
+                max: {{y_max_value}},
+                title: {
+                  display: true,
+                  text: 'Observed Quantiles'
+                }
+              }
+            }
+          }
+        });
+
         $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
             regionStyle: {
                 initial: {

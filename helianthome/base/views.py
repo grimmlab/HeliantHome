@@ -9,13 +9,13 @@ def marker_color(species):
     elif species == "Helianthus annuus subsp. texanus":
         return "#fa9d14"
     elif species == "Helianthus argophyllus":
-        return "#3c1d64"
+        return "#af1384"
     elif species == "Helianthus petiolaris subsp. fallax":
         return "#1a57e1"
     elif species == "Helianthus petiolaris subsp. petiolaris":
-        return "#af1384"
-    elif species == "Helianthus niveus subsp. canescens":
         return "#cd6750"
+    elif species == "Helianthus niveus subsp. canescens":
+        return "#3c1d64"
     else:
         return "yellow"
 
@@ -33,7 +33,7 @@ def landing_page(request):
     vdata['number_images'] = models.PlantImage.objects.count()
     
     pops = models.Population.objects.all()
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4}} for pop in pops]   
+    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}} for pop in pops]   
     vdata['map_data'] = json.dumps(data)
 
     return render(request,'base/landingpage.html',vdata)
