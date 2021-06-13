@@ -9,6 +9,7 @@ from main.models import Phenotype, Individual
 from main.models import PlantImage
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
+from base.views import marker_color
 
 import json
 import numpy as np
@@ -24,25 +25,37 @@ def species_overview(request):
 Species Detailed Page
 '''
 def species_details(request, ncbi_id):
-    try:
+    #try:
         species = Species.objects.get(ncbi_id=ncbi_id)
-        pops = Population.objects.filter(species=species)
+        pops = species.population_set.all()
         data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"} for pop in pops]   
+
+        pop_table = PopulationTable(pops, order_by="population_id")
+        RequestConfig(request, paginate={"per_page":50}).configure(pop_table)
+        obs = species.individual_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
+        ind_table = IndividualsTable(obs)
+        RequestConfig(request, paginate={"per_page":50}).configure(ind_table)
+        pheno_table = PhenotypeTable(species.phenotype_set.all())
+        RequestConfig(request, paginate={"per_page":50}).configure(pheno_table)
+        
         vdata = {}
         vdata['map_data'] = json.dumps(data)
         vdata['message'] = "ok"
         vdata['ncbi_id'] = ncbi_id
         vdata['species'] = species
+        vdata['pop_table'] = pop_table
+        vdata['ind_table'] = ind_table
+        vdata['pheno_table'] = pheno_table
         return render(request,'main/species_detail.html',vdata)
-    except:
-        return render(request,'main/species_detail.html',{"message":"no_species","ncbi_id":ncbi_id})
+    #except:
+    #    return render(request,'main/species_detail.html',{"message":"no_species","ncbi_id":ncbi_id})
 
 '''
 Population Overview Page
 '''
 def population_overview(request):
     pops = Population.objects.all()
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"} for pop in pops]   
+    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}} for pop in pops]   
     table = PopulationTable(pops, order_by="population_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
     vdata = {}
@@ -58,6 +71,7 @@ def population_detail(request,population_id):
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
     vdata = {}
     vdata['map_data'] = json.dumps(data)
+    vdata['pop'] = pop
     return render(request,'main/population_detail.html',vdata)
 
 '''

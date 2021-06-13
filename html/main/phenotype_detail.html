@@ -192,11 +192,11 @@
               <div class="text-center">
                 <div class="container">
                     <div class="row">
-                    <div class="col-sm-12 col-md-6 mh-100">
-                        <canvas style="min-height:150px"  id="phenotype_histogram"></canvas>
+                    <div class="col-sm-12 col-md-6">
+                        <canvas style="min-height:250px"  id="phenotype_histogram"></canvas>
                     </div>
                     <div class="col-sm-12 col-md-6">
-                        <canvas style="min-height:150px" id="phenotype_qqplot"></canvas>
+                        <canvas style="min-height:250px" id="phenotype_qqplot"></canvas>
                     </div>
                     </div>
                 </div>
@@ -243,6 +243,8 @@
             }]
           },
           options: {
+            responsive: true,
+            aspectRatio: {% if request.user_agent.is_mobile %} 1 {% else %} 2 {% endif %},
             scales: {
               x: {
                 display: true,
@@ -292,6 +294,8 @@
             ]
           },
           options: {
+            responsive: true,
+            aspectRatio: {% if request.user_agent.is_mobile %} 1 {% else %} 2 {% endif %},
             plugins: {
                 legend: {
                 display: true,

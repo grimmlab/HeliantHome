@@ -2,6 +2,8 @@
 
 {% block title %} HeliantHome - Species Details for {{species.species}}{% endblock title %}
 
+{% load render_table from django_tables2 %}
+
 {% block content %}
 <nav class="navbar navbar-light bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="breadcrumb ms-3 fw-bolder fs-6 mt-2">
@@ -77,6 +79,31 @@
 </div>
 
 </div>
+</div>
+
+<div class="container mt-2 container-fluid content-row">
+
+    <div class="row mt-2 pt-2">
+<nav>
+  <div class="nav nav-pills me-3" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-pop-tab" data-bs-toggle="tab" data-bs-target="#nav-pop" type="button" role="tab" aria-controls="nav-pop" aria-selected="true">Population Table <span class="badge rounded-pill bg-light text-dark">{{species.population_set.count}}</span></button>
+    <button class="nav-link" id="nav-ind-tab" data-bs-toggle="tab" data-bs-target="#nav-ind" type="button" role="tab" aria-controls="nav-ind" aria-selected="false">Individuals Table <span class="badge rounded-pill bg-light text-dark">{{species.individual_set.count}}</span></button>
+    <button class="nav-link" id="nav-pheno-tab" data-bs-toggle="tab" data-bs-target="#nav-pheno" type="button" role="tab" aria-controls="nav-pheno" aria-selected="false">Phenotypes Table <span class="badge rounded-pill bg-light text-dark">{{species.phenotype_set.count}}</span></button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-pop" role="tabpanel" aria-labelledby="nav-pop-tab">
+                {% render_table pop_table %}
+  </div>
+  <div class="tab-pane fade" id="nav-ind" role="tabpanel" aria-labelledby="nav-ind-tab">
+                {% render_table ind_table %}
+  </div>
+  <div class="tab-pane fade" id="nav-pheno" role="tabpanel" aria-labelledby="nav-pheno-tab">
+                {% render_table pheno_table %}
+  </div>
+</div>
+</nav>
+
 </div>
 
 {% endifequal %}

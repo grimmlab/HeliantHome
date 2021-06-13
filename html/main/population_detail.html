@@ -15,23 +15,225 @@
 </nav>
 
 <div class="container">
-
 <div class="row">
-<div class="col col-xl">
-    <div class="card">
+
+<div class="col-sm-12 col-md-6 pt-2">
+    <div class="card h-100">
       <div class="card-header">
-        <h4>Population Map</h4>
+        Details for Population: <span class="fw-bold">{{pop.population_id}}</span>
       </div>
-      <div class="card-body mh-100" id="world-map" style="height:400px">
+  
+      <div class="card-body p-0 m-2" style="font-size:10.5pt">
+        <p class="card-text">
+        <!--<small class="text-muted">-->
+            <div class="row">
+                <div class="col">
+                Population ID:
+                </div>
+                <div class="col">
+                {{pop.population_id}}
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col">
+                Individuals Sampled:
+                </div>
+                <div class="col">
+                {{pop.individuals_sampled}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                #Individuals:
+                </div>
+                <div class="col">
+                {{pop.individual_set.count}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                Estimated Population Size:
+                </div>
+                <div class="col">
+                {{pop.pop_size_est}}
+                </div>
+            </div>
+
+            <div class="row pt-2">
+                <div class="col">
+                Species:
+                </div>
+                <div class="col">
+                <a href="/species/{{pop.species.ncbi_id}}/"><em>{{pop.species.species}}</em></a>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col">
+                Species NCBI-ID:
+                </div>
+                <div class="col">
+                <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{pop.species.ncbi_id}}" target="_blank">{{pop.species.ncbi_id}}</a>
+                </div>
+            </div>
+            
+            <div class="row pt-2">
+                <div class="col">
+                Country:
+                </div>
+                <div class="col">
+                {{pop.country}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Sitename:
+                </div>
+                <div class="col">
+                {{pop.sitename}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Location Description:
+                </div>
+                <div class="col">
+                {{pop.location_description}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Latitude:
+                </div>
+                <div class="col">
+                {{pop.latitude}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Longitude:
+                </div>
+                <div class="col">
+                {{pop.longitude}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Elevation:
+                </div>
+                <div class="col">
+                {{pop.elevation}}
+                </div>
+            </div>
+        
+            <div class="row pt-2">
+                <div class="col">
+                Ecology Description:
+                </div>
+                <div class="col">
+                {{pop.ecology_description}}
+                </div>
+            </div>
+            <div class="row pt">
+                <div class="col">
+                Woody Plant:
+                </div>
+                <div class="col">
+                {{pop.woody_plant}}
+                </div>
+            </div>
+        <!--</small>-->
+        </p>
+      </div>
+</div>
+</div>
+
+<div class="col-sm-12 col-md-6 pt-2">
+    <div class="card" style="border-color:#9FC4E1;">
+      <div class="card-header" style="background-color: #9FC4E1;">
+        {{pop.country}} – {{pop.sitename}} <span class="fw-lighter">(Lat={{pop.latitude}}° Long={{pop.longitude}}°)</span>
+      </div>
+      <div class="card-body mh-100" id="world-map" style="height:300px">
       </div>
     </div>
 </div>
-<div class="col col">
+
+</div>
+
+<div class="row">
+
+<div class="col-sm-12 col-md-6 mt-2">
     <div class="card">
       <div class="card-header">
-        <h4>Filters</h4>
+        Climate Variables
       </div>
-      
+      <div class="card-body" style="font-size:10pt">
+        <p class="card-text">
+            <div class="row">
+                <div class="col-3">
+                <strong>Variable Name</strong>
+                </div>
+                <div class="col-3">
+                <strong>Variable Value</strong>
+                </div>
+                <div class="col-6">
+                <strong>Variable Description</strong>
+                </div>
+            
+            </div>
+        {% for cl in pop.climate_variables.all %}
+            <div class="row">
+                <div class="col-3">
+                {{cl.climate_variable.name}}:
+                </div>
+                <div class="col-3">
+                {{cl.value}}
+                </div>
+                <div class="col-6">
+                {{cl.climate_variable.description}}
+                </div>
+            </div>
+        {% endfor %}
+        <p>
+      </div>
+    </div>
+</div>
+
+<div class="col-sm-12 col-md-6 mt-2">
+    <div class="card">
+      <div class="card-header">
+        Soil Variables
+      </div>
+      <div class="card-body" style="font-size:10pt">
+        <p class="card-text">
+            <div class="row">
+                <div class="col-3">
+                <strong>Variable Name</strong>
+                </div>
+                <div class="col-3">
+                <strong>Variable Value</strong>
+                </div>
+                <div class="col-6">
+                <strong>Variable Description</strong>
+                </div>
+            
+            </div>
+        {% for cl in pop.soil_variables.all %}
+            <div class="row">
+                <div class="col-3">
+                {{cl.soil_variable.name}}:
+                </div>
+                <div class="col-3">
+                {{cl.value}}
+                </div>
+                <div class="col-6">
+                {{cl.soil_variable.description}}
+                </div>
+            </div>
+        {% endfor %}
+        <p>
+      </div>
     </div>
 </div>
 </div>
