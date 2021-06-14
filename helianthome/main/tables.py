@@ -129,6 +129,7 @@ class ImageTable(tables.Table):
 
     class Meta:
         attrs = {"class": "table table-striped table-hover"}
+        orderable = False
 
 class IndividualPhenotypeTable(tables.Table):
     """
