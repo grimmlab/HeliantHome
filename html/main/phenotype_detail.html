@@ -34,7 +34,7 @@
 <div class="row">
 
 <div class="col-sm-12 col-md-6 pt-2">
-    <div class="card h-100">
+    <div class="card h-100" id="details">
       <div class="card-header">
         Details for Phenotype: <span class="fw-bold">{{pheno.name}} (ID: {{pheno.id}})</span>
       </div>
@@ -192,10 +192,10 @@
               <div class="text-center">
                 <div class="container">
                     <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-sm-12 col-md-6" id="histogram">
                         <canvas style="min-height:250px"  id="phenotype_histogram"></canvas>
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-sm-12 col-md-6" id="qqplot">
                         <canvas style="min-height:250px" id="phenotype_qqplot"></canvas>
                     </div>
                     </div>
@@ -346,6 +346,37 @@
             markers: {{ map_data|safe }}
         });
     });
+     
+    if (RegExp('multipage', 'gi').test(window.location.search)) {
+        var steps = [
+            {
+                element: '#details',
+                intro: 'Phenotype details',
+            },
+            {
+                element: '#histogram',
+                intro: 'Histogram of phenotype, including a fitted Gaussian distribution'
+            },
+            {
+                element: '#qqplot',
+                intro: 'Probability plot showing theoretical quantiles of Gaussian distribution against observed quantiles. If the data is normally distributed the green dots should follow the diagnonal line.'
+            },
+            {
+                element: 'thead',
+                intro: 'Phenotypic values'
+            },
+            {
+                element: '.individual',
+                intro: 'Clicking on the Individual ID will forward to more detailed information about the Individual of interest'
+            },
+
+        ];
+        var intro = introJs();
+        intro.setOptions({doneLabel:'Next page',steps:steps,"tooltipPosition":"top"});
+        intro.start().oncomplete(function() {
+          window.location.href = '/individual/ANN0801/?multipage=true';
+        });
+    }
 </script>
 
 {% endblock content %}

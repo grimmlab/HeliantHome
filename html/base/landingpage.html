@@ -7,11 +7,9 @@
 <div class="mask" style="background-color: rgba(0, 0, 0, 0.4);height: 100%">
       <div class="d-flex justify-content-center align-items-center h-100 m-3">
         <div class="text-white">
-          <h1 class="mb-3">HeliantHome</h1>
+          <h1 class="header mb-3">HeliantHome</h1>
           <h4 class="mb-3">HeliantHome is a public database collection of different sunflower species phenotypes</h4>
-          <a class="btn btn-outline-light btn-lg" href="#!" role="button"
-            >Guided Tour</a
-          >
+          <a class="btn btn-outline-light btn-lg" href="#!" id="start_tour" role="button">Guided Tour</a>
         </div>
       </div>
     </div>
@@ -23,7 +21,7 @@
 <div class="row">
 
 <div class="col-sm-12 col-md-4 pt-2">
-    <div class="card h-100">
+    <div class="card h-100" id="stats">
       <div class="card-header">
         Summary Statistics
       </div>
@@ -38,7 +36,7 @@
              <a href="/individuals/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-rulers text-secondary fs-3 me-3"></i>{{ number_phenotypes }} Phenotypes
-             <a href="/phenotypes"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <a href="/phenotypes"><i id="phenotype_detail" class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-sort-numeric-down text-secondary fs-3 me-3"></i>{{ number_measurements }} Measurements
              <a href="/phenotypes"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
@@ -51,7 +49,7 @@
 </div>
 
 <div class="col-sm-12 col-md-4 pt-2">
-    <div class="card">
+    <div class="card h-100" id="popmap">
       <div class="card-header">
         Population Map
       </div>
@@ -61,7 +59,7 @@
 </div>
 
 <div class="col-sm-12 col-md-4 pt-2">
-    <div class="card">
+    <div class="card h-100" id="phenotype">
       <div class="card-header">
         Phenotype Categories
       </div>
@@ -127,6 +125,48 @@
             },
             markers: {{ map_data|safe }}
         });
+    });
+
+    $('#start_tour').click(function() {
+        var steps = [
+            {
+                element: '.header',
+                intro: 'HeliantHome is a public database collection of phenotypes for different sunflower species. This tour will show some of the main features'
+            },
+            {
+                element: '#faq_button',
+                intro: 'The FAQ section provides additional information about features of HeliantHome'
+            },
+            {
+                element: '#download_button',
+                intro: 'Download center for downloading data batchwise from HeliantHome'
+            },
+            {
+                element: '#phenotype',
+                intro: 'Summary of different phenotype categories and how much phenotypes are available for which categorie'
+            },
+            {
+                element: '#popmap',
+                intro: 'Population maps shows locations of wild sunflowers which are integrated into this database'
+            },
+            {
+                element: '#stats',
+                intro: 'Short summary statistics about the database content, e.g. the number of phenotypes or images included in the database.'
+            },
+            {
+                element: '#phenotype_detail',
+                intro: 'Clicking on one of these buttons forwards you to additional information, e.g. like here to an overview about all integrated phenotypes'
+            },
+
+        ];
+        var intro = introJs();
+        intro.setOptions({doneLabel:'Next page',steps:steps});
+        intro.start().oncomplete(function() {
+          window.location.href = 'phenotypes/?multipage=true';
+        });
+        //.onexit(function() {
+        //  ga('send', 'event', 'Tour', 'exit','Home');
+        //});
     });
 </script>
 

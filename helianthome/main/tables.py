@@ -19,7 +19,7 @@ class PopulationTable(tables.Table):
     longitude = tables.Column(accessor="longitude", verbose_name="Longitude")
     latitude = tables.Column(accessor="latitude", verbose_name="Latitude")
     pop_size_est = tables.Column(accessor="pop_size_est", verbose_name="Population Size Estimate")
-
+    
     class Meta:
         attrs = {"class": "table table-striped table-hover table-light"}
 
@@ -41,12 +41,19 @@ class PhenotypeTable(tables.Table):
     Table that is displayed in the phenotype overview
     """
     id = tables.LinkColumn("phenotype_detail",args=[A('id')], verbose_name="ID", order_by="id",attrs={"a": {"class": "text-decoration-none"}})
-    name = tables.LinkColumn("phenotype_detail",args=[A('id')], verbose_name="Phenotype Name", order_by="name",attrs={"a": {"class": "text-decoration-none"}})
+    #name = tables.LinkColumn("phenotype_detail",args=[A('id')], verbose_name="Phenotype Name", order_by="name",attrs={"a": {"class": "text-decoration-none"}})
+    name = tables.Column(accessor="name", verbose_name="Phenotype Name")
     species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none"}})
     type = tables.Column(accessor="type", verbose_name="Type")
     category = tables.Column(accessor="category", verbose_name="Category")
     sub_category = tables.Column(accessor="sub_category", verbose_name="Subcategory")
     ontology = tables.Column(accessor="ontology.name", verbose_name="Ontology")
+    
+    def render_name(self,record):
+        try:
+           return mark_safe('<span class="phenotype text-decoration-none" style="white-space:nowrap"><a class="text-decoration-none" href="/phenotype/' + str(record.id) + '/">' + str(record.name) + '</a></span>')
+        except:
+            return record.name
     
     def render_ontology(self,record):
         try:
@@ -94,12 +101,16 @@ class PhenotypeValueTable(tables.Table):
     """
     species = tables.LinkColumn("species_details",args=[A('phenotype_link__individual__species__ncbi_id')], text=lambda record: record['phenotype_link__individual__species__species'], verbose_name="Species", order_by="phenotype_link__individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
     population_id = tables.LinkColumn("population_detail",args=[A('phenotype_link__individual__population_id')], verbose_name="Population ID", order_by="phenotype_link__individual__population_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__population_id'])
-    individual_id = tables.LinkColumn("individual_detail",args=[A('phenotype_link__individual__individual_id')], verbose_name="Individual ID", order_by="phenotype_link__individual__individual_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__individual_id'])
+    individual_id = tables.Column(accessor="phenotype_link__individual__individual_id", verbose_name="Individual ID")
+    #individual_id = tables.LinkColumn("individual_detail",args=[A('phenotype_link__individual__individual_id')], verbose_name="Individual ID", order_by="phenotype_link__individual__individual_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__individual_id'])
     value = tables.Column(accessor="value", verbose_name="Phenotype Value")
     country = tables.Column(accessor="phenotype_link__individual__population__country", verbose_name="Country")
     sitename = tables.Column(accessor="phenotype_link__individual__population__sitename", verbose_name="Sitename")
     latitude = tables.Column(accessor="phenotype_link__individual__population__latitude", verbose_name="Latitude")
     longitude = tables.Column(accessor="phenotype_link__individual__population__longitude", verbose_name="Longitude")
+
+    def render_individual_id(self,record):
+           return mark_safe('<span class="individual text-decoration-none" style="white-space:nowrap"><a class="text-decoration-none" href="/individual/' + str(record["phenotype_link__individual__individual_id"]) + '/">' + str(record["phenotype_link__individual__individual_id"]) + '</a></span>')
     
 
     class Meta:

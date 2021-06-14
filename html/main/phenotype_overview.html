@@ -13,7 +13,7 @@
   </ol>
 </nav>
 
-<div class="container">
+<div class="container" id="table">
 
     <div class="row">
             <div class="col">
@@ -23,26 +23,29 @@
 </div>
 
 <script>
-    $(function(){
-        $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
-            regionStyle: {
-                initial: {
-                    fill: '#9FC4E1'
-                },
+
+     if (RegExp('multipage', 'gi').test(window.location.search)) {
+        var steps = [
+            {
+                element: 'table',
+                intro: 'The phenotype table displays all public phenotypes across all species.',
             },
-            scaleColors: ['#C8EEFF', '#0071A4'],
-            normalizeFunction: 'polynomial',
-            hoverOpacity: 0.7,
-            hoverColor: false,
-            markerStyle: {
-                initial: {
-                    fill: '#FF6961',
-                    stroke: '#383f47'
-                }
+            {
+                element: 'thead',
+                intro: 'The phenotype list can be sorted by any of the table columns'
             },
-            markers: {{ map_data|safe }}
+            {
+                element: '.phenotype',
+                intro: 'Clicking on a certain phenotype will display more information about the corresponding phenotype'
+            }
+
+        ];
+        var intro = introJs();
+        intro.setOptions({doneLabel:'Next page',steps:steps,"tooltipPosition":"top"});
+        intro.start().oncomplete(function() {
+          window.location.href = '/phenotype/1?multipage=true';
         });
-    });
+    }
 </script>
 
 {% endblock content %}
