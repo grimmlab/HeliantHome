@@ -199,9 +199,9 @@ def individual_detail(request,individual_id):
 Image Overview Page
 '''
 def image_overview(request):
-    images = PlantImage.objects.all()
-    table = ImageTable(images, order_by="individual_id")
-    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    ind = Individual.objects.all()
+    table = ImageTable(ind, order_by="individual_id")
+    RequestConfig(request, paginate={"per_page":30}).configure(table)
     vdata = {}
     vdata['table'] = table
     return render(request,'main/image_overview.html',vdata)

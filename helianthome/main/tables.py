@@ -68,8 +68,64 @@ class ImageTable(tables.Table):
     """
     Table that is displayed in the image overview
     """
-    individual_id = tables.LinkColumn("individual_detail",args=[A('individual.individual_id')], verbose_name="Individual ID", order_by="individual.individual_id")
-    species = tables.LinkColumn("species_details",args=[A('individual.species.ncbi_id')], text=lambda record: record.individual.species.species, verbose_name="Species", order_by="individual.species.species")
+    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species")
+    individual_id = tables.LinkColumn("individual_detail",args=[A('individual_id')], verbose_name="Individual ID", order_by="individual_id")
+    flower = tables.Column(verbose_name="Flower",accessor="plantimage_set")
+    leafbottom = tables.Column(verbose_name="Leaf Bottom",accessor="plantimage_set")
+    leaftop = tables.Column(verbose_name="Leaf Top",accessor="plantimage_set")
+    plantside = tables.Column(verbose_name="Plant Side",accessor="plantimage_set")
+    planttop = tables.Column(verbose_name="Plant Top",accessor="plantimage_set")
+    primarybranch = tables.Column(verbose_name="Primary Branch",accessor="plantimage_set")
+    seed = tables.Column(verbose_name="Seed",accessor="plantimage_set")
+    leafstrip = tables.Column(verbose_name="Leaf Strip",accessor="plantimage_set")
+
+    def render_flower(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="flower").thumb_filename +'" style="max-height:80px;width:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_leafbottom(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="leafbottom").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+
+    def render_leaftop(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="leaftop").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_plantside(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="plantside").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_planttop(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="planttop").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_primarybranch(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="primarybranch").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_seed(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="seed").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
+    
+    def render_leafstrip(self,record):
+        try:
+            return mark_safe('<img src="' + record.plantimage_set.get(category="leafstrip").thumb_filename +'" style="max-height:80px;"></img>')
+        except:
+            return "-"
 
     class Meta:
         attrs = {"class": "table table-striped table-hover"}
