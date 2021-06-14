@@ -9,6 +9,7 @@ from main.models import Phenotype, Individual
 from main.models import PlantImage
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
+from main.filters import PopulationFilter
 from base.views import marker_color
 
 import json
@@ -55,12 +56,17 @@ Population Overview Page
 '''
 def population_overview(request):
     pops = Population.objects.all()
+    
+    filter = PopulationFilter(request.GET, queryset=pops)
+    
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}} for pop in pops]   
     table = PopulationTable(pops, order_by="population_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
+
     vdata = {}
     vdata['pop_table'] = table
     vdata['map_data'] = json.dumps(data)
+    vdata['filter'] = filter
     return render(request,'main/population_overview.html',vdata)
 
 '''

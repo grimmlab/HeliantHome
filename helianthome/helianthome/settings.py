@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'base',
     'main',
     'django_tables2',
+    'django_filters',
     'django_user_agents',
 ]
 
