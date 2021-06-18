@@ -1,4 +1,3 @@
-import h5py
 import numpy as np
 import os
 from main.models import *
@@ -12,13 +11,13 @@ TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus niveus subsp. canescens":74145,
             "Helianthus annuus var. macrocarpus":0}
 
-CULTIVATED = {"Helianthus annuus":0,
-            "Helianthus argophyllus":0,
-            "Helianthus annuus subsp. texanus":0,
-            "Helianthus petiolaris subsp. fallax":0,
-            "Helianthus petiolaris subsp. petiolaris":0,
-            "Helianthus niveus subsp. canescens":0,
-            "Helianthus annuus var. macrocarpus":1}
+SPECIES_CULTIVATED = {"Helianthus annuus":False,
+                      "Helianthus argophyllus":False,
+                      "Helianthus annuus subsp. texanus":False,
+                      "Helianthus petiolaris subsp. fallax":False,
+                      "Helianthus petiolaris subsp. petiolaris":False,
+                      "Helianthus niveus subsp. canescens":False,
+                      "Helianthus annuus var. macrocarpus":True}
 
 SPECIES_IMAGES = {"Helianthus annuus":"/media/images/species/helianthus_annuus.jpg",
                   "Helianthus argophyllus":"/media/images/species/helianthus_argophyllus.jpg",
@@ -26,7 +25,7 @@ SPECIES_IMAGES = {"Helianthus annuus":"/media/images/species/helianthus_annuus.j
                   "Helianthus petiolaris subsp. fallax":"/media/images/species/helianthus_petiolaris_subsp_fallax.jpg",
                   "Helianthus petiolaris subsp. petiolaris":"/media/images/species/helianthus_petiolaris_subsp_petiolaris.jpg",
                   "Helianthus niveus subsp. canescens":"/media/images/species/helianthus_niveus_subsp_canescens.jpg",
-                  "Helianthus annuus var. macrocarpus":""}
+                  "Helianthus annuus var. macrocarpus":"/media/images/species/helianthus_niveus_subsp_canescens.jpg"}
 
 SPECIES_DESCRIPTION = {"Helianthus annuus":'It’s an annual plant frequently found between the southern Canada and all across the western US until the north of Mexico. It is the most widely distributed species of Helianthus and the closest relative to the cultivated sunflower. Members of the species show a broad range of variation in plant size (up to 4 meters tall), architecture, Inflorescences and pigmentation. At the same time, they can be found in all kind of environments, growing from sea level to 2,500 m both in low and moderate rainfall areas (<a href="http://doi.wiley.com/10.2134/agronmonogr19.c2">Heiser et al. 1978</a>).',
                   "Helianthus argophyllus":'Also known as the Silverleaf sunflower, is an annual plant native to the coastal regions of Texas, in the US.<br>The full grown plant can reach up to 3 m tall. Its leaves are ovate and densely covered with long silky hairs as well as the stem. The flowerheads are about 3 cm of diameter with yellow ligules on ray flowers (<a href="http://doi.wiley.com/10.2134/agronmonogr19.c2">Heiser et al. 1978</a>).',
@@ -96,6 +95,8 @@ def store_populations(filename):
                 species = Species()
                 species.species = sv[4].strip()
                 species.ncbi_id = TAXONOMY[sv[4].strip()]
+                species.description = SPECIES_DESCRIPTION[sv[4].strip()]
+                species.cultivated = SPECIES_CULTIVATED[sv[4].strip()]
                 species.species_image = SPECIES_IMAGES[sv[4].strip()]
                 species.save()
             pop.species = species
@@ -175,7 +176,7 @@ def store_phenotype_values(filename):
                 if pn in pd:
                     p = pd[pn]
                     pheno = Phenotype()
-                    pheno.name = pn.remove("_"," ")
+                    pheno.name = pn.replace("_"," ")
                     pheno.type = p['type']
                     pheno.description = p['description']
                     pheno.method = p['method']
@@ -249,7 +250,7 @@ def store_images(filename):
                     pimg.save()
                 elif img.strip().split("_")[-1]=="plantside":
                     pimg = PlantImage(category="plantside",thumb_filename=os.path.join(media,os.path.join("plantside",img.strip() + ".jpg")),
-                                      indivaidual=ind,description="High resolution image of sunflower whole plant of each studied individual (side view)")
+                                      individual=ind,description="High resolution image of sunflower whole plant of each studied individual (side view)")
                     pimg.save()
                 elif img.strip().split("_")[-1]=="planttop":
                     pimg = PlantImage(category="planttop",thumb_filename=os.path.join(media,os.path.join("planttop",img.strip() + ".jpg")),

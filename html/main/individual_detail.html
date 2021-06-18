@@ -122,11 +122,10 @@
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body">
               <div class="text-center">
-              All images can be downloaded in high resolution as bulk download for each individual.
               {% for im in ind.plantimage_set.all %}
-                    <figure class="figure m-2 p-2">
+                    <figure class="figure m-2 p-2" style="max-width:280px">
                      <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
-                     <figcaption class="figure-caption">Image shows <strong>{{im.description}}</strong></figcaption>
+                     <figcaption class="figure-caption">{{im.description|safe}}</figcaption>
                     </figure>
                 {% endfor %}
 

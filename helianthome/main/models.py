@@ -85,6 +85,7 @@ class Species(models.Model):
     species = models.CharField(max_length=255) #Species name
     description = models.TextField(blank=True, null=True) #short species description
     species_image = models.CharField(max_length=255, blank=True,null=True) #Species image
+    cultivated = models.BooleanField(default=False) #is species cultivated or not
 
     def __unicode__(self):
         return u"%s (%s): %s" % (self.species, self.ncbi_id, self.description)
@@ -153,6 +154,20 @@ class Individual(models.Model):
     species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     population = models.ForeignKey("Population",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
 
+"""
+Accessions
+"""
+class Accession(models.Model):
+    accession_id = models.CharField(max_length=20, db_index=True,primary_key=True)
+    
+    species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
+    population = models.ForeignKey("Population",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
+
+class AlternativeAccession(models.Model):
+    alt_acc_id = models.CharField(max_length=20, db_index=True,primary_key=True)
+    alt_acc_name = models.CharField(max_length=20, null=True, blank=True)
+    accession = models.ForeignKey("Accession",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
+
 
 """
 PhenotypeLink model
@@ -160,6 +175,7 @@ Link Phenotype Values to Individuals
 """
 class PhenotypeLink(models.Model):
     individual = models.ForeignKey('Individual',blank=True,null=True,on_delete=models.CASCADE)
+    accession = models.ForeignKey('Accession',blank=True,null=True,on_delete=models.CASCADE)
     study = models.ForeignKey('Study',blank=True,null=True,on_delete=models.CASCADE)
 
 """
@@ -190,11 +206,18 @@ class Phenotype(models.Model):
     species = models.ForeignKey('Species',blank=True,null=True, on_delete=models.CASCADE)
     study = models.ForeignKey('Study',blank=True, null=True,on_delete=models.CASCADE)
 
-    def get_values_for_acc(self,individual_id):
+    def get_values_for_ind(self,individual_id):
         """
-        Retrieves the phenotype value for a specific accession
+        Retrieves the phenotype value for a specific individual
         """
         return self.phenotypevalue_set.filter(phenotype_link__individual=individual_id).values_list("value", flat=True)
+    
+    def get_values_for_acc(self,accession_id):
+        """
+        Retrieves the phenotype value for a specific individual
+        """
+        return self.phenotypevalue_set.filter(phenotype_link__accession=accession_id).values_list("value", flat=True)
+
 
     def __unicode__(self):
         if self.to_term is None:
@@ -213,6 +236,7 @@ class PlantImage(models.Model):
     description = models.CharField(max_length=500)
 
     individual = models.ForeignKey("Individual",blank=True,null=True, on_delete=models.CASCADE)
+    accession = models.ForeignKey("Accession",blank=True,null=True, on_delete=models.CASCADE)
 
 
 """
