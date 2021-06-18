@@ -271,6 +271,19 @@ def store_images(filename):
     f.close()
     print("Successfully stored %s thumbnails" % filename)
 
+def store_easygwas_links(filename=""):
+    f = open(filename,"r",encoding="utf-8", errors='ignore')
+    for i,line in enumerate(f):
+        if i==0:
+            continue
+        sv = line.strip().split(",")
+        species = Species.objects.get(species=sv[0].strip())
+        phenotype = species.phenotype_set.get(name=sv[1].strip())
+        phenotype.easygwas_link = sv[-1].strip()
+        phenotype.save()
+    f.close()
+    print("Successfully stored %s easyGWAS links" % filename)
+
 def integrate():
     store_climate_variables(filename="../data/climate_variables.csv")
     store_soil_variables(filename="../data/soil_variables.csv")
@@ -280,4 +293,5 @@ def integrate():
     store_phenotype_values(filename="../data/phenotypes_h_n_canescens.csv")
     store_phenotype_values(filename="../data/phenotypes_h_p_fallax.csv")
     store_phenotype_values(filename="../data/phenotypes_h_p_petiolaris.csv")
+    store_easygwas_links(filename="../data/easygwas_links.csv")
     store_images(filename="../data/thumbnails.txt")

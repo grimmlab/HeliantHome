@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'django_user_agents',
+    #'autocomplete_light',
+    'dal',
+    'dal_select2',
 ]
 
 MIDDLEWARE = [

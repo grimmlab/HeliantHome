@@ -203,6 +203,8 @@ class Phenotype(models.Model):
     integration_date = models.DateTimeField(auto_now_add=True) #date of phenotype integration/submission
     ontology = models.ForeignKey('OntologyTerm', null=True, blank=True, on_delete=models.CASCADE)
     
+    easygwas_link = models.CharField(max_length=500, blank=True,null=True)
+    
     species = models.ForeignKey('Species',blank=True,null=True, on_delete=models.CASCADE)
     study = models.ForeignKey('Study',blank=True, null=True,on_delete=models.CASCADE)
 

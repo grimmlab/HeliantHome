@@ -21,11 +21,12 @@ from django.conf import settings
 from base import views as base
 from main import views as main
 
+from base.autocomplete_light_registry import GlobalSearchAutocomplete
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    #url(r'^admin/', admin.site.urls),
     url(r'^$',base.landing_page, name="landing_page"),
-    url(r'^about/',base.about_page, name="about_page"),
+    url(r'^about/$',base.about_page, name="about_page"),
     url(r'^species/$',main.species_overview, name="species_overview"),
     url(r'^species/(?P<ncbi_id>[0-9]+)/$',main.species_details, name="species_details"),
     url(r'^populations/$',main.population_overview, name="population_overview"),
@@ -35,5 +36,10 @@ urlpatterns = [
     url(r'^individuals/$',main.individuals_overview, name="individuals_overview"),
     url(r'^individual/(?P<individual_id>.*)/$',main.individual_detail, name="individual_detail"),
     url(r'^images/$',main.image_overview, name="image_overview"),
+
+    url(r'^global-autocomplete/$', GlobalSearchAutocomplete,name='global-autocomplete'),
+    #url(r'^search_results/$', base.SearchResults, name="searchresults"),
+    #url(r'^search_results//$', base.SearchResults, name="searchresults"),
+    #url(r'^search_results/(?P<query>.*)/$', base.SearchResults, name="searchresults"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
