@@ -210,6 +210,8 @@ class PlantImage(models.Model):
     category = models.CharField(max_length=255)
     thumb_filename = models.CharField(max_length=255)
 
+    description = models.CharField(max_length=500)
+
     individual = models.ForeignKey("Individual",blank=True,null=True, on_delete=models.CASCADE)
 
 

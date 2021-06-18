@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} HeliantHome - Individual Detail{% endblock title %}
+{% block title %} HeliantHOME - Individual Detail{% endblock title %}
 
 {% load render_table from django_tables2 %}
 
@@ -122,10 +122,11 @@
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body">
               <div class="text-center">
+              All images can be downloaded in high resolution as bulk download for each individual.
               {% for im in ind.plantimage_set.all %}
                     <figure class="figure m-2 p-2">
                      <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
-                     <figcaption class="figure-caption">Image shows <strong>{{im.category}}</strong></figcaption>
+                     <figcaption class="figure-caption">Image shows <strong>{{im.description}}</strong></figcaption>
                     </figure>
                 {% endfor %}
 

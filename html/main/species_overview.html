@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} HeliantHome - Species Overview{% endblock title %}
+{% block title %} HeliantHOME - Species Overview{% endblock title %}
 
 {% block content %}
 
@@ -11,9 +11,23 @@
   </ol>
 </nav>
 
-<div class="container pt-2 container-fluid content-row">
-<div class="row justify-content-md-center ">
+<div class="container container-fluid content-row">
+<div class="row mb-3">
+<div class="col-sm-12 col-md-6 mt-2">
+<span class="fw-lighter lh-sm">The genus <em>Helianthus</em> (commonly known as sunflower) is large and diverse, and includes more than 50 wild species, most of them native of North America. We have selected a handful of them, for an in-depth study of genetic, phenotypic and environmental variation and local adaptation, based on their relative major abundance and ability to grow in a variety of, often extreme, environments, including deserts, salt marshes and serpentine soils (<span style="white-space:nowrap"><a class="mr-2 text-decoration-none"  href="https://doi.org/10.1038/s41586-020-2467-6" target="_blank">Todesco et al., Nature 2020  <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>). These data has established the bases for the construction of HeliantHOME.<br><br>
+In addition, the cultivated sunflower (<em>Helianthus annuus var. macrocarpus</em>) is one of the main crops worldwide and therefore of great agricultural relevance. For this reason, we have also included them here as an invaluable source of data and knowledge.
+The study of sunflowers can offer numerous possibilities both to increase our understanding of ecological and evolutionary processes as well as to contribute to the development of genetic research and breeding efforts (<span style="white-space:nowrap"><a href="https://doi.org/10.1111/1755-0998.12023" target="_blank" class="text-decoration-none">Kane et al., Mol Ecol Resour 2013 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>).<br><br>
+The current availability of a well curated, reference genome for the cultivated Sunflower (<span style="white-space:nowrap"><a href="https://sunflowergenome.org/" target="_blank" class="text-decoration-none">https://sunflowergenomes.org <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>) has now made it possible to start asking new types of questions about sunflower ecology and its evolutionary history. It also opens the possibility to investigate the genetic association between sequence and gene function in a more accurate way. HeliantHOME offers the perfect platform from where to start that journey.</span>
+</div>
+<div class="col-sm-12 col-md-6 mt-2">
+                    <figure class="figure">
+                     <img src="/static/img/phylotree.png" class="figure-img img-fluid rounded-3 img-thumbnail" alt="Phylogenetic Tree" style="max-height:450px">
+                     <figcaption class="figure-caption">Phylogenetic Tree <span style="white-space:nowrap"><a href="https://doi.org/10.3732/ajb.1500031" target="_blank" class="text-decoration-none">Stephens et al., American Journal of Botany 2015 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span></figcaption>
+                    </figure>
+</div>
+</div>
 
+<div class="row justify-content-md-center">
 {% for sp in species %}
 <div class="card p-2 m-2" style="max-width: 600px;">
 <div class="row">
