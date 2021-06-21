@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^phenotype/(?P<id>[0-9]+)/$',main.phenotype_detail, name="phenotype_detail"),
     url(r'^individuals/$',main.individuals_overview, name="individuals_overview"),
     url(r'^individual/(?P<individual_id>.*)/$',main.individual_detail, name="individual_detail"),
+    url(r'^accessions/$',main.accession_overview, name="accession_overview"),
+    url(r'^accession/(?P<accession_id>.*)/$',main.accession_detail, name="accession_detail"),
     url(r'^images/$',main.image_overview, name="image_overview"),
 
     url(r'^global-autocomplete/$', GlobalSearchAutocomplete,name='global-autocomplete'),

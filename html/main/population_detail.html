@@ -17,7 +17,11 @@
 <div class="container">
 <div class="row">
 
-<div class="col-sm-12 col-md-6 pt-2">
+{% if pop.species.cultivated %}
+    <div class="col-sm-12 col-md-12 pt-2">
+{% else %}
+    <div class="col-sm-12 col-md-6 pt-2">
+{% endif %}
     <div class="card h-100">
       <div class="card-header">
         Details for Population: <span class="fw-bold">{{pop.population_id}}</span>
@@ -34,7 +38,45 @@
                 {{pop.population_id}}
                 </div>
             </div>
-        
+            {% if pop.species.cultivated %}
+            
+            <div class="row pt-2">
+                <div class="col">
+                Cultivated Species:
+                </div>
+                <div class="col">
+                <a href="/species/{{pop.species.ncbi_id}}/"><em>{{pop.species.species}}</em></a>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                #Accessions:
+                </div>
+                <div class="col">
+                {{pop.accession_set.count}}
+                </div>
+            </div>
+            
+            <div class="row pt-2">
+                <div class="col">
+                Ecology Description:
+                </div>
+                <div class="col">
+                {{pop.ecology_description}}
+                </div>
+            </div>
+            
+            <div class="row pt-2">
+                <div class="col">
+                Population Description:
+                </div>
+                <div class="col">
+                {{pop.description}}
+                </div>
+            </div>
+
+            {% else %}
             <div class="row">
                 <div class="col">
                 Individuals Sampled:
@@ -143,12 +185,16 @@
                 {{pop.woody_plant}}
                 </div>
             </div>
+            {% endif %}
         <!--</small>-->
         </p>
       </div>
 </div>
 </div>
 
+{% if pop.species.cultivated %}
+
+{% else %}
 <div class="col-sm-12 col-md-6 pt-2">
     <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
@@ -158,9 +204,13 @@
       </div>
     </div>
 </div>
+{% endif %}
 
 </div>
 
+{% if pop.species.cultivated %}
+
+{% else %}
 <div class="row">
 
 <div class="col-sm-12 col-md-6 mt-2">
@@ -237,6 +287,7 @@
     </div>
 </div>
 </div>
+{% endif %}
 
 </div>
 

@@ -13,7 +13,11 @@
 
 <div class="row justify-content-md-center">
 {% for sp in species %}
-<div class="card p-2 m-2" style="max-width: 600px;">
+{% if sp.cultivated %}
+    <div class="card p-2 m-2" style="max-width: 600px;background-color:#d1d8e0;">
+{% else %}
+    <div class="card p-2 m-2" style="max-width: 600px;">
+{% endif %}
 <div class="row">
 <div class="col-sm-4">
   <img src="{{sp.species_image}}" class="card-img-top rounded-3" alt="{{sp.species}}">
@@ -21,10 +25,22 @@
   <div class="col-sm-8">
   <div class="card-body">
     <h5 class="card-title"><em>{{sp.species}}</em></h5>
-    <p class="card-text"><small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{sp.ncbi_id}}" target="_blank">{{sp.ncbi_id}}</a>
-    <br># Populations: {{sp.population_set.count}}
-    <br># Individuals: {{sp.individual_set.count}}
-    <br># Phenotypes: {{sp.phenotype_set.count}}</small></p>
+     <p class="card-text">
+    {% if sp.cultivated %}
+        <strong>Cultivated Species</strong>
+        <small class="text-muted">
+        <br># Populations: {{sp.population_set.count}}
+        <br># Accessions: {{sp.accession_set.count}}
+        <br># Phenotypes: {{sp.phenotype_set.count}}
+        </small>
+    {% else %}
+        <small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{sp.ncbi_id}}" target="_blank">{{sp.ncbi_id}}</a>
+        <br># Populations: {{sp.population_set.count}}
+        <br># Individuals: {{sp.individual_set.count}}
+        <br># Phenotypes: {{sp.phenotype_set.count}}
+        </small>
+    {% endif %}
+    </p>
     <!--<p class="card-text">{{sp.description}}</p>-->
     <a href="/species/{{sp.ncbi_id}}/" class="btn btn-secondary position-absolute bottom-0 end-0 mb-3 me-3">See details ...</a>
   </div>

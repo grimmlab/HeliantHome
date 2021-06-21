@@ -8,7 +8,7 @@
       <div class="d-flex justify-content-center align-items-center h-100 m-3">
         <div class="text-white">
           <h1 class="header mb-3">HeliantHOME</h1>
-          <h4 class="mb-3">HeliantHOME: a public and centralized database Home of a comprehensive collection of phenotypes for different Sunflower species.</h4>
+          <h4 class="mb-3">HeliantHOME: a public and centralized database Home of a comprehensive collection of phenotypes for different Sunflower species</h4>
           <a class="btn btn-outline-light btn-lg" href="#!" id="start_tour" role="button">Guided Tour</a>
       </div>
     </div>
@@ -26,14 +26,20 @@
         Summary Statistics
       </div>
       <div class="card-body">
-             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-flower3 text-success fs-3 me-3"></i>{{ number_species }} Species
+             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-flower3 text-success fs-3 me-3"></i>{{ number_species }} Taxa
+             <a href="/species/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-flower2 text-warning fs-3 me-3"></i>{{ number_cultivated }} Cultivated Species
              <a href="/species/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-globe text-primary fs-3 me-3"></i>{{ number_populations }} Populations
              <a href="/populations/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
-             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-people fs-3 me-3"></i>{{ number_individuals }} Individuals
+             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-person fs-3 me-3"></i>{{ number_individuals }} Individuals
              <a href="/individuals/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <br>
+             <span style="white-space:nowrap" class="fs-5"><i class="bi bi-person-square fs-3 me-3"></i>{{ number_accessions }} Accessions
+             <a href="/accessions/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-rulers text-secondary fs-3 me-3"></i>{{ number_phenotypes }} Phenotypes
              <a href="/phenotypes"><i id="phenotype_detail" class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
@@ -126,7 +132,10 @@
 <div class="col-sm-12 col-md-3 pt-2">
                     <figure class="figure">
                      <img src="/static/img/phylotree.png" class="figure-img img-fluid rounded-3" alt="Phylogenetic Tree" style="max-height:320px">
-                     <figcaption class="figure-caption" style="font-size:8pt">Phylogenetic Tree <span style="white-space:nowrap"><a href="https://doi.org/10.3732/ajb.1500031" target="_blank" class="text-decoration-none">Stephens et al., American Journal of Botany 2015 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span></figcaption>
+                     <figcaption class="figure-caption" style="font-size:8pt">Phylogenetic Tree 
+                        <span style="white-space:nowrap"><a class="mr-2 text-decoration-none"  href="https://doi.org/10.1038/s41586-020-2467-6" target="_blank">Todesco et al., Nature 2020  <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>
+                     <!--<span style="white-space:nowrap"><a href="https://doi.org/10.3732/ajb.1500031" target="_blank" class="text-decoration-none">Stephens et al., American Journal of Botany 2015 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>-->
+                     </figcaption>
                     </figure>
 </div>
 </div>
@@ -150,18 +159,19 @@
                                 'rgb(255, 255, 224)', 
                                 'rgb(255, 165, 158)', 
                                 'rgb(221, 76, 101)', 
-                                'rgb(147, 0, 58)'],
+                                'rgb(147, 0, 58)',
+                                '#fa8231','#8854d0'],
               hoverOffset: 4,
             },
             ]
           },
           options: {
             responsive: true,
-            aspectRatio: {% if request.user_agent.is_mobile %} 1 {% else %} 2 {% endif %},
+            aspectRatio: {% if request.user_agent.is_mobile %} 1 {% else %} 1 {% endif %},
             plugins: {
                 legend: {
                     display: true,
-                    position: "right",
+                    position: "bottom",
                 }
             }
           }

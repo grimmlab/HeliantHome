@@ -25,7 +25,7 @@ SPECIES_IMAGES = {"Helianthus annuus":"/media/images/species/helianthus_annuus.j
                   "Helianthus petiolaris subsp. fallax":"/media/images/species/helianthus_petiolaris_subsp_fallax.jpg",
                   "Helianthus petiolaris subsp. petiolaris":"/media/images/species/helianthus_petiolaris_subsp_petiolaris.jpg",
                   "Helianthus niveus subsp. canescens":"/media/images/species/helianthus_niveus_subsp_canescens.jpg",
-                  "Helianthus annuus var. macrocarpus":"/media/images/species/helianthus_niveus_subsp_canescens.jpg"}
+                  "Helianthus annuus var. macrocarpus":"/media/images/species/helianthus_annuus_var_macrocarpus.jpg"}
 
 SPECIES_DESCRIPTION = {"Helianthus annuus":'It’s an annual plant frequently found between the southern Canada and all across the western US until the north of Mexico. It is the most widely distributed species of Helianthus and the closest relative to the cultivated sunflower. Members of the species show a broad range of variation in plant size (up to 4 meters tall), architecture, Inflorescences and pigmentation. At the same time, they can be found in all kind of environments, growing from sea level to 2,500 m both in low and moderate rainfall areas (<a href="http://doi.wiley.com/10.2134/agronmonogr19.c2">Heiser et al. 1978</a>).',
                   "Helianthus argophyllus":'Also known as the Silverleaf sunflower, is an annual plant native to the coastal regions of Texas, in the US.<br>The full grown plant can reach up to 3 m tall. Its leaves are ovate and densely covered with long silky hairs as well as the stem. The flowerheads are about 3 cm of diameter with yellow ligules on ray flowers (<a href="http://doi.wiley.com/10.2134/agronmonogr19.c2">Heiser et al. 1978</a>).',
@@ -155,7 +155,7 @@ def load_phenotype_descriptions(filename="../data/phenotype_description.csv"):
                          'ontology_name':sv[2].strip(),
                          'ontology_id':sv[3].strip().split("/")[-1],
                          'name':sv[4].strip(),
-                         'unit':sv[5].strip(),
+                         'unit': sv[5].strip(),
                          'description':sv[6].strip(),
                          'method':sv[7].strip(),
                          'image':sv[8].strip(),
@@ -284,6 +284,128 @@ def store_easygwas_links(filename=""):
     f.close()
     print("Successfully stored %s easyGWAS links" % filename)
 
+
+
+"""
+Read and Store Populations & Individuals for Lexuan Populatian
+"""
+def store_lexuan_pop(filename):
+    sname =  "Helianthus annuus var. macrocarpus"
+    species = Species()
+    species.species = sname
+    species.ncbi_id = TAXONOMY[sname]
+    species.description = SPECIES_DESCRIPTION[sname]
+    species.cultivated = SPECIES_CULTIVATED[sname]
+    species.species_image = SPECIES_IMAGES[sname]
+    species.save()
+
+    pop = Population()
+    pop.population_id = "SAM"
+    pop.description = ""
+    pop.ecology_description = ""
+    pop.species = species
+    #Save Model   
+    pop.save()
+
+    f = open(filename,"r",encoding="utf-8")
+    for i,line in enumerate(f):
+        sv = line.strip().split(",")
+        if i==0:
+            continue
+        else:
+            accession = Accession(accession_id=sv[3].strip(),species=species,population=pop)
+            accession.save()
+
+            #create alternative accession names
+            aacc = AlternativeAccession()
+            aacc.alt_acc_id = sv[0].strip()
+            aacc.alt_acc_name = "Planting Packet Number"
+            aacc.accession = accession
+            aacc.save()
+            
+            aacc = AlternativeAccession()
+            aacc.alt_acc_id = sv[1].strip()
+            aacc.alt_acc_name = "Pit Name"
+            aacc.accession = accession
+            aacc.save()
+            
+            aacc = AlternativeAccession()
+            aacc.alt_acc_id = sv[2].strip()
+            aacc.alt_acc_name = "Class"
+            aacc.accession = accession
+            aacc.save()
+            
+            aacc = AlternativeAccession()
+            aacc.alt_acc_id = sv[-1].strip()
+            aacc.alt_acc_name = "Name of the line"
+            aacc.accession = accession
+            aacc.save()
+
+    f.close()
+    print("Successfully stored %s Lexuan SAM population" % filename)
+
+def store_phenotype_values4sam(filename):
+    pd = load_phenotype_descriptions("../data/lexuan_paper_phenotyping_description.csv")
+    phenotypes = {}
+    f = open(filename,"r",encoding="utf-8")
+    for i,line in enumerate(f):
+        sv = line.strip().split(",")
+        if i==0:
+            for j in range(3,len(sv)):
+                pn = sv[j].strip().replace(" ","_")
+                if pn in pd:
+                    p = pd[pn]
+                    pheno = Phenotype()
+                    pheno.name = pn.replace("_"," ")
+                    pheno.type = p['type']
+                    pheno.description = p['description']
+                    pheno.method = p['method']
+                    pheno.category = p['category']
+                    pheno.sub_category = p['sub_category']
+                    try:
+                        ontology = OntologyTerm.objects.get(id=p['ontology_id'])
+                    except:
+                        ontology = OntologyTerm()
+                        ontology.id = p['ontology_id']
+                        ontology.name = p['ontology_name']
+                        ontology.save()
+                    pheno.ontology = ontology
+                    pheno.save()
+                    phenotypes[j] = pheno
+                else:
+                    print("ERROR PHENOTYPE IS NOT IN LIST: %s" % pn)
+                    quit()
+        else:
+            #try:
+                ind = AlternativeAccession.objects.get(alt_acc_id=sv[0].strip())
+                for j in range(3,len(sv)):
+                    pheno = phenotypes[j]
+                    if i==1:#update species name
+                        pheno.species = ind.accession.species
+                        pheno.save()  
+                    
+                    val = sv[j].strip().replace(",",".")
+                    if val=="NA":
+                        val = np.nan
+                    else:
+                        pv = PhenotypeValue()
+                        val = float(val)
+                        pl = PhenotypeLink()
+                        pl.accession = ind.accession
+                        #pl.study = 
+                        pl.save()
+                        pv.value = val
+                        pv.phenotype = pheno
+                        pv.phenotype_link = pl
+                        pv.save()
+            #except:
+            #    print("[ERROR STORE PHENOTYPE]: Individual ID %s does not exist." % sv[0])
+            #    quit()
+    f.close()
+    print("Successfully stored %s phenotypes" % filename)
+
+
+
 def integrate():
     store_climate_variables(filename="../data/climate_variables.csv")
     store_soil_variables(filename="../data/soil_variables.csv")
@@ -295,3 +417,7 @@ def integrate():
     store_phenotype_values(filename="../data/phenotypes_h_p_petiolaris.csv")
     store_easygwas_links(filename="../data/easygwas_links.csv")
     store_images(filename="../data/thumbnails.txt")
+    
+    #integrate cultivated species
+    store_lexuan_pop(filename="../data/lexuan_paper_SAM_population.csv")
+    store_phenotype_values4sam(filename="../data/lexuan_SAM_data_compiled.csv")

@@ -33,7 +33,11 @@
 <div class="container mt-2 container-fluid content-row">
 <div class="row">
 
+{% if cultivated %}
+<div class="col-sm-12 col-md-12 pt-2">
+{% else %}
 <div class="col-sm-12 col-md-6 pt-2">
+{% endif %}
     <div class="card h-100" id="details">
       <div class="card-header">
         Details for Phenotype: <span class="fw-bold">{{pheno.name}} (ID: {{pheno.id}})</span>
@@ -68,7 +72,17 @@
                 <a href="/species/{{pheno.species.ncbi_id}}/" class="fw-lighter text-decoration-none"><em>{{pheno.species.species}}</em></a>
                 </div>
             </div>
-        
+            
+            {% if cultivated %}
+            <div class="row">
+                <div class="col">
+                </div>
+                <div class="col">
+                Cultivated species
+                </div>
+            </div>
+
+            {% else %}
             <div class="row">
                 <div class="col">
                 Species NCBI-ID:
@@ -77,6 +91,7 @@
                 <span style="white-space:nowrap"><a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{pheno.species.ncbi_id}}" target="_blank" class="fw-lighter text-decoration-none">{{pheno.species.ncbi_id}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
+            {% endif %}
         
             <div class="row pt-2">
                 <div class="col">
@@ -174,6 +189,8 @@
 </div>
 </div>
 
+{% if cultivated %}
+{% else %}
 <div class="col-sm-12 col-md-6 pt-2">
     <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
@@ -184,6 +201,7 @@
       </div>
     </div>
 </div>
+{% endif %}
 
 </div>
 </div>

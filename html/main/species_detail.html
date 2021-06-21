@@ -38,7 +38,11 @@
 <div class="container mt-1 container-fluid content-row">
 <div class="row fluid">
 
+{% if species.cultivated %}
+<div class="col-sm-12 col-md-12 pt-2">
+{%else%}
 <div class="col-sm-12 col-md-6 pt-2">
+{%endif%}
     <div class="card h-100">
       <div class="card-header">
         Detailed Information for <em>{{species.species}}</em>
@@ -47,16 +51,36 @@
   <div class="card-body">
     <div class="container">
     <div class="row">
+        {% if species.cultivated %}
+        <div class="col-md-2">
+            <img src="{{species.species_image}}" class="card-img-top" alt="{{species.species}}" style="max-height:200px;width:auto;">
+        {%else%}
         <div class="col-md-4">
             <img src="{{species.species_image}}" class="card-img-top" alt="{{species.species}}">
+        {%endif%}
         </div>
+        {% if species.cultivated %}
+        <div class="col-md-10">
+        {%else%}
         <div class="col-md-8">
+        {%endif%}
             <h5 class="card-title"><em>{{species.species}}</em></h5>
-            <p class="card-text"><small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{species.ncbi_id}}" target="_blank">{{species.ncbi_id}}</a>
+            <p class="card-text">
+            {% if species.cultivated %}
+                <strong>Cultivated Species</strong>
+                <small class="text-muted">
+                <br># Populations: {{species.population_set.count}}
+                <br># Accessions: {{species.accession_set.count}}
+                <br># Phenotypes: {{species.phenotype_set.count}}
+                </small>
+
+            {% else %}
+            <small class="text-muted">NCBI Taxonomy ID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id={{species.ncbi_id}}" target="_blank">{{species.ncbi_id}}</a>
                 <br># Populations: {{species.population_set.count}}
                 <br># Individuals: {{species.individual_set.count}}
-                <br># Phenotypes: {{species.phenotype_set.count}}</small></p>
-                <!--<p class="card-text">{{species.description}}</p>-->
+                <br># Phenotypes: {{species.phenotype_set.count}}</small>
+            {% endif %}
+            </p>
         </div>
     </div>
     {% ifnotequal species.description None  %}
@@ -68,6 +92,8 @@
 </div>
 </div>
 
+{% if species.cultivated %}
+{% else %}
 <div class="col-sm-12 col-md-6 pt-2"> 
     <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
@@ -77,6 +103,7 @@
       </div>
     </div>
 </div>
+{% endif %}
 
 </div>
 </div>
@@ -87,7 +114,12 @@
 <nav>
   <div class="nav nav-pills me-3 mb- mb-2" id="nav-tab" role="tablist">
     <button class="nav-link active" id="nav-pop-tab" data-bs-toggle="tab" data-bs-target="#nav-pop" type="button" role="tab" aria-controls="nav-pop" aria-selected="true">Population Table <span class="badge rounded-pill bg-light text-dark">{{species.population_set.count}}</span></button>
+    
+    {% if species.cultivated %}
+    <button class="nav-link" id="nav-acc-tab" data-bs-toggle="tab" data-bs-target="#nav-acc" type="button" role="tab" aria-controls="nav-acc" aria-selected="false">Accession Table <span class="badge rounded-pill bg-light text-dark">{{species.accession_set.count}}</span></button>
+    {% else %}
     <button class="nav-link" id="nav-ind-tab" data-bs-toggle="tab" data-bs-target="#nav-ind" type="button" role="tab" aria-controls="nav-ind" aria-selected="false">Individuals Table <span class="badge rounded-pill bg-light text-dark">{{species.individual_set.count}}</span></button>
+    {% endif %}
     <button class="nav-link" id="nav-pheno-tab" data-bs-toggle="tab" data-bs-target="#nav-pheno" type="button" role="tab" aria-controls="nav-pheno" aria-selected="false">Phenotypes Table <span class="badge rounded-pill bg-light text-dark">{{species.phenotype_set.count}}</span></button>
   </div>
 </nav>
@@ -95,9 +127,16 @@
   <div class="tab-pane fade show active" id="nav-pop" role="tabpanel" aria-labelledby="nav-pop-tab">
                 {% render_table pop_table %}
   </div>
-  <div class="tab-pane fade" id="nav-ind" role="tabpanel" aria-labelledby="nav-ind-tab">
-                {% render_table ind_table %}
-  </div>
+
+    {% if species.cultivated %}
+      <div class="tab-pane fade" id="nav-acc" role="tabpanel" aria-labelledby="nav-acc-tab">
+                    {% render_table acc_table %}
+      </div>
+    {% else %}
+      <div class="tab-pane fade" id="nav-ind" role="tabpanel" aria-labelledby="nav-ind-tab">
+                    {% render_table ind_table %}
+      </div>
+    {% endif %}
   <div class="tab-pane fade" id="nav-pheno" role="tabpanel" aria-labelledby="nav-pheno-tab">
                 {% render_table pheno_table %}
   </div>

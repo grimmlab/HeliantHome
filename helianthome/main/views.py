@@ -6,9 +6,11 @@ import django_tables2 as tables
 from base.views import marker_color
 from main.models import Species, Population
 from main.models import Phenotype, Individual
-from main.models import PlantImage
+from main.models import PlantImage, Accession
 from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
+from main.tables import PhenotypeValueTableCultivated, AccessionTable
+from main.tables import AccessionPhenotypeTable
 from main.filters import PopulationFilter
 from base.views import marker_color
 
@@ -19,37 +21,44 @@ from scipy.stats import norm, probplot
 Species Overview Page
 '''
 def species_overview(request):
-    species = Species.objects.all()
+    species = Species.objects.all().order_by('ncbi_id')
     return render(request,'main/species_overview.html',{"species":species})
 
 '''
 Species Detailed Page
 '''
 def species_details(request, ncbi_id):
-    #try:
+    try:
+        vdata = {}
         species = Species.objects.get(ncbi_id=ncbi_id)
         pops = species.population_set.all()
-        data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"} for pop in pops]   
-
+        
+        if species.cultivated:
+            obs = species.accession_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
+            acc_table = AccessionTable(obs)
+            RequestConfig(request, paginate={"per_page":50}).configure(acc_table)
+            vdata['acc_table'] = acc_table
+        else:
+            obs = species.individual_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
+            ind_table = IndividualsTable(obs)
+            RequestConfig(request, paginate={"per_page":50}).configure(ind_table)
+            data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"} for pop in pops]   
+            vdata['map_data'] = json.dumps(data)
+            vdata['ind_table'] = ind_table
+        
         pop_table = PopulationTable(pops, order_by="population_id")
         RequestConfig(request, paginate={"per_page":50}).configure(pop_table)
-        obs = species.individual_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
-        ind_table = IndividualsTable(obs)
-        RequestConfig(request, paginate={"per_page":50}).configure(ind_table)
         pheno_table = PhenotypeTable(species.phenotype_set.all())
         RequestConfig(request, paginate={"per_page":50}).configure(pheno_table)
         
-        vdata = {}
-        vdata['map_data'] = json.dumps(data)
         vdata['message'] = "ok"
         vdata['ncbi_id'] = ncbi_id
         vdata['species'] = species
         vdata['pop_table'] = pop_table
-        vdata['ind_table'] = ind_table
         vdata['pheno_table'] = pheno_table
         return render(request,'main/species_detail.html',vdata)
-    #except:
-    #    return render(request,'main/species_detail.html',{"message":"no_species","ncbi_id":ncbi_id})
+    except:
+        return render(request,'main/species_detail.html',{"message":"no_species","ncbi_id":ncbi_id})
 
 '''
 Population Overview Page
@@ -59,7 +68,10 @@ def population_overview(request):
     
     filter = PopulationFilter(request.GET, queryset=pops)
     
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}} for pop in pops]   
+    data = []
+    for pop in pops:
+        if pop.species.cultivated==False:
+            data.append({"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}})   
     table = PopulationTable(pops, order_by="population_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
 
@@ -74,9 +86,10 @@ Population Detail Page
 '''
 def population_detail(request,population_id):
     pop = Population.objects.get(population_id=population_id)
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
     vdata = {}
-    vdata['map_data'] = json.dumps(data)
+    if not pop.species.cultivated:
+        data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
+        vdata['map_data'] = json.dumps(data)
     vdata['pop'] = pop
     return render(request,'main/population_detail.html',vdata)
 
@@ -96,27 +109,42 @@ Phenotype Detail Page
 '''
 def phenotype_detail(request,id):
     vdata = {}
-    #try:
-    if 1:
+    try:
         pheno = Phenotype.objects.get(id=id)
         message = "ok"
         vdata['pheno'] = pheno
-        value_set = pheno.phenotypevalue_set.values("phenotype_link__individual__individual_id",
-                                                    "phenotype_link__individual__population_id",
-                                                    "phenotype_link__individual__population__latitude",
-                                                    "phenotype_link__individual__population__longitude",
-                                                    "phenotype_link__individual__population__country",
-                                                    "phenotype_link__individual__population__sitename","value",
-                                                    "phenotype_link__individual__species__species",
-                                                    "phenotype_link__individual__species__ncbi_id")
-        pop_set = value_set.values("phenotype_link__individual__population_id",
-                                   "phenotype_link__individual__population__latitude",
-                                   "phenotype_link__individual__population__longitude",
-                                   "phenotype_link__individual__population__country",
-                                   "phenotype_link__individual__population__sitename",
-                                   "phenotype_link__individual__species__species",
-                                   "phenotype_link__individual__species__ncbi_id").distinct()
-        data = [{"latLng": [elem['phenotype_link__individual__population__latitude'], 
+        if pheno.species.cultivated==True:
+            vdata['cultivated'] = True
+            value_set = pheno.phenotypevalue_set.values("phenotype_link__accession__accession_id",
+                                                        "phenotype_link__accession__population_id",
+                                                        "value",
+                                                        "phenotype_link__accession__species__species",
+                                                        "phenotype_link__accession__species__ncbi_id")
+            pop_set = value_set.values("phenotype_link__accession__population_id",
+                                       "phenotype_link__accession__species__species",
+                                       "phenotype_link__accession__species__ncbi_id").distinct()
+            vdata['map_data'] = None
+            table = PhenotypeValueTableCultivated(value_set, order_by="phenotype_link__accession__accession_id")
+            RequestConfig(request, paginate={"per_page":50}).configure(table)
+            vdata['table'] = table
+        else:
+            vdata['cultivated'] = False
+            value_set = pheno.phenotypevalue_set.values("phenotype_link__individual__individual_id",
+                                                        "phenotype_link__individual__population_id",
+                                                        "phenotype_link__individual__population__latitude",
+                                                        "phenotype_link__individual__population__longitude",
+                                                        "phenotype_link__individual__population__country",
+                                                        "phenotype_link__individual__population__sitename","value",
+                                                        "phenotype_link__individual__species__species",
+                                                        "phenotype_link__individual__species__ncbi_id")
+            pop_set = value_set.values("phenotype_link__individual__population_id",
+                                       "phenotype_link__individual__population__latitude",
+                                       "phenotype_link__individual__population__longitude",
+                                       "phenotype_link__individual__population__country",
+                                       "phenotype_link__individual__population__sitename",
+                                       "phenotype_link__individual__species__species",
+                                       "phenotype_link__individual__species__ncbi_id").distinct()
+            data = [{"latLng": [elem['phenotype_link__individual__population__latitude'], 
                             elem["phenotype_link__individual__population__longitude"]], 
                  "name": elem["phenotype_link__individual__species__species"] + ": " + 
                          elem['phenotype_link__individual__population_id'] + " (" + 
@@ -124,8 +152,13 @@ def phenotype_detail(request,id):
                          elem['phenotype_link__individual__population__sitename'] + ")",
                  "style": {"fill": marker_color(elem["phenotype_link__individual__species__species"]),"r":4}} for elem in value_set]   
         
-        vdata['map_data'] = json.dumps(data)
-        vdata['pop_size'] = len(pop_set)
+            vdata['map_data'] = json.dumps(data)
+            vdata['pop_size'] = len(pop_set)
+            
+            table = PhenotypeValueTable(value_set, order_by="phenotype_link__individual__individual_id")
+            RequestConfig(request, paginate={"per_page":50}).configure(table)
+            vdata['table'] = table
+        
         values = value_set.values_list("value",flat=True)
         #compute hist
         hist, bins = np.histogram(values,bins=30,density=True)
@@ -160,11 +193,8 @@ def phenotype_detail(request,id):
         vdata['y_max_value'] = y_max_value
         diagonal = np.interp(ndist, [x_min_value,x_max_value], [y_min_value,y_max_value])
         vdata['diagonal_qq'] = json.dumps(list(np.array(diagonal,dtype="float")))
-        table = PhenotypeValueTable(value_set, order_by="phenotype_link__individual__individual_id")
-        RequestConfig(request, paginate={"per_page":50}).configure(table)
-        vdata['table'] = table
-    #except:
-    #    message = "no_pheno"
+    except:
+        message = "no_pheno"
     vdata['pid'] = id
     vdata['message'] = message
 
@@ -175,7 +205,7 @@ Individual Overview Page
 '''
 def individuals_overview(request):
     #.objects.annotate(count_phenotypes=Count('observationunit__phenotypevalue__phenotype', distinct=True)).prefetch_related('genotype_set').all()
-    obs = Individual.objects.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all()
+    obs = Individual.objects.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).filter(species__cultivated=False)
     table = IndividualsTable(obs, order_by="individual_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
     vdata = {}
@@ -211,3 +241,32 @@ def image_overview(request):
     vdata = {}
     vdata['table'] = table
     return render(request,'main/image_overview.html',vdata)
+
+'''
+Accession Overview Page
+'''
+def accession_overview(request):
+    #.objects.annotate(count_phenotypes=Count('observationunit__phenotypevalue__phenotype', distinct=True)).prefetch_related('genotype_set').all()
+    obs = Accession.objects.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).filter(species__cultivated=True)
+    table = AccessionTable(obs, order_by="accession_id")
+    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    vdata = {}
+    vdata['table'] = table
+    return render(request,'main/accession_overview.html',vdata)
+
+'''
+Accession Detail Page
+'''
+def accession_detail(request,accession_id):
+    ind = Accession.objects.get(accession_id=accession_id)
+    pop = ind.population
+    phenotype_values = ind.phenotypelink_set.values("accession__species__ncbi_id","accession__species__species",
+                                                    "phenotypevalue__phenotype__name","phenotypevalue__value",
+                                                    "phenotypevalue__phenotype__category","phenotypevalue__phenotype__sub_category",
+                                                    "phenotypevalue__phenotype__type","phenotypevalue__phenotype_id")
+    table = AccessionPhenotypeTable(phenotype_values, order_by="accession_phenotypevalue__phenotype__name")
+    RequestConfig(request, paginate={"per_page":100}).configure(table)
+    vdata = {}
+    vdata['ind'] = ind
+    vdata['table'] = table
+    return render(request,'main/accession_detail.html',vdata)

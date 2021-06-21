@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %} HeliantHOME - Accession Detail{% endblock title %}
+
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+<nav class="navbar navbar-light bg-light" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+  <ol class="breadcrumb ms-3 fw-bolder fs-6 mt-2">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/accessions/">Accession Overview</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Accession Detail</li>
+  </ol>
+</nav>
+
+<div class="container mt-2 container-fluid content-row">
+<div class="row">
+
+<div class="col-sm-12 col-md-12 pt-2">
+    <div class="card h-100">
+      <div class="card-header">
+        Details for Accession: <span class="fw-bold">{{ind.accession_id}}</span>
+      </div>
+  
+      <div class="card-body p-0 m-2">
+        <p class="card-text">
+        <!--<small class="text-muted">-->
+            <div class="row">
+                <div class="col">
+                Accession ID:
+                </div>
+                <div class="col">
+                {{ind.accession_id}}
+                </div>
+            </div>
+        
+            <div class="row pt-3">
+                <div class="col">
+                Cultivated Species:
+                </div>
+                <div class="col">
+                <a href="/species/{{ind.species.ncbi_id}}/"><em>{{ind.species.species}}</em></a>
+                </div>
+            </div>
+        
+            <div class="row pt-3">
+                <div class="col">
+                Population:
+                </div>
+                <div class="col">
+                <a href="/population/{{ind.population.population_id}}/">{{ind.population.population_id}}</a>
+                </div>
+            </div>
+
+            <div class="row pt-3">
+                <div class="col">
+                Measured Phenotypes:
+                </div>
+                <div class="col">
+                {{ind.phenotypelink_set.count}}
+                </div>
+            </div>
+        
+        <!--</small>-->
+        </p>
+      </div>
+</div>
+</div>
+
+</div>
+</div>
+<!-- New Container -->
+<div class="container mt-2 container-fluid content-row">
+
+    <div class="row">
+
+                {% render_table table %}
+    
+    </div>
+
+<!--container end-->
+</div>
+
+<script>
+    $(function(){
+        $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
+            regionStyle: {
+                initial: {
+                    fill: '#9FC4E1'
+                },
+            },
+            scaleColors: ['#C8EEFF', '#0071A4'],
+            normalizeFunction: 'polynomial',
+            hoverOpacity: 0.7,
+            hoverColor: false,
+            markerStyle: {
+                initial: {
+                    fill: '#FF6961',
+                    stroke: '#383f47'
+                }
+            },
+            markers: {{ map_data|safe }}
+        });
+    });
+</script>
+
+{% endblock content %}

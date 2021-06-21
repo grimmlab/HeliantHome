@@ -35,11 +35,13 @@ def landing_page(request):
     #    return HttpResponseRedirect("search_results/%s/"%(query))
     vdata = {}
     #vdata['search_form'] = search_form
-    vdata['number_species'] = models.Species.objects.count()
+    vdata['number_species'] = models.Species.objects.filter(cultivated=False).count()
+    vdata['number_cultivated'] = models.Species.objects.filter(cultivated=True).count()
     vdata['number_phenotypes'] = models.Phenotype.objects.count()
     vdata['number_measurements'] = models.PhenotypeValue.objects.count()
     vdata['number_populations'] = models.Population.objects.count()
     vdata['number_individuals'] = models.Individual.objects.count()
+    vdata['number_accessions'] = models.Accession.objects.count()
     vdata['number_images'] = models.PlantImage.objects.count()
     categories = models.Phenotype.objects.values_list("category").distinct()
     category_list = []
@@ -49,7 +51,7 @@ def landing_page(request):
         category_entries.append(models.Phenotype.objects.filter(category=cat[0]).count())
     vdata['category_list'] = json.dumps(category_list)
     vdata['category_entries'] = json.dumps(list(np.array(category_entries,dtype="float")))
-    pops = models.Population.objects.all()
+    pops = models.Population.objects.filter(species__cultivated=False)
     data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.8}} for pop in pops]   
     vdata['map_data'] = json.dumps(data)
     return render(request,'base/landingpage.html',vdata)
