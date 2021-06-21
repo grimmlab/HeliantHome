@@ -11,7 +11,7 @@ class PopulationTable(tables.Table):
     Table that is displayed in the population overview
     """
     population_id = tables.LinkColumn("population_detail",args=[A('population_id')], verbose_name="Population ID", order_by="population_id",attrs={"a": {"class": "text-decoration-none"}})
-    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none"}})
+    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
     individuals_sampled = tables.Column(accessor="individuals_sampled", verbose_name="Individuals Samples")
     country = tables.Column(accessor="country", verbose_name="Country")
     sitename = tables.Column(accessor="sitename", verbose_name="Sitename")
@@ -28,7 +28,7 @@ class IndividualsTable(tables.Table):
     Table that is displayed in the individuals overview
     """
     individual_id = tables.LinkColumn("individual_detail",args=[A('individual_id')], verbose_name="Individual ID", order_by="individual_id",attrs={"a": {"class": "text-decoration-none"}})
-    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none"}})
+    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
     population = tables.LinkColumn("population_detail",args=[A('population.population_id')], text=lambda record: record.population.population_id, verbose_name="Population", order_by="population.population_id",attrs={"a": {"class": "text-decoration-none"}})
     genotype_id = tables.Column(accessor="genotype_id", verbose_name="Genotype ID")
     number_of_phenotypes = tables.Column(accessor="count_phenotypes",verbose_name='# Phenotypes')
@@ -43,7 +43,7 @@ class PhenotypeTable(tables.Table):
     id = tables.LinkColumn("phenotype_detail",args=[A('id')], verbose_name="ID", order_by="id",attrs={"a": {"class": "text-decoration-none"}})
     #name = tables.LinkColumn("phenotype_detail",args=[A('id')], verbose_name="Phenotype Name", order_by="name",attrs={"a": {"class": "text-decoration-none"}})
     name = tables.Column(accessor="name", verbose_name="Phenotype Name")
-    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none"}})
+    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
     type = tables.Column(accessor="type", verbose_name="Type")
     category = tables.Column(accessor="category", verbose_name="Category")
     sub_category = tables.Column(accessor="sub_category", verbose_name="Subcategory")
@@ -68,7 +68,7 @@ class ImageTable(tables.Table):
     """
     Table that is displayed in the image overview
     """
-    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species")
+    species = tables.LinkColumn("species_details",args=[A('species.ncbi_id')], text=lambda record: record.species.species, verbose_name="Species", order_by="species.species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
     individual_id = tables.LinkColumn("individual_detail",args=[A('individual_id')], verbose_name="Individual ID", order_by="individual_id")
     flower = tables.Column(verbose_name="Flower",accessor="plantimage_set")
     leafbottom = tables.Column(verbose_name="Leaf Bottom",accessor="plantimage_set")
@@ -135,8 +135,8 @@ class IndividualPhenotypeTable(tables.Table):
     """
     Display Individual Phenotype Values
     """
-    species = tables.LinkColumn("species_details",args=[A('individual__species__ncbi_id')], text=lambda record: record['individual__species__species'], verbose_name="Species", order_by="individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
-    id = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="ID", order_by="phenotypevalue__phenotype_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotypevalue__phenotype_id'])
+    species = tables.LinkColumn("species_details",args=[A('individual__species__ncbi_id')], text=lambda record: record['individual__species__species'], verbose_name="Species", order_by="individual__species__species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
+    #id = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="ID", order_by="phenotypevalue__phenotype_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotypevalue__phenotype_id'])
     name = tables.LinkColumn("phenotype_detail",args=[A('phenotypevalue__phenotype_id')], verbose_name="Phenotype Name", order_by="phenotypevalue__phenotype__name",attrs={"a": {"class": "text-decoration-none"}}, text=lambda record: record['phenotypevalue__phenotype__name'])
     value = tables.Column(accessor="phenotypevalue__value", verbose_name="Phenotype Value")
     category = tables.Column(accessor="phenotypevalue__phenotype__category", verbose_name="Category")
@@ -156,7 +156,7 @@ class PhenotypeValueTable(tables.Table):
     """
     Display Phenotype Values
     """
-    species = tables.LinkColumn("species_details",args=[A('phenotype_link__individual__species__ncbi_id')], text=lambda record: record['phenotype_link__individual__species__species'], verbose_name="Species", order_by="phenotype_link__individual__species__species",attrs={"a": {"class": "text-decoration-none"}})
+    species = tables.LinkColumn("species_details",args=[A('phenotype_link__individual__species__ncbi_id')], text=lambda record: record['phenotype_link__individual__species__species'], verbose_name="Species", order_by="phenotype_link__individual__species__species",attrs={"a": {"class": "text-decoration-none","style":"font-style:italic"}})
     population_id = tables.LinkColumn("population_detail",args=[A('phenotype_link__individual__population_id')], verbose_name="Population ID", order_by="phenotype_link__individual__population_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__population_id'])
     individual_id = tables.Column(accessor="phenotype_link__individual__individual_id", verbose_name="Individual ID")
     #individual_id = tables.LinkColumn("individual_detail",args=[A('phenotype_link__individual__individual_id')], verbose_name="Individual ID", order_by="phenotype_link__individual__individual_id",attrs={"a": {"class": "text-decoration-none"}},text=lambda record: record['phenotype_link__individual__individual_id'])

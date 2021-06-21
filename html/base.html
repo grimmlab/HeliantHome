@@ -93,16 +93,47 @@
 
 <!-- Container element -->
 
+
 	<div class="container">
         {% block content %}{% endblock content %}
 	</div>
-	<div class="footer">
+	<div class="footer mb-4"> 
 	    <div class="container">
     		<hr>
 		    HeliantHOME is a public database for sunflower phenotypes (&copy 2021)
-            <a class="float-end fw-lighter" href="/about/">About</a>
+            <span class="float-end fw-lighter">
+            <a href="/about/"> About</a> |
+            <a data-bs-toggle="offcanvas" data-bs-target="#imprint" aria-controls="imprint" href="#imprint"> Imprint</a>
+            </span>
 	    </div>
         </div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="imprint" aria-labelledby="imprintLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="imprintLabel">Legal Notice</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body small">
+    <strong>Contact Information</strong><br>
+    Prof. Dr. Dominik Grimm<br>
+    Professorship of Bioinformatics<br>
+    <br>
+    TUM Campus Straubing for Biotechnology and Sustainability (TUMCS)<br>
+    Weihenstephan-Triesdorf University of Applied Sciences (HSWT)<br>
+    Petersgasse 18<br>
+    93415 Straubing<br>
+    Germany<br>
+    <br>
+    dominik.grimm [at] hswt.de
+    <br><br>
+    <strong>Legal Information</strong><br>
+    Type of business: Research Institute
+    <br><br>
+    <strong>Disclaimer</strong><br>
+    This website provides information about public research data. We make no guarantees of accuracy, completeness and timeliness of the infomration on this website. We, therefore, accept no responsibility or liability for damages or losses resulting from the use of this website. This website provides links to other internet sites for the convenience of users. We are not responsible for the availability or content of these external sites, nor do they endorse, warrant, or guarantee any commercial product, service, site, law firm, attorney or information described or offered at these other internet sites.
+  </div>
+</div>
+
 
 	</body>
 

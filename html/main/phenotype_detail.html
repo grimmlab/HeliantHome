@@ -115,7 +115,7 @@
                 Ontology:
                 </div>
                 <div class="col">
-                <span style="white-space:nowrap"><a href="{{pheno.ontology.get_info_url}}" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.ontology.name}} (ID: {{pheno.ontology.id}}) <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                <span style="white-space:nowrap"><a href="{{pheno.ontology.get_info_url}}" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.ontology.name}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
             
@@ -135,6 +135,17 @@
                 {{pop_size}}
                 </div>
             </div>
+        
+        {% ifnotequal pheno.easygwas_link None  %}
+            <div class="row pt-2">
+                <div class="col">
+                    <strong>GWAS Results in easyGWAS</strong>
+                </div>
+                <div class="col">
+                <span style="white-space:nowrap"><a href="{{pheno.easygwas_link}}" target="_blank" class="text-decoration-none">easyGWAS results <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>
+                </div>
+            </div>
+        {% endifnotequal %}
             
             <div class="row pt-2">
                 <div class="col">
@@ -156,6 +167,7 @@
                 {{pheno.method}}
                 </div>
             </div>
+            
         <!--</small>-->
         </p>
       </div>
@@ -175,6 +187,8 @@
 
 </div>
 </div>
+
+
 <!-- New Container -->
 <div class="container mt-2 container-fluid content-row">
 
