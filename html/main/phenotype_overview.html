@@ -12,6 +12,47 @@
     <li class="breadcrumb-item active" aria-current="page">Phenotype Overview</li>
   </ol>
 </nav>
+    
+    <div class="card h-100 mt-2">
+      <div class="card-header">
+        Filters
+      </div>  
+    <div class="card-body">
+    <form method="post">
+        {% csrf_token %}
+          <div class="row">
+          <div class="col-sm-12 col-md-1">
+            <label for="id_species" class="form-label">Taxa</label>
+          </div>
+          <div class="col-sm-12 col-md-2">
+                {{form.species}}
+          </div>
+          <div class="col-sm-12 col-md-1">
+            <label for="id_category" class="form-label">Category</label>
+          </div>
+          <div class="col-sm-12 col-md-2">
+                {{form.category}}
+          </div>
+          <div class="col-sm-12 col-md-1">
+            <label for="id_subcategory" class="form-label">Subcategory</label>
+          </div>
+          <div class="col-sm-12 col-md-2">
+                {{form.subcategory}}
+          </div>
+          <div class="col-sm-12 col-md-1">
+            <label for="id_cultivated" class="form-label">Cultivated</label>
+          </div>
+          <div class="col-sm-12 col-md-2">
+                {{form.cultivated}}
+          </div>
+          </div>
+          <div class="mt-3 float-end">
+            <a href="/phenotypes/" class="btn btn-secondary">Clear Filters</a>
+            <button type="submit" class="btn btn-primary">Filter Table</button>
+         </div>
+    </form>
+    </div>
+    </div>
 
 <div class="container" id="table">
 

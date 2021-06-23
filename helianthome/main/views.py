@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Count
 from django_tables2 import RequestConfig
 import django_tables2 as tables
+from django.db.models import Q
 
 from base.views import marker_color
 from main.models import Species, Population
@@ -11,7 +12,7 @@ from main.tables import PopulationTable, PhenotypeTable, IndividualsTable
 from main.tables import ImageTable, IndividualPhenotypeTable, PhenotypeValueTable
 from main.tables import PhenotypeValueTableCultivated, AccessionTable
 from main.tables import AccessionPhenotypeTable
-from main.filters import PopulationFilter
+from main.forms import PopulationFilter, PhenotypeFilter
 from base.views import marker_color
 
 import json
@@ -64,10 +65,33 @@ def species_details(request, ncbi_id):
 Population Overview Page
 '''
 def population_overview(request):
-    pops = Population.objects.all()
     
-    filter = PopulationFilter(request.GET, queryset=pops)
-    
+    initial = {}
+
+    if request.method == 'POST':
+        form = PopulationFilter(request.POST)
+        search_dict = {}
+        species = request.POST.get('species')
+        if not (species==None or species==""):
+            search_dict['species__species'] = species
+            initial['species'] = species
+        country = request.POST.get('country')
+        if not ( country==None or country==""):
+            search_dict['country'] = country
+            initial['country'] = country
+        sitename = request.POST.get('sitename')
+        if not ( sitename==None or sitename==""):
+            search_dict['sitename'] = sitename
+            initial['sitename'] = sitename
+        cultivated = request.POST.get('cultivated')
+        if not ( cultivated==None or cultivated==""):
+            search_dict['species__cultivated'] = cultivated
+            initial['cultivated'] = cultivated
+        pops = Population.objects.filter(**search_dict)
+    else:
+        pops = Population.objects.all()
+        
+
     data = []
     for pop in pops:
         if pop.species.cultivated==False:
@@ -75,10 +99,16 @@ def population_overview(request):
     table = PopulationTable(pops, order_by="population_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
 
+    form = PopulationFilter(initial=initial)
     vdata = {}
+    if pops.count()==0:
+        vdata['filter_empty'] = True
+    else:
+        vdata['filter_empty'] = False
     vdata['pop_table'] = table
     vdata['map_data'] = json.dumps(data)
-    vdata['filter'] = filter
+    #vdata['filter'] = filter
+    vdata['form'] = form
     return render(request,'main/population_overview.html',vdata)
 
 '''
@@ -97,11 +127,42 @@ def population_detail(request,population_id):
 Phenotype Overview Page
 '''
 def phenotype_overview(request):
-    obs = Phenotype.objects.all()
+    initial = {}
+
+    if request.method == 'POST':
+        form = PhenotypeFilter(request.POST)
+        search_dict = {}
+        species = request.POST.get('species')
+        if not (species==None or species==""):
+            search_dict['species__species'] = species
+            initial['species'] = species
+        res = request.POST.get('category')
+        if not ( res==None or res==""):
+            search_dict['category'] = res
+            initial['category'] = res
+        res = request.POST.get('subcategory')
+        if not ( res==None or res==""):
+            search_dict['sub_category'] = res
+            initial['subcategory'] = res
+        cultivated = request.POST.get('cultivated')
+        if not ( cultivated==None or cultivated==""):
+            search_dict['species__cultivated'] = cultivated
+            initial['cultivated'] = cultivated
+        obs = Phenotype.objects.filter(**search_dict)
+    else:
+        obs = Phenotype.objects.all()
+    
+    form = PhenotypeFilter(initial=initial)
+    vdata = {}
+    if obs.count()==0:
+        vdata['filter_empty'] = True
+    else:
+        vdata['filter_empty'] = False
+    
     table = PhenotypeTable(obs, order_by="id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
-    vdata = {}
     vdata['table'] = table
+    vdata['form'] = form
     return render(request,'main/phenotype_overview.html',vdata)
 
 '''

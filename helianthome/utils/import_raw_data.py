@@ -440,6 +440,8 @@ def integrate():
     study.save()
 
     add_publication_to_study(study,"10.1038/s41586-020-2467-6")
+    add_publication_to_study(study,"10.2134/agronmonogr19.c2")
+    add_publication_to_study(study,"10.3732/ajb.1500031")
     
     store_climate_variables(filename="../data/climate_variables.csv")
     store_soil_variables(filename="../data/soil_variables.csv")
@@ -461,6 +463,12 @@ def integrate():
     study.save()
 
     add_publication_to_study(study,"10.1111/nph.15894")
+    add_publication_to_study(study,"10.1038/s41477-018-0329-0")
+    add_publication_to_study(study,"10.1007/s00122-011-1619-3")
+    add_publication_to_study(study,"10.3732/ajb.1500031")
+    add_publication_to_study(study,"10.1371/journal.pgen.1003378")
+    add_publication_to_study(study,"10.1093/jhered/esz013")
+    add_publication_to_study(study,"10.1007/s00438-019-01610-7")
 
     store_lexuan_pop(filename="../data/lexuan_paper_SAM_population.csv",study=study)
     store_phenotype_values4sam(filename="../data/lexuan_SAM_data_compiled.csv",study=study)

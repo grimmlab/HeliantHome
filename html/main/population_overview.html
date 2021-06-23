@@ -23,7 +23,45 @@
         Filters
       </div>  
     <div class="card-body">
-    
+    <form method="post">
+        {% csrf_token %}
+          <div class="row mb-2 align-items-center">
+          <div class="col-sm-12 col-md-2">
+            <label for="id_species" class="form-label">Taxa</label>
+          </div>
+          <div class="col-sm-12 col-md-10">
+                {{form.species}}
+          </div>
+          </div>
+          <div class="row mb-2 align-items-center">
+          <div class="col-sm-12 col-md-2">
+            <label for="id_country" class="form-label">Country</label>
+          </div>
+          <div class="col-sm-12 col-md-10">
+                {{form.country}}
+          </div>
+          </div>
+          <div class="row mb-2 align-items-center">
+          <div class="col-sm-12 col-md-2">
+            <label for="id_sitename" class="form-label">Sitename</label>
+          </div>
+          <div class="col-sm-12 col-md-10">
+                {{form.sitename}}
+          </div>
+          </div>
+          <div class="row mb-2 align-items-center">
+          <div class="col-sm-12 col-md-2">
+            <label for="id_cultivated" class="form-label">Cultivated</label>
+          </div>
+          <div class="col-sm-12 col-md-10">
+                {{form.cultivated}}
+          </div>
+          </div>
+          <div class="mb-3 float-end">
+            <a href="/populations/" class="btn btn-secondary">Clear Filters</a>
+            <button type="submit" class="btn btn-primary">Filter</button>
+         </div>
+    </form>
     </div>
     </div>
 </div>
@@ -40,7 +78,16 @@
 
     <div class="row pt-3">
             <div class="col">
+                {% if filter_empty %}
+                <div class="card border-danger">
+                  <div class="card-body text-danger">
+                    <i class="bi bi-file-x"></i> <strong>No entries found for this query</strong>
+                  </div>
+                </div>
+
+                {% else %}
                 {% render_table pop_table %}
+                {% endif %}
             </div>
         </div>
 </div>
