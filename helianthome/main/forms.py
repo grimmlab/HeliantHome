@@ -16,6 +16,7 @@ class PhenotypeFilter(forms.Form):
     cultivated = forms.ModelChoiceField(queryset=models.Phenotype.objects.order_by('species__cultivated').values_list('species__cultivated', flat=True).distinct(),widget=forms.Select(attrs={"class":"form-select"}),required=False)
     category = forms.ModelChoiceField(queryset=models.Phenotype.objects.order_by('category').values_list('category', flat=True).distinct(),widget=forms.Select(attrs={"class":"form-select"}),required=False)
     subcategory = forms.ModelChoiceField(queryset=models.Phenotype.objects.order_by('sub_category').values_list('sub_category', flat=True).distinct(),widget=forms.Select(attrs={"class":"form-select"}),required=False)
+    search = forms.CharField(required=False)
     #class Meta:
     #    model = models.Population
     #    fields = ['species']

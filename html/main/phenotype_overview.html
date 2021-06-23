@@ -46,7 +46,15 @@
                 {{form.cultivated}}
           </div>
           </div>
-          <div class="mt-3 float-end">
+          <div class="row mt-2 mb-2">
+          <div class="col-sm-12 col-md-1">
+            <label for="id_cultivated" class="form-label">Search</label>
+          </div>
+          <div class="col-sm-12 col-md-2">
+            {{form.search}}
+          </div>
+          </div>
+          <div class="float-end">
             <a href="/phenotypes/" class="btn btn-secondary">Clear Filters</a>
             <button type="submit" class="btn btn-primary">Filter Table</button>
          </div>
@@ -54,12 +62,19 @@
     </div>
     </div>
 
-<div class="container" id="table">
+<div class="container mt-2" id="table">
 
     <div class="row">
-            <div class="col">
+                {% if filter_empty %}
+                <div class="card border-danger">
+                  <div class="card-body text-danger">
+                    <i class="bi bi-file-x"></i> <strong>No entries found for this query</strong>
+                  </div>
+                </div>
+
+                {% else %}
                 {% render_table table %}
-            </div>
+                {% endif %}
         </div>
 </div>
 

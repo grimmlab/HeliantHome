@@ -148,7 +148,16 @@ def phenotype_overview(request):
         if not ( cultivated==None or cultivated==""):
             search_dict['species__cultivated'] = cultivated
             initial['cultivated'] = cultivated
-        obs = Phenotype.objects.filter(**search_dict)
+        
+        search = request.POST.get('search')
+        if not (search==None or search==""):
+            search = search.strip()
+            initial['search'] = search
+            obs = Phenotype.objects.filter(Q(**search_dict) | Q(name__contains=search) | Q(category__contains=search) |
+                                           Q(sub_category__contains=search) | Q(type__contains=search) |
+                                           Q(ontology__name__contains=search))
+        else:
+            obs = Phenotype.objects.filter(**search_dict)
     else:
         obs = Phenotype.objects.all()
     
@@ -186,7 +195,7 @@ def phenotype_detail(request,id):
                                        "phenotype_link__accession__species__ncbi_id").distinct()
             vdata['map_data'] = None
             table = PhenotypeValueTableCultivated(value_set, order_by="phenotype_link__accession__accession_id")
-            RequestConfig(request, paginate={"per_page":50}).configure(table)
+            RequestConfig(request, paginate={"per_page":20}).configure(table)
             vdata['table'] = table
         else:
             vdata['cultivated'] = False
@@ -217,7 +226,7 @@ def phenotype_detail(request,id):
             vdata['pop_size'] = len(pop_set)
             
             table = PhenotypeValueTable(value_set, order_by="phenotype_link__individual__individual_id")
-            RequestConfig(request, paginate={"per_page":50}).configure(table)
+            RequestConfig(request, paginate={"per_page":20}).configure(table)
             vdata['table'] = table
         
         values = value_set.values_list("value",flat=True)

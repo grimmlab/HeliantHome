@@ -122,13 +122,21 @@
             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <div class="accordion-body">
               <div class="text-center">
+              {% ifequal ind.plantimage_set.count 0 %}
+                <div class="card border-danger">
+                  <div class="card-body text-danger">
+                    <i class="bi bi-file-x"></i> <strong>No images found for this individual</strong>
+                  </div>
+                </div>
+              {% else %}
+                <a href="/data/individuals/{{ind.individual_id}}.tar.gz" class="btn btn-outline-info float-end"> <i class="bi bi-download me-3 fs-6"></i>Download high-quality images</a>
               {% for im in ind.plantimage_set.all %}
                     <figure class="figure m-2 p-2" style="max-width:280px">
                      <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
                      <figcaption class="figure-caption">{{im.description|safe}}</figcaption>
                     </figure>
                 {% endfor %}
-
+              {% endifequal %}
                 </div>
               </div>
             </div>
