@@ -35,7 +35,7 @@ def landing_page(request):
     #    return HttpResponseRedirect("search_results/%s/"%(query))
     vdata = {}
     #vdata['search_form'] = search_form
-    vdata['number_species'] = models.Species.objects.filter(cultivated=False).count()
+    vdata['number_species'] = models.Species.objects.filter().count()
     vdata['number_cultivated'] = models.Species.objects.filter(cultivated=True).count()
     vdata['number_phenotypes'] = models.Phenotype.objects.count()
     vdata['number_measurements'] = models.PhenotypeValue.objects.count()
@@ -61,6 +61,12 @@ About Page
 '''
 def about_page(request):
     return render(request,'base/about.html',{})
+
+'''
+Download Page
+'''
+def download_page(request):
+    return render(request,'base/download.html',{})
 
 '''
 Search Result View for Global Search in AraPheno

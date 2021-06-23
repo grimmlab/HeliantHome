@@ -2,6 +2,7 @@ import numpy as np
 import os
 from main.models import *
 from datetime import datetime
+import requests
 
 TAXONOMY = {"Helianthus annuus":4232,
             "Helianthus argophyllus":73275,
@@ -35,6 +36,8 @@ SPECIES_DESCRIPTION = {"Helianthus annuus":'It’s an annual plant frequently fo
                   "Helianthus niveus subsp. canescens":'Also known as Grey Sunflower, mostly annual plants, smaller than other species with individuals of 50 to 150 cm tall. Extremely branched with small inflorescences. Found in Mexico (Sonora) , and in the US (Arizona and California).',
                   "Helianthus annuus var. macrocarpus":'Commonly known as cultivated sunflower, it’s a variety nested within the H.annuus species, shorter than most of it’s wild relatives, with large single flowerheads, most of the times not branched.'}
 
+
+
 """
 Read and Store Climate Variables
 """
@@ -65,7 +68,7 @@ def store_soil_variables(filename="../data/soil_variables.csv"):
 """
 Read and Store Populations & Individuals
 """
-def store_populations(filename):
+def store_populations(filename,study):
     f = open(filename,"r",encoding="utf-8")
     for i,line in enumerate(f):
         sv = line.strip().split(";")
@@ -98,6 +101,7 @@ def store_populations(filename):
                 species.description = SPECIES_DESCRIPTION[sv[4].strip()]
                 species.cultivated = SPECIES_CULTIVATED[sv[4].strip()]
                 species.species_image = SPECIES_IMAGES[sv[4].strip()]
+                species.study = study
                 species.save()
             pop.species = species
             #Save Model   
@@ -164,7 +168,7 @@ def load_phenotype_descriptions(filename="../data/phenotype_description.csv"):
     f.close()
     return phenotypes
 
-def store_phenotype_values(filename):
+def store_phenotype_values(filename,study):
     pd = load_phenotype_descriptions("../data/phenotype_description.csv")
     phenotypes = {}
     f = open(filename,"r",encoding="utf-8")
@@ -190,6 +194,7 @@ def store_phenotype_values(filename):
                         ontology.name = p['ontology_name']
                         ontology.save()
                     pheno.ontology = ontology
+                    pheno.study = study
                     pheno.save()
                     phenotypes[j] = pheno
                 else:
@@ -214,7 +219,7 @@ def store_phenotype_values(filename):
                         val = float(val)
                         pl = PhenotypeLink()
                         pl.individual = ind
-                        #pl.study = 
+                        pl.study = study
                         pl.save()
                         pv.value = val
                         pv.phenotype = pheno
@@ -226,7 +231,7 @@ def store_phenotype_values(filename):
     f.close()
     print("Successfully stored %s phenotypes" % filename)
 
-def store_images(filename):
+def store_images(filename,study):
     f = open(filename,"r",encoding="utf-8")
     media = "/media/images/thumbnails/"
     for i,line in enumerate(f):
@@ -238,35 +243,43 @@ def store_images(filename):
                     continue
                 elif img.strip().split("_")[-1]=="flower":
                     pimg = PlantImage(category="flower",thumb_filename=os.path.join(media,os.path.join("flower",img.strip() + ".jpg")),
-                                      individual=ind, description="High Resolution Image of individual sunflower inflorescences showing both top and bottom sides of them (most of the times in triplicate).")
+                                      individual=ind, description="High Resolution Image of individual sunflower inflorescences showing both top and bottom sides of them (most of the times in triplicate).",
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="leafbottom":
                     pimg = PlantImage(category="leafbottom",thumb_filename=os.path.join(media,os.path.join("leafbottom",img.strip() + ".jpg")),
-                                     individual=ind, description="300 dpi resolution image of individual sunflower leaf (abaxial)")
+                                     individual=ind, description="300 dpi resolution image of individual sunflower leaf (abaxial)",
+                                     study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="leaftop":
                     pimg = PlantImage(category="leaftop",thumb_filename=os.path.join(media,os.path.join("leaftop",img.strip() + ".jpg")),
-                                      individual=ind,description="300 dpi resolution image of sunflower leaf of each studied individual (adaxial)")
+                                      individual=ind,description="300 dpi resolution image of sunflower leaf of each studied individual (adaxial)", 
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="plantside":
                     pimg = PlantImage(category="plantside",thumb_filename=os.path.join(media,os.path.join("plantside",img.strip() + ".jpg")),
-                                      individual=ind,description="High resolution image of sunflower whole plant of each studied individual (side view)")
+                                      individual=ind,description="High resolution image of sunflower whole plant of each studied individual (side view)",
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="planttop":
                     pimg = PlantImage(category="planttop",thumb_filename=os.path.join(media,os.path.join("planttop",img.strip() + ".jpg")),
-                                      individual=ind,description="High resolution image of sunflower whole plant of each studied individual (top view)")
+                                      individual=ind,description="High resolution image of sunflower whole plant of each studied individual (top view)",
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="primarybranch":
                     pimg = PlantImage(category="primarybranch",thumb_filename=os.path.join(media,os.path.join("primarybranch",img.strip() + ".jpg")),
-                                      individual=ind,description="High resolution image of branch sections of each studied individual (about 8 com long) cut from their primary branch.")
+                                      individual=ind,description="High resolution image of branch sections of each studied individual (about 8 com long) cut from their primary branch.",
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="seed":
                     pimg = PlantImage(category="seed",thumb_filename=os.path.join(media,os.path.join("seed",img.strip() + ".jpg")),
-                                      individual=ind,description="High resolution image of branch sections of each studied individual (about 8 com long) cut from their primary branch.")
+                                      individual=ind,description="High resolution image of branch sections of each studied individual (about 8 com long) cut from their primary branch.",
+                                      study=study)
                     pimg.save()
                 elif img.strip().split("_")[-1]=="leafstrip":
                     pimg = PlantImage(category="leafstrip",thumb_filename=os.path.join(media,os.path.join("leafstrip",img.strip() + ".jpg")),
-                                      individual=ind,description="High Resolution Image (2400 dpi) of sunflower leaf sections for each studied individual.")
+                                      individual=ind,description="High Resolution Image (2400 dpi) of sunflower leaf sections for each studied individual.",
+                                      study=study)
                     pimg.save()
     f.close()
     print("Successfully stored %s thumbnails" % filename)
@@ -289,7 +302,7 @@ def store_easygwas_links(filename=""):
 """
 Read and Store Populations & Individuals for Lexuan Populatian
 """
-def store_lexuan_pop(filename):
+def store_lexuan_pop(filename,study):
     sname =  "Helianthus annuus var. macrocarpus"
     species = Species()
     species.species = sname
@@ -297,6 +310,7 @@ def store_lexuan_pop(filename):
     species.description = SPECIES_DESCRIPTION[sname]
     species.cultivated = SPECIES_CULTIVATED[sname]
     species.species_image = SPECIES_IMAGES[sname]
+    species.study = study
     species.save()
 
     pop = Population()
@@ -313,38 +327,20 @@ def store_lexuan_pop(filename):
         if i==0:
             continue
         else:
-            accession = Accession(accession_id=sv[3].strip(),species=species,population=pop)
+            accession = Accession()
+            accession.accession_id = sv[3].strip()
+            accession.ppn = sv[0].strip()
+            accession.pit = sv[1].strip()
+            accession.aclass = sv[2].strip()
+            accession.name = sv[4].strip()
+            accession.species = species
+            accession.population = pop
             accession.save()
-
-            #create alternative accession names
-            aacc = AlternativeAccession()
-            aacc.alt_acc_id = sv[0].strip()
-            aacc.alt_acc_name = "Planting Packet Number"
-            aacc.accession = accession
-            aacc.save()
-            
-            aacc = AlternativeAccession()
-            aacc.alt_acc_id = sv[1].strip()
-            aacc.alt_acc_name = "Pit Name"
-            aacc.accession = accession
-            aacc.save()
-            
-            aacc = AlternativeAccession()
-            aacc.alt_acc_id = sv[2].strip()
-            aacc.alt_acc_name = "Class"
-            aacc.accession = accession
-            aacc.save()
-            
-            aacc = AlternativeAccession()
-            aacc.alt_acc_id = sv[-1].strip()
-            aacc.alt_acc_name = "Name of the line"
-            aacc.accession = accession
-            aacc.save()
 
     f.close()
     print("Successfully stored %s Lexuan SAM population" % filename)
 
-def store_phenotype_values4sam(filename):
+def store_phenotype_values4sam(filename,study):
     pd = load_phenotype_descriptions("../data/lexuan_paper_phenotyping_description.csv")
     phenotypes = {}
     f = open(filename,"r",encoding="utf-8")
@@ -370,6 +366,7 @@ def store_phenotype_values4sam(filename):
                         ontology.name = p['ontology_name']
                         ontology.save()
                     pheno.ontology = ontology
+                    pheno.study = study
                     pheno.save()
                     phenotypes[j] = pheno
                 else:
@@ -377,11 +374,11 @@ def store_phenotype_values4sam(filename):
                     quit()
         else:
             #try:
-                ind = AlternativeAccession.objects.get(alt_acc_id=sv[0].strip())
+                ind = Accession.objects.get(ppn=sv[0].strip())
                 for j in range(3,len(sv)):
                     pheno = phenotypes[j]
                     if i==1:#update species name
-                        pheno.species = ind.accession.species
+                        pheno.species = ind.species
                         pheno.save()  
                     
                     val = sv[j].strip().replace(",",".")
@@ -391,8 +388,8 @@ def store_phenotype_values4sam(filename):
                         pv = PhenotypeValue()
                         val = float(val)
                         pl = PhenotypeLink()
-                        pl.accession = ind.accession
-                        #pl.study = 
+                        pl.accession = ind
+                        pl.study = study
                         pl.save()
                         pv.value = val
                         pv.phenotype = pheno
@@ -404,20 +401,66 @@ def store_phenotype_values4sam(filename):
     f.close()
     print("Successfully stored %s phenotypes" % filename)
 
+def remove_publication_from_study(study_id, doi):
+    """
+    Removes a publication from a study
+    """
+    publication = Publication.objects.get(doi=doi)
+    study = Study.objects.get(pk=study_id)
+    study.publications.remove(publication)
 
+def add_publication_to_study(study, doi):
+    """
+    Adds a publication from a study
+    """
+    doi_data = _retrieve_publication_from_doi(doi)
+    pub, created = Publication.objects.get_or_create(doi=doi)
+    if created or pub.title == '':
+        pub.volume = doi_data.get('volume',None)
+        pub.pages = doi_data.get('page', None)
+        pub.title = doi_data['title']
+        pub.journal = doi_data['container-title']
+        pub.pub_year = doi_data['issued']['date-parts'][0][0]
+        pub.author_order = ', '.join([item.get('name', '%s %s' % (item.get('given',''), item.get('family',''))) for item in doi_data['author']])
+        pub.save()
+    study.publications.add(pub)
+
+def _retrieve_publication_from_doi(doi):
+    response = requests.get('https://doi.org/%s' % doi,
+                            headers={'Accept': 'application/vnd.citationstyles.csl+json;q=1.0'})
+    if response.status_code != 200:
+        raise Exception('Publication with %s not found' % doi)
+    return response.json()
 
 def integrate():
+    #create Study Marco
+    study = Study()
+    study.name = "Massive haplotypes underlie ecotypic differentiation in sunflowers"
+    study.description = "Species often include multiple ecotypes that are adapted to different environments1. However, it is unclear how ecotypes arise and how their distinctive combinations of adaptive alleles are maintained despite hybridization with non-adapted populations. Here, by resequencing 1,506 wild sunflowers from 3 species (Helianthus annuus, Helianthus petiolaris and Helianthus argophyllus), we identify 37 large (1–100 Mbp in size), non-recombining haplotype blocks that are associated with numerous ecologically relevant traits, as well as soil and climate characteristics. Limited recombination in these haplotype blocks keeps adaptive alleles together, and these regions differentiate sunflower ecotypes. For example, haplotype blocks control a 77-day difference in flowering between ecotypes of the silverleaf sunflower H. argophyllus (probably through deletion of a homologue of FLOWERING LOCUS T (FT)), and are associated with seed size, flowering time and soil fertility in dune-adapted sunflowers. These haplotypes are highly divergent, frequently associated with structural variants and often appear to represent introgressions from other—possibly now-extinct—congeners. These results highlight a pervasive role of structural variation in ecotypic adaptation."
+    study.save()
+
+    add_publication_to_study(study,"10.1038/s41586-020-2467-6")
+    
     store_climate_variables(filename="../data/climate_variables.csv")
     store_soil_variables(filename="../data/soil_variables.csv")
-    store_populations(filename="../data/populations.csv")
-    store_phenotype_values(filename="../data/phenotypes_h_annuus.csv")
-    store_phenotype_values(filename="../data/phenotypes_h_argophyllus.csv")
-    store_phenotype_values(filename="../data/phenotypes_h_n_canescens.csv")
-    store_phenotype_values(filename="../data/phenotypes_h_p_fallax.csv")
-    store_phenotype_values(filename="../data/phenotypes_h_p_petiolaris.csv")
+    store_populations(filename="../data/populations.csv",study=study)
+    store_phenotype_values(filename="../data/phenotypes_h_annuus.csv",study=study)
+    store_phenotype_values(filename="../data/phenotypes_h_argophyllus.csv",study=study)
+    store_phenotype_values(filename="../data/phenotypes_h_n_canescens.csv",study=study)
+    store_phenotype_values(filename="../data/phenotypes_h_p_fallax.csv",study=study)
+    store_phenotype_values(filename="../data/phenotypes_h_p_petiolaris.csv",study=study)
     store_easygwas_links(filename="../data/easygwas_links.csv")
-    store_images(filename="../data/thumbnails.txt")
+    store_images(filename="../data/thumbnails.txt",study=study)
     
+
+
     #integrate cultivated species
-    store_lexuan_pop(filename="../data/lexuan_paper_SAM_population.csv")
-    store_phenotype_values4sam(filename="../data/lexuan_SAM_data_compiled.csv")
+    study = Study()
+    study.name = "Genetic and phenotypic analyses indicate that resistance to flooding stress is uncoupled from performance in cultivated sunflower"
+    study.description = "Given the rising risk of extreme weather caused by climate change, enhancement of abiotic stress resistance in crops is increasingly urgent. But will the development of stress-resistant cultivars come at the cost of yield under ideal conditions? We hypothesize that this need not be inevitable, because resistance alleles with minimal pleiotropic costs may evade artificial selection and be retained in crop germplasm.<br>Genome-wide association (GWA) analyses for variation in plant performance and flooding response were conducted in cultivated sunflower, a globally important oilseed.<br>We observed broad variation in flooding responses among genotypes. Flooding resistance was not strongly correlated with performance in control conditions, suggesting no inherent trade-offs. Consistent with this finding, we identified a subset of loci conferring flooding resistance, but lacking antagonistic effects on growth. Genetic diversity loss at candidate genes underlying these loci was significantly less than for other resistance genes during cultivated sunflower evolution.<br>Despite bottlenecks associated with domestication and improvement, low-cost resistance alleles remain within the cultivated sunflower gene pool. Thus, development of cultivars that are both flooding-tolerant and highly productive should be straightforward. Results further indicate that estimates of pleiotropic costs from GWA analyses explain, in part, patterns of diversity loss in crop genomes."
+    study.save()
+
+    add_publication_to_study(study,"10.1111/nph.15894")
+
+    store_lexuan_pop(filename="../data/lexuan_paper_SAM_population.csv",study=study)
+    store_phenotype_values4sam(filename="../data/lexuan_SAM_data_compiled.csv",study=study)

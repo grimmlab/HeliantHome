@@ -131,3 +131,6 @@ dmypy.json
 *.swp
 .DS_Store
 migrations/
+
+*.tar
+*.tar.gz

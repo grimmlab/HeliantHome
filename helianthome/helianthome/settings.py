@@ -26,7 +26,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tucs000-helianthome.srv.mwn.de','138.246.225.120']
+ALLOWED_HOSTS = ['tucs000-helianthome.srv.mwn.de','138.246.225.120','www.helianthome.org']
 
 
 # Application definition

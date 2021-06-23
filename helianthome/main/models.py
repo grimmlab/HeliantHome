@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 PHENOTYPE_TYPE = (
     (
@@ -56,7 +57,6 @@ class Study(models.Model):
     name = models.CharField(max_length=255) #name of study/experiment
     description = models.TextField(blank=True, null=True) #short study description
 
-    species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     publications = models.ManyToManyField("Publication", blank=True)
     update_date = models.DateTimeField(default=None, null=True, blank=True)
 
@@ -86,6 +86,8 @@ class Species(models.Model):
     description = models.TextField(blank=True, null=True) #short species description
     species_image = models.CharField(max_length=255, blank=True,null=True) #Species image
     cultivated = models.BooleanField(default=False) #is species cultivated or not
+    
+    study = models.ForeignKey("Study",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
 
     def __unicode__(self):
         return u"%s (%s): %s" % (self.species, self.ncbi_id, self.description)
@@ -159,14 +161,13 @@ Accessions
 """
 class Accession(models.Model):
     accession_id = models.CharField(max_length=20, db_index=True,primary_key=True)
+    ppn = models.CharField(max_length=20, db_index=True,blank=True,null=True)
+    pit = models.CharField(max_length=20, db_index=True,blank=True,null=True)
+    aclass = models.CharField(max_length=20, db_index=True,blank=True,null=True)
+    name = models.CharField(max_length=20, db_index=True,blank=True,null=True)
     
     species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     population = models.ForeignKey("Population",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
-
-class AlternativeAccession(models.Model):
-    alt_acc_id = models.CharField(max_length=20, db_index=True,primary_key=True)
-    alt_acc_name = models.CharField(max_length=20, null=True, blank=True)
-    accession = models.ForeignKey("Accession",blank=True,null=True,on_delete=models.CASCADE) #foreign key to population
 
 
 """
@@ -239,6 +240,7 @@ class PlantImage(models.Model):
 
     individual = models.ForeignKey("Individual",blank=True,null=True, on_delete=models.CASCADE)
     accession = models.ForeignKey("Accession",blank=True,null=True, on_delete=models.CASCADE)
+    study = models.ForeignKey('Study',blank=True, null=True,on_delete=models.CASCADE)
 
 
 """

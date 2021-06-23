@@ -27,6 +27,7 @@ urlpatterns = [
     #url(r'^admin/', admin.site.urls),
     url(r'^$',base.landing_page, name="landing_page"),
     url(r'^about/$',base.about_page, name="about_page"),
+    url(r'^download/$',base.download_page, name="download_page"),
     url(r'^species/$',main.species_overview, name="species_overview"),
     url(r'^species/(?P<ncbi_id>[0-9]+)/$',main.species_details, name="species_details"),
     url(r'^populations/$',main.population_overview, name="population_overview"),

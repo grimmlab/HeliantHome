@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block title %} HeliantHOME - Download Center {% endblock title %}
+
+{% block content %}
+
+<div class="container mt-2 container-fuild content-row">
+
+<div class="row mb-4">
+
+<div class="col">
+<div class="card">
+  <div class="card-body">
+    <i class="bi bi-info-square"></i> Here you can download phenotypic and genotypic data from the database in bulk.
+  </div>
+</div>
+</div>
+
+</div>
+
+<ul class="nav nav-pills">
+  <li class="nav-item me-2">
+    <a class="btn btn-outline-secondary" aria-current="page" href="#phenotype">Phenotype Data</a>
+  </li>
+  <li class="nav-item me-2">
+    <a class="btn btn-outline-secondary" aria-current="page" href="#imaging">Imaging Data</a>
+  </li>
+  <li class="nav-item me-2">
+    <a class="btn btn-outline-secondary" aria-current="page" href="#genotype">Genotype Data</a>
+  </li>
+  <li class="nav-item">
+    <a class="btn btn-outline-secondary" aria-current="page" href="#gwas">GWAS Data</a>
+  </li>
+</ul>
+
+<div class="row mt-4">
+
+<div class="col" id="phenotype">
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-cloud-download"></i> Phenotype Data
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+    </p>
+   </div>
+  </div>
+</div>
+
+</div>
+
+<div class="row mt-3" id="imaging">
+
+<div class="col">
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-images"></i> Imaging Data
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+    <strong>High Quality Imaging Data</strong><br><br>
+        All high-quality images for 1449 wild sunflower individuals as a single ZIP file<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="/data/HighQualityImages.tar" target="_blank" class="text-decoration-none">HighQualityImagesWildIndividuals.tar <i class="bi bi-download me-3 fs-6"></i></a></span><br><br>
+        You can also download images for certain species only. For this purpose, you can use the following URL endpoint:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="/data/individuals/ANN1208.tar.gz" target="_blank" class="text-decoration-none">www.helanthome.org/data/individuals/ANN1208.tar.gz <i class="bi bi-download me-3 fs-6"></i></a></span><br><br>
+        Just replace the Individual ID, e.g. ANN1208, with any other Individual ID.
+
+    </p>
+   </div>
+  </div>
+</div>
+
+</div>
+
+<div class="row mt-3" id="genotype">
+
+<div class="col">
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-cloud-download"></i> Genotype Data
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+    <strong>Links to VCFs called on Ha412HOv2.0 reference genome</strong>
+    <br><br>
+    <span class="fw-light lh-sm">Hard filter was applied to retain only bi-allelic SNPs with 90% tranche, MAF > 0.01 and genotype rate > 50%. Additional filter of MAF > 0.01 and genotype rate > 50% was also applied for each subset.<br>
+Imputed datasets are generated with Beagle on all available samples for each species and the same filter was applied for each subset. (SNP set is slightly different from the un-imputed one.)<br>
+The VCFs with perennials are VQSR-ed with the same goldset used in the corresponding intra-species VCF to try to keep as many consistent SNPs as possible. To accommodate different requirements, multi-allelic SNPs are kept and filtered as follows: rare alleles with AF<0.01 are removed while others at the same site are kept; indels overlapping with a SNP are set as missing; sites that are variable after filtering and have >50% samples called are kept. Downstream filtration based on the genotypes (e.g. SNPs with no more than 1 missing data in the perennial outgroup, SNPs fixed between the target species and perennials, or SNPs that are variable within the target species but fixed in the perennial outgroup) should be conducted according to one’s purpose.
+</span>
+<br><br>
+<strong>Links to Datasets</strong>
+<br><br>
+Annuus:
+    <ul>
+        <li>ann_gwas (614 samples - ANN samples sequenced in the wildGWAS project):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            ann_env (719 samples - ann_gwas plus some samples from the herbicide project):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        <li class="mt-2">
+        Indel:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_indels_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_indels_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_env.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_env.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            ann_fullsam (287 samples - SAM population used in pan-genome paper):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_fullsam.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_fullsam.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_fullsam.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_fullsam.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_fullsam.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_fullsam.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_fullsam.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_fullsam.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+        ann_perennials (1295 samples - all available WGS ANN samples plus 4 high-coverage perennials): 
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Annuus.ann_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Annuus.ann_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Annuus.ann_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </ul>
+        </li>
+
+    </ul>
+
+Argophyllus:
+<ul>
+        <li class="mt-2">
+            arg_gwas (299 samples - ARG samples sequenced in the wildGWAS project):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        <li class="mt-2">
+        Indel:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Argophyllus.arg_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </ul>
+        </li>
+        <li class="mt-2">
+        arg_perennials (313 samples - all available WGS ARG samples plus 4 high-coverage perennials):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Argophyllus.arg_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Argophyllus.arg_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Argophyllus.arg_perennials.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </ul>
+        </li>
+
+</ul>
+Petiolaris:
+
+<ul>
+        <li class="mt-2">
+            petpet (168 samples - PETPET samples sequenced in the wildGWAS project):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petpet.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.petpet.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petpet.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.petpet.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petpet.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.petpet.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petpet.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.petpet.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            petfal (259 samples - PETFAL samples sequenced in the wildGWAS project, plus GSD and MON samples):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petfal.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.petfal.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petfal.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.petfal.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petfal.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.petfal.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petfal.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.petfal.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            niv (86 samples - NIV samples sequenced in the wildGWAS project):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            petiolaris (427 samples - petpet+petfal):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petiolaris.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petiolaris.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petiolaris.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.petiolaris.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        </ul>
+        </li>
+        
+        <li class="mt-2">
+            pet_gwas (475 samples - PET samples sequenced in the wildGWAS project, including NIV but excluding GSD and MON samples):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        <li class="mt-2">
+        SNPs Imputed:<br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_snps_bi_AN50_beagle_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        </li>
+        <li class="mt-2">
+        Indel:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_indels_bi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_gwas.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.niv.tranche90_indels_bi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </ul>
+        <li class="mt-2">
+            pet_perennials (540 samples - all available WGS PET samples plus 4 high-coverage perennials):
+        <ul>
+        <li>
+        SNPs:<br>
+        <span class="fw-lighter" style="white-space:nowrap">
+        <a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_perennials.tranche90_snps_multi_AN50_AF99.vcf.gz" target="_blank" class="text-decoration-none">Petiolaris.pet_perennials.tranche90_snps_multi_AN50_AF99.vcf.gz <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span><br>
+        <span class="fw-lighter" style="white-space:nowrap"><a href="https://ubc-sunflower-genome.s3.us-west-2.amazonaws.com/VCFs/Ha412v2/Petiolaris.pet_perennials.tranche90_snps_multi_AN50_AF99.vcf.gz.tbi" target="_blank" class="text-decoration-none">Petiolaris.pet_perennials.tranche90_snps_multi_AN50_AF99.vcf.gz.tbi <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span>
+        </li>
+        </li>
+</ul>
+    </p>
+  </div>
+</div>
+
+<div class="row mt-3" id="gwas">
+
+<div class="col">
+<div class="card">
+  <div class="card-header">
+    <i class="bi bi-clipboard-data"></i> GWAS Results
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+    Results of genome-wide association studies for some phenotypes can be found on easyGWAS:
+    <ul>
+        <li><span class="fw-lighter" style="white-space:nowrap"><a href="https://easygwas.ethz.ch/gwas/myhistory/public/20/" target="_blank" class="text-decoration-none">GWAS Results for <em>H. argophyllus</em> <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span></li>
+        <li><span class="fw-lighter" style="white-space:nowrap"><a href="https://easygwas.ethz.ch/gwas/myhistory/public/21/" target="_blank" class="text-decoration-none">GWAS Results for <em>H. annuus</em> <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span></li>
+        <li><span class="fw-lighter" style="white-space:nowrap"><a href="https://easygwas.ethz.ch/gwas/myhistory/public/22/" target="_blank" class="text-decoration-none">GWAS Results for <em>H. petiolaris fallax</em> <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span></li>
+        <li><span class="fw-lighter" style="white-space:nowrap"><a href="https://easygwas.ethz.ch/gwas/myhistory/public/23/" target="_blank" class="text-decoration-none">GWAS Results for <em>H. petiolaris petiolaris</em> <i class="bi bi-box-arrow-up-right me-3 fs-6"></i></a></span></li>
+    </ul>
+    </p>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+{% endblock content %}

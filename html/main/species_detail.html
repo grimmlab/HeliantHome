@@ -36,12 +36,12 @@
 {% else %}
 
 <div class="container mt-1 container-fluid content-row">
-<div class="row fluid">
+<div class="row">
 
 {% if species.cultivated %}
-<div class="col-sm-12 col-md-12 pt-2">
+<div class="col-sm-12 col-md-12 mt-2">
 {%else%}
-<div class="col-sm-12 col-md-6 pt-2">
+<div class="col-sm-12 col-md-6 mt-2">
 {%endif%}
     <div class="card h-100">
       <div class="card-header">
@@ -92,9 +92,10 @@
 </div>
 </div>
 
+
 {% if species.cultivated %}
 {% else %}
-<div class="col-sm-12 col-md-6 pt-2"> 
+<div class="col-sm-12 col-md-6 mt-2"> 
     <div class="card h-100" style="border-color:#9FC4E1;">
       <div class="card-header" style="background-color: #9FC4E1;">
         Population Map for <em>{{species.species}}</em>
@@ -106,6 +107,36 @@
 {% endif %}
 
 </div>
+</div>
+
+
+<div class="container mt-2 container-fluid content-row">
+<div class="row">
+<div class="col-sm-12 col-md-12"> 
+    <div class="card">
+      <div class="card-header">
+        Publications 
+      </div>
+      <div class="card-body fw-lighter lh-sm" style="font-size:10pt">
+         <ul class="collection">
+            {% for p in species.study.publications.all %}
+                <li class="collection-item">
+                    <span class="title">
+                       <strong><span class="text-decoration-none" style="white-space:nowrap"><a href="https://doi.org/{{ p.doi }}" target="_blank" class="text-decoration-none">{{ p.title }} <i class="bi bi-box-arrow-up-right me-3 " style="font-size:8pt"></i></a></span></strong>
+                    </span>
+                    <p class="author-list">
+                        {{ p.author_order }}
+                    </p>
+                    <p class="publication-details">
+                        <strong>{{ p.journal }}</strong>. {{ p.pub_year }} {{ p.volume }}: {{ p.pages }}. doi: {{ p.doi }}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+  </div>
+  </div>
+  </div>
+  </div>
 </div>
 
 <div class="container mt-2 container-fluid content-row">
