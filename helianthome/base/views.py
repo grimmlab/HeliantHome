@@ -69,6 +69,12 @@ def download_page(request):
     return render(request,'base/download.html',{})
 
 '''
+FAQ Page
+'''
+def faq_page(request):
+    return render(request,'base/faq.html',{})
+
+'''
 Search Result View for Global Search in AraPheno
 '''
 def SearchResults(request,query=None):
