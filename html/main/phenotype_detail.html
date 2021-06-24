@@ -267,9 +267,7 @@
                        <strong><span class="text-decoration-none" style="white-space:nowrap"><a href="https://doi.org/{{ p.doi }}" target="_blank" class="text-decoration-none">{{ p.title }} <i class="bi bi-box-arrow-up-right me-3 " style="font-size:8pt"></i></a></span></strong>
                     </span>
                     <p class="author-list">
-                        {{ p.author_order }}
-                    </p>
-                    <p class="publication-details">
+                        {{ p.author_order }}<br>
                         <strong>{{ p.journal }}</strong>. {{ p.pub_year }} {{ p.volume }}: {{ p.pages }}. doi: {{ p.doi }}
                     </p>
                 </li>
@@ -388,7 +386,8 @@
             }
           }
         });
-
+        
+        var markers = {{map_data|safe}};
         $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
             regionStyle: {
                 initial: {
@@ -405,7 +404,10 @@
                     stroke: '#383f47'
                 }
             },
-            markers: {{ map_data|safe }}
+            markers: markers,
+            onMarkerClick: function(event, index) {
+                 window.location.href = markers[index].weburl;
+            }
         });
     });
      

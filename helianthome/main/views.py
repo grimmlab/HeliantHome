@@ -95,7 +95,7 @@ def population_overview(request):
     data = []
     for pop in pops:
         if pop.species.cultivated==False:
-            data.append({"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6}})   
+            data.append({"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.6},"weburl":"/population/" + str(pop.population_id) + "/"})   
     table = PopulationTable(pops, order_by="population_id")
     RequestConfig(request, paginate={"per_page":50}).configure(table)
 
@@ -121,6 +121,12 @@ def population_detail(request,population_id):
         data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")"}]  
         vdata['map_data'] = json.dumps(data)
     vdata['pop'] = pop
+    if pop.species.cultivated:
+        table = AccessionTable(pop.accession_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all(), order_by="accession_id")
+    else:
+        table = IndividualsTable(pop.individual_set.annotate(count_phenotypes=Count('phenotypelink__phenotypevalue__phenotype',distinct=True)).all(), order_by="individual_id")
+    RequestConfig(request, paginate={"per_page":50}).configure(table)
+    vdata['table'] = table
     return render(request,'main/population_detail.html',vdata)
 
 '''
@@ -220,7 +226,8 @@ def phenotype_detail(request,id):
                          elem['phenotype_link__individual__population_id'] + " (" + 
                          elem['phenotype_link__individual__population__country'] + ", " + 
                          elem['phenotype_link__individual__population__sitename'] + ")",
-                 "style": {"fill": marker_color(elem["phenotype_link__individual__species__species"]),"r":4}} for elem in value_set]   
+                 "style": {"fill": marker_color(elem["phenotype_link__individual__species__species"]),"r":4},
+                 "weburl": "/population/" + str(elem['phenotype_link__individual__population_id']) + "/"} for elem in value_set]   
         
             vdata['map_data'] = json.dumps(data)
             vdata['pop_size'] = len(pop_set)

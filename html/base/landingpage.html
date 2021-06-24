@@ -23,7 +23,7 @@
 <div class="col-sm-12 col-md-4 pt-2">
     <div class="card h-100" id="stats">
       <div class="card-header">
-        Summary Statistics
+        Quik Links & Summary Statistics
       </div>
       <div class="card-body">
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-flower3 text-success fs-3 me-3"></i>{{ number_species }} Taxa
@@ -42,7 +42,7 @@
              <a href="/phenotypes"><i id="phenotype_detail" class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-sort-numeric-down text-secondary fs-3 me-3"></i>{{ number_measurements }} Measurements
-             <a href="/phenotypes"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
+             <!--<a href="/phenotypes"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a>--></span>
              <br>
              <span style="white-space:nowrap" class="fs-5"><i class="bi bi-images text-danger fs-3 me-3"></i>{{ number_images }} Images
              <a href="/images/"><i class="bi bi-box-arrow-right text-black fs-3 float-end me-auto"></i></a></span>
@@ -121,10 +121,9 @@
 </div>
 
 <div class="col-sm-12 col-md-7 pt-2">
-    <span class="fw-light lh-sm" style="font-size:10.5pt">The genus <em>Helianthus</em> (commonly known as sunflower) is large and diverse, and includes more than 50 wild species, most of them native of North America. We have selected a handful of them, for an in-depth study of genetic, phenotypic and environmental variation and local adaptation, based on their relative major abundance and ability to grow in a variety of, often extreme, environments, including deserts, salt marshes and serpentine soils (<span style="white-space:nowrap"><a class="mr-2 text-decoration-none"  href="https://doi.org/10.1038/s41586-020-2467-6" target="_blank">Todesco et al., Nature 2020  <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>). These data has established the bases for the construction of HeliantHOME.<br><br>
-    In addition, the cultivated sunflower (<em>Helianthus annuus var. macrocarpus</em>) is one of the main crops worldwide and therefore of great agricultural relevance. For this reason, we have also included them here as an invaluable source of data and knowledge.
-    The study of sunflowers can offer numerous possibilities both to increase our understanding of ecological and evolutionary processes as well as to contribute to the development of genetic research and breeding efforts (<span style="white-space:nowrap"><a href="https://doi.org/10.1111/1755-0998.12023" target="_blank" class="text-decoration-none">Kane et al., Mol Ecol Resour 2013 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>).<br><br>
-    The current availability of a well curated, reference genome for the cultivated Sunflower (<span style="white-space:nowrap"><a href="https://sunflowergenome.org/" target="_blank" class="text-decoration-none">https://sunflowergenomes.org <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>) has now made it possible to start asking new types of questions about sunflower ecology and its evolutionary history. It also opens the possibility to investigate the genetic association between sequence and gene function in a more accurate way. HeliantHOME offers the perfect platform from where to start that journey.</span>
+    <span class="fw-light lh-sm" style="font-size:10.5pt">The genus <em>Helianthus</em> (commonly known as sunflower) is large and diverse, and includes more than 50 wild species, most of which are native of North America. We have selected a handful of them for an in-depth study of genetic, phenotypic and environmental variation, as well as local adaptation, based on their ability to grow in a variety of, often extreme, environments, including deserts, sand dunes, and salt marshes (<span style="white-space:nowrap"><a class="mr-2 text-decoration-none"  href="https://doi.org/10.1038/s41586-020-2467-6" target="_blank">Todesco et al., Nature 2020  <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>). These data provide the basis for the construction of HeliantHOME.<br><br>
+    In addition, the cultivated sunflower (<em>Helianthus annuus var. macrocarpus</em>) is a major oilseed crop and therefore of significant agricultural relevance. Therefore, we have also included phenotypic data for a diversity panel of cultivated sunflowers, which should be a valuable resource for plant breeders. The study of sunflowers offer numerous opportunities both to increase our understanding of ecological and evolutionary processes as well as to contribute to genetic research and breeding efforts (<span style="white-space:nowrap"><a href="https://doi.org/10.1111/1755-0998.12023" target="_blank" class="text-decoration-none">Kane et al., Mol Ecol Resour 2013 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>).<br><br>
+   The current availability of multiple well curated, reference genomes for the cultivated Sunflower (<span style="white-space:nowrap"><a href="https://doi.org/10.1038/nature22380" target="_blank" class="text-decoration-none">Badouin et al., Nature 2017 <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>, <span style="white-space:nowrap"><a href="https://www.heliagene.org.org/" target="_blank" class="text-decoration-none">https://www.heliagene.org <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>, <span style="white-space:nowrap"><a href="https://sunflowergenome.org/" target="_blank" class="text-decoration-none">https://sunflowergenomes.org <i class="bi bi-box-arrow-up-right fs-6"></i></a></span>) has now made it possible to start asking new types of questions about sunflower ecology and its evolutionary history. It also opens the possibility to investigate associations between sequence variants and phenotype in a more accurate way. HeliantHOME offers the perfect platform from where to start that journey.</span>
 </div>
 <div class="col-sm-12 col-md-3 pt-2">
                     <figure class="figure">
@@ -173,7 +172,7 @@
             }
           }
         });
-
+        var markers = {{ map_data|safe }};
         $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
             regionStyle: {
                 initial: {
@@ -190,7 +189,10 @@
                     stroke: '#383f47'
                 }
             },
-            markers: {{ map_data|safe }}
+            markers:markers,
+            onMarkerClick: function(event, index) {
+                window.location.href = markers[index].weburl;
+            }
         });
     });
 

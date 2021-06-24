@@ -209,32 +209,6 @@
 
 </div>
 
-<div class="row mt-2">
-<div class="col-sm-12 col-md-12"> 
-    <div class="card">
-      <div class="card-header">
-        Publications 
-      </div>
-      <div class="card-body fw-lighter lh-sm" style="font-size:10pt">
-         <ul class="collection">
-            {% for p in pop.species.study.publications.all %}
-                <li class="collection-item">
-                    <span class="title">
-                       <strong><span class="text-decoration-none" style="white-space:nowrap"><a href="https://doi.org/{{ p.doi }}" target="_blank" class="text-decoration-none">{{ p.title }} <i class="bi bi-box-arrow-up-right me-3 " style="font-size:8pt"></i></a></span></strong>
-                    </span>
-                    <p class="author-list">
-                        {{ p.author_order }}
-                    </p>
-                    <p class="publication-details">
-                        <strong>{{ p.journal }}</strong>. {{ p.pub_year }} {{ p.volume }}: {{ p.pages }}. doi: {{ p.doi }}
-                    </p>
-                </li>
-            {% endfor %}
-        </ul>
-  </div>
-  </div>
-  </div>
-  </div>
 
 {% if pop.species.cultivated %}
 
@@ -316,6 +290,45 @@
 </div>
 </div>
 {% endif %}
+
+
+<div class="row mt-2">
+<div class="col-sm-12 col-md-12"> 
+    <div class="card">
+      <div class="card-header">
+        Individuals
+      </div>
+      <div class="card-body fw-lighter lh-sm" style="font-size:10pt">
+        {% render_table table %} 
+  </div>
+  </div>
+  </div>
+</div>
+
+<div class="row mt-2">
+<div class="col-sm-12 col-md-12"> 
+    <div class="card">
+      <div class="card-header">
+        Publications 
+      </div>
+      <div class="card-body fw-lighter lh-sm" style="font-size:10pt">
+         <ul class="collection">
+            {% for p in pop.species.study.publications.all %}
+                <li class="collection-item">
+                    <span class="title">
+                       <strong><span class="text-decoration-none" style="white-space:nowrap"><a href="https://doi.org/{{ p.doi }}" target="_blank" class="text-decoration-none">{{ p.title }} <i class="bi bi-box-arrow-up-right me-3 " style="font-size:8pt"></i></a></span></strong>
+                    </span>
+                    <p class="author-list">
+                        {{ p.author_order }}<br>
+                        <strong>{{ p.journal }}</strong>. {{ p.pub_year }} {{ p.volume }}: {{ p.pages }}. doi: {{ p.doi }}
+                    </p>
+                </li>
+            {% endfor %}
+        </ul>
+  </div>
+  </div>
+  </div>
+  </div>
 
 </div>
 

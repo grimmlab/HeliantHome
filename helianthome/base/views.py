@@ -52,7 +52,7 @@ def landing_page(request):
     vdata['category_list'] = json.dumps(category_list)
     vdata['category_entries'] = json.dumps(list(np.array(category_entries,dtype="float")))
     pops = models.Population.objects.filter(species__cultivated=False)
-    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.8}} for pop in pops]   
+    data = [{"latLng": [pop.latitude, pop.longitude], "name": pop.species.species + ": " + pop.population_id + " (" + pop.country + ", " + pop.sitename + ")", "style": {"fill": marker_color(pop.species.species),"r":4,"opacity":0.8},"weburl":"/population/"+ str(pop.population_id) + "/"} for pop in pops]   
     vdata['map_data'] = json.dumps(data)
     return render(request,'base/landingpage.html',vdata)
 
