@@ -32,6 +32,17 @@
 
 <div class="container mt-2 container-fluid content-row">
 <div class="row">
+<div class="col">
+        <span class="float-end">
+        <a href="/rest/phenotype/id/{{pheno.id}}" target="_blank" class="btn btn-outline-info p-1 m-1">Meta Data <i class="bi bi-download"></i></a>
+        <a href="/rest/phenotype/id/{{pheno.id}}/values" target="_blank" class="btn btn-outline-secondary p-1 m-1">Values as CSV <i class="bi bi-download"></i></a>
+        <a href="/rest/phenotype/id/{{pheno.id}}/values.plink" target="_blank" class="btn btn-outline-success p-1 m-1">Values as PLINK <i class="bi bi-download"></i></a>
+        </span>
+</div>
+
+</div>
+
+<div class="row">
 
 {% if cultivated %}
 <div class="col-sm-12 col-md-12 pt-2">
@@ -436,6 +447,11 @@
         intro.start().oncomplete(function() {
           window.location.href = '/individual/ANN0801/?multipage=true';
         });
+
+        //var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        //var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        //    return new bootstrap.Tooltip(tooltipTriggerEl)
+        //});
     }
 </script>
 

@@ -18,10 +18,30 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 
+from rest_framework.urlpatterns import format_suffix_patterns
+#from drf_yasg.views import get_schema_view
+#from drf_yasg import openapi
+
 from base import views as base
 from main import views as main
 
-from base.autocomplete_light_registry import GlobalSearchAutocomplete
+import main.rest as rest
+
+'''
+schema_view = get_schema_view(
+   openapi.Info(
+      title="HeliantHOME REST API",
+      default_version='v1',
+      description="REST API to fetch data from HeliantHOME",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+'''
+
+
+ID_REGEX = r"[0-9]+"
+UUID_REGEX = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
 
 urlpatterns = [
     #url(r'^admin/', admin.site.urls),
@@ -41,9 +61,21 @@ urlpatterns = [
     url(r'^accession/(?P<accession_id>.*)/$',main.accession_detail, name="accession_detail"),
     url(r'^images/$',main.image_overview, name="image_overview"),
 
-    url(r'^global-autocomplete/$', GlobalSearchAutocomplete,name='global-autocomplete'),
+    #url(r'^global-autocomplete/$', GlobalSearchAutocomplete,name='global-autocomplete'),
     #url(r'^search_results/$', base.SearchResults, name="searchresults"),
     #url(r'^search_results//$', base.SearchResults, name="searchresults"),
     #url(r'^search_results/(?P<query>.*)/$', base.SearchResults, name="searchresults"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+restpatterns = [
+    #url(r'^rest/api/',  schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    url(r'^rest/phenotype/list/$', rest.phenotype_list),
+    url(r'^rest/phenotype/id/(?P<q>%s)/$' % ID_REGEX, rest.phenotype_detail),
+    url(r'^rest/phenotype/id/(?P<q>%s)/values/$' % ID_REGEX, rest.phenotype_value),
+]
+
+restpatterns = format_suffix_patterns(restpatterns, allowed=['json', 'csv', 'plink', 'zip'])
+'''
+Add REST patterns to urlpatterns
+'''
+urlpatterns += restpatterns

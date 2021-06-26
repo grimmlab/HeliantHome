@@ -43,10 +43,27 @@ INSTALLED_APPS = [
     'django_tables2',
     'django_filters',
     'django_user_agents',
+    'rest_framework',
+    #'drf-yasg',
     #'autocomplete_light',
     'dal',
     'dal_select2',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.DjangoModelPermissions',
+    ],
+    'DEFAULT_RENDERER_CLASSES': (
+        #'rest_framework.renderers.BrowsableAPIRenderer',
+        #can be added if necessary (provides a nice browser interface)
+        'rest_framework_csv.renderers.CSVRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        #'phenotypedb.renderer.PLINKRenderer',
+    ),
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
