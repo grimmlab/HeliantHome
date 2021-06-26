@@ -12,6 +12,13 @@
     <li class="breadcrumb-item"><a href="/phenotypes/">Phenotypes Overview</a></li>
     <li class="breadcrumb-item active" aria-current="page">Phenotype Detail</li>
   </ol>
+{% ifnotequal message "no_pheno" %}
+        <span class="float-end">
+        <a href="/rest/phenotype/id/{{pheno.id}}" target="_blank" class="btn btn-outline-info m-1">Meta Data <i class="bi bi-download"></i></a>
+        <a href="/rest/phenotype/id/{{pheno.id}}/values" target="_blank" class="btn btn-outline-secondary m-1">Values as CSV <i class="bi bi-download"></i></a>
+        <a href="/rest/phenotype/id/{{pheno.id}}/values.plink" target="_blank" class="btn btn-outline-success m-1">Values as PLINK <i class="bi bi-download"></i></a>
+        </span>
+{% endifnotequal %}
 </nav>
 
 {% ifequal message "no_pheno" %}
@@ -29,18 +36,6 @@
 </div>
 
 {% else %}
-
-<div class="container mt-2 container-fluid content-row">
-<div class="row">
-<div class="col">
-        <span class="float-end">
-        <a href="/rest/phenotype/id/{{pheno.id}}" target="_blank" class="btn btn-outline-info p-1 m-1">Meta Data <i class="bi bi-download"></i></a>
-        <a href="/rest/phenotype/id/{{pheno.id}}/values" target="_blank" class="btn btn-outline-secondary p-1 m-1">Values as CSV <i class="bi bi-download"></i></a>
-        <a href="/rest/phenotype/id/{{pheno.id}}/values.plink" target="_blank" class="btn btn-outline-success p-1 m-1">Values as PLINK <i class="bi bi-download"></i></a>
-        </span>
-</div>
-
-</div>
 
 <div class="row">
 
