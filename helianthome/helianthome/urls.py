@@ -69,9 +69,17 @@ urlpatterns = [
 
 restpatterns = [
     #url(r'^rest/api/',  schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    url(r'^rest/species/list/$', rest.species_list),
+    url(r'^rest/species/id/(?P<q>%s)/$' % ID_REGEX, rest.species_detail),
     url(r'^rest/phenotype/list/$', rest.phenotype_list),
     url(r'^rest/phenotype/id/(?P<q>%s)/$' % ID_REGEX, rest.phenotype_detail),
     url(r'^rest/phenotype/id/(?P<q>%s)/values/$' % ID_REGEX, rest.phenotype_value),
+    url(r'^rest/population/list/$', rest.population_list),
+    url(r'^rest/population/id/(?P<q>%s)/$' % r".*", rest.population_detail),
+    url(r'^rest/individual/list/$', rest.individual_list),
+    url(r'^rest/individual/id/(?P<q>%s)/$' % r".*", rest.individual_detail),
+    url(r'^rest/accession/list/$', rest.accession_list),
+    url(r'^rest/accession/id/(?P<q>%s)/$' % r".*", rest.accession_detail),
 ]
 
 restpatterns = format_suffix_patterns(restpatterns, allowed=['json', 'csv', 'plink', 'zip'])

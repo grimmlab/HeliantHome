@@ -12,6 +12,7 @@
     <li class="breadcrumb-item"><a href="/populations/">Population Overview</a></li>
     <li class="breadcrumb-item active" aria-current="page">Population Detail</li>
   </ol>
+        <a href="/rest/population/id/{{pop.population_id}}.json" target="_blank" class="btn btn-outline-info float-end">Download Population Meta Data <i class="bi bi-download"></i></a>
 </nav>
 
 <div class="container">
@@ -60,19 +61,10 @@
             
             <div class="row pt-2">
                 <div class="col">
-                Ecology Description:
-                </div>
-                <div class="col">
-                {{pop.ecology_description}}
-                </div>
-            </div>
-            
-            <div class="row pt-2">
-                <div class="col">
                 Population Description:
                 </div>
                 <div class="col">
-                {{pop.description}}
+                {{pop.ecology_description|safe}}
                 </div>
             </div>
 

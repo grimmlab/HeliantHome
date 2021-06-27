@@ -315,8 +315,7 @@ def store_lexuan_pop(filename,study):
 
     pop = Population()
     pop.population_id = "SAM"
-    pop.description = ""
-    pop.ecology_description = ""
+    pop.ecology_description = 'The SAM population is a core collection of 288 inbreed lines of cultivated sunflowers, obtained using single seed descent, that captures nearly 90% of the allelic diversity present within the cultivated sunflower germplasm collection. It is known as the SAM (Sunflower Association Mapping) population (<span class="text-decoration-none" style="white-space:nowrap"><a href="https://doi.org/10.1007/s00122-011-1619-3" target="_blank" class="text-decoration-none">Mandel et. al, 2011 <i class="bi bi-box-arrow-up-right" style="font-size:8pt"></i></a></span>) and represents an invaluable resource for sunflower researchers.'
     pop.species = species
     #Save Model   
     pop.save()

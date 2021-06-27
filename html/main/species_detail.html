@@ -15,6 +15,9 @@
     <li class="breadcrumb-item active" aria-current="page">Details for {{species.species}}</li>
     {% endifequal %}
   </ol>
+    {% ifnotequal message "no_species" %}
+        <a href="/rest/species/id/{{ncbi_id}}" target="_blank" class="btn btn-outline-info float-end">Download Data <i class="bi bi-download"></i></a>
+    {% endifnotequal %}
 </nav>
 
 <br>
