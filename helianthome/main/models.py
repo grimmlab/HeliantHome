@@ -1,5 +1,6 @@
-from django.db import models
+from django.db import models,connection
 from datetime import datetime
+import pandas as pd
 
 PHENOTYPE_TYPE = (
     (
@@ -59,6 +60,58 @@ class Study(models.Model):
 
     publications = models.ManyToManyField("Publication", blank=True)
     update_date = models.DateTimeField(default=None, null=True, blank=True)
+
+    def value_as_dataframe(self,sam=False):
+        """
+        Returns the PhenotypValue records for this study as a pandas dataframe
+        """
+        cursor = connection.cursor()
+        if sam:
+            cursor.execute("""
+                    SELECT v.id,o.accession_id,po.population_id as population_id,s.species,p.id as phenotype_id, p.name as phenotype_name, v.value
+                    FROM main_phenotypevalue as v
+                    LEFT JOIN main_phenotypelink o ON v.phenotype_link_id = o.id
+                    LEFT JOIN main_phenotype as p ON p.id = v.phenotype_id
+                    LEFT JOIN main_accession as a ON a.accession_id = o.accession_id
+                    LEFT JOIN main_population as po ON po.population_id = a.population_id
+                    LEFT JOIN main_species as s ON s.id = a.species_id
+                    WHERE p.study_id = %s ORDER BY o.accession_id,p.id ASC """ % self.id)
+            data = pd.DataFrame(cursor.fetchall(),
+                                columns=['id', 'accession_id', 'population_id',
+                                         'species', 'phenotype_id', 'phenotype_name',
+                                         'value']).set_index(['id'])
+
+        else:
+            cursor.execute("""
+                    SELECT v.id,o.individual_id,po.population_id as population_id,s.species,p.id as phenotype_id, p.name as phenotype_name, v.value
+                    FROM main_phenotypevalue as v
+                    LEFT JOIN main_phenotypelink o ON v.phenotype_link_id = o.id
+                    LEFT JOIN main_phenotype as p ON p.id = v.phenotype_id
+                    LEFT JOIN main_individual as a ON a.individual_id = o.individual_id
+                    LEFT JOIN main_population as po ON po.population_id = a.population_id
+                    LEFT JOIN main_species as s ON s.id = a.species_id
+                    WHERE p.study_id = %s ORDER BY o.individual_id,p.id ASC """ % self.id)
+            data = pd.DataFrame(cursor.fetchall(),
+                                columns=['id', 'individual_id', 'population_id',
+                                         'species', 'phenotype_id', 'phenotype_name',
+                                         'value']).set_index(['id'])
+        return data
+
+    def get_matrix_and_accession_map(self, sam=False,column='phenotype_name'):
+        """Returns both the dataframe and a matrix version of it"""
+        if sam:
+            data = self.value_as_dataframe(sam=sam)
+            data.set_index(['accession_id'], inplace=True)
+            df_pivot = data.pivot(columns=column, values='value')
+            data.drop(['value', 'phenotype_id', 'phenotype_name'], axis=1, inplace=True)
+            data = data[~data.index.duplicated(keep='first')]
+        else:
+            data = self.value_as_dataframe(sam=sam)
+            data.set_index(['individual_id'], inplace=True)
+            df_pivot = data.pivot(columns=column, values='value')
+            data.drop(['value', 'phenotype_id', 'phenotype_name'], axis=1, inplace=True)
+            data = data[~data.index.duplicated(keep='first')]
+        return (data, df_pivot)
 
     @property
     def count_phenotypes(self):
@@ -143,6 +196,35 @@ class Population(models.Model):
     species = models.ForeignKey("Species",blank=True,null=True,on_delete=models.CASCADE) #foreign key to species
     climate_variables = models.ManyToManyField("ClimateVariableValue",  blank=True)
     soil_variables = models.ManyToManyField("SoilVariableValue",  blank=True)
+    
+    def value_as_dataframe(self):
+        """
+        Returns the PhenotypValue records for this population as a pandas dataframe
+        """
+        cursor = connection.cursor()
+        cursor.execute("""
+                    SELECT v.id,o.individual_id,po.population_id as population_id,s.species,p.id as phenotype_id, p.name as phenotype_name, v.value
+                    FROM main_phenotypevalue as v
+                    LEFT JOIN main_phenotypelink o ON v.phenotype_link_id = o.id
+                    LEFT JOIN main_phenotype as p ON p.id = v.phenotype_id
+                    LEFT JOIN main_individual as a ON a.individual_id = o.individual_id
+                    LEFT JOIN main_population as po ON po.population_id = a.population_id
+                    LEFT JOIN main_species as s ON s.id = a.species_id
+                    WHERE po.population_id = '%s' ORDER BY o.individual_id,p.id ASC """ % self.population_id)
+        data = pd.DataFrame(cursor.fetchall(),
+                            columns=['id', 'individual_id', 'population_id',
+                                         'species', 'phenotype_id', 'phenotype_name',
+                                         'value']).set_index(['id'])
+        return data
+
+    def get_matrix_and_accession_map(self, column='phenotype_name'):
+        """Returns both the dataframe and a matrix version of it"""
+        data = self.value_as_dataframe()
+        data.set_index(['individual_id'], inplace=True)
+        df_pivot = data.pivot(columns=column, values='value')
+        data.drop(['value', 'phenotype_id', 'phenotype_name'], axis=1, inplace=True)
+        data = data[~data.index.duplicated(keep='first')]
+        return (data, df_pivot)
 
 
 

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_user_agents',
     'rest_framework',
-    #'drf-yasg',
+    'drf_yasg',
     #'autocomplete_light',
     'dal',
     'dal_select2',
@@ -64,6 +64,9 @@ REST_FRAMEWORK = {
     ),
 }
 
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

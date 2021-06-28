@@ -12,7 +12,10 @@
     <li class="breadcrumb-item"><a href="/populations/">Population Overview</a></li>
     <li class="breadcrumb-item active" aria-current="page">Population Detail</li>
   </ol>
-        <a href="/rest/population/id/{{pop.population_id}}.json" target="_blank" class="btn btn-outline-info float-end">Download Population Meta Data <i class="bi bi-download"></i></a>
+        <span class="float-end">
+        <a href="/rest/population/id/{{pop.population_id}}.json" target="_blank" class="btn btn-outline-info">Download Population Meta Data <i class="bi bi-download"></i></a>
+        <a href="/rest/population/phenotype_matrix/{{pop.population_id}}.csv" target="_blank" class="btn btn-outline-success">Download Phenotypes <i class="bi bi-download"></i></a>
+        </span>
 </nav>
 
 <div class="container">

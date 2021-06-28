@@ -54,3 +54,18 @@ class PLINKRenderer(renderers.BaseRenderer):
                 return "Wrong Data Format"
             plink += str(element['id']) + " " + str(element['id']) + " " + str(element['phenotype_value']) + "\n"
         return plink
+
+class PhenotypeMatrixRenderer(renderers.BaseRenderer):
+    media_type = "application/csv"
+    format = "csv"
+    
+    def render(self,data,media_type=None,renderer_context=None):
+        return data
+
+class JSONPhenotypeMatrixRenderer(renderers.BaseRenderer):
+    media_type = "application/json"
+    format = "json"
+    
+    def render(self,data,media_type=None,renderer_context=None):
+        return data
+

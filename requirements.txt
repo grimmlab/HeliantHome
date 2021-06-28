@@ -2,6 +2,7 @@ gunicorn
 requests==2.25.1
 numpy==1.16.6
 scipy==1.2.3
+pandas
 django==3.2.4
 python-decouple==3.4
 djangorestframework==3.12.2

@@ -18,16 +18,16 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 
+from rest_framework import permissions
 from rest_framework.urlpatterns import format_suffix_patterns
-#from drf_yasg.views import get_schema_view
-#from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from base import views as base
 from main import views as main
 
 import main.rest as rest
 
-'''
 schema_view = get_schema_view(
    openapi.Info(
       title="HeliantHOME REST API",
@@ -37,7 +37,6 @@ schema_view = get_schema_view(
    public=True,
    permission_classes=(permissions.AllowAny,),
 )
-'''
 
 
 ID_REGEX = r"[0-9]+"
@@ -68,7 +67,7 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 restpatterns = [
-    #url(r'^rest/api/',  schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    url(r'^rest/api/',  schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger'),
     url(r'^rest/species/list/$', rest.species_list),
     url(r'^rest/species/id/(?P<q>%s)/$' % ID_REGEX, rest.species_detail),
     url(r'^rest/phenotype/list/$', rest.phenotype_list),
@@ -76,6 +75,7 @@ restpatterns = [
     url(r'^rest/phenotype/id/(?P<q>%s)/values/$' % ID_REGEX, rest.phenotype_value),
     url(r'^rest/population/list/$', rest.population_list),
     url(r'^rest/population/id/(?P<q>%s)/$' % r".*", rest.population_detail),
+    url(r'^rest/population/phenotype_matrix/(?P<q>%s)/$' % r".*", rest.population_phenotype_value_matrix),
     url(r'^rest/individual/list/$', rest.individual_list),
     url(r'^rest/individual/id/(?P<q>%s)/$' % r".*", rest.individual_detail),
     url(r'^rest/accession/list/$', rest.accession_list),

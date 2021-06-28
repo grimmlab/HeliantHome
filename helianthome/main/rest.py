@@ -20,8 +20,9 @@ from main.serializers import IndividualListSerializer, AccessionListSerializer
 from main.renderer import PhenotypeListRenderer, PhenotypeValueRenderer, PLINKRenderer
 from main.renderer import SpeciesListRenderer, PopulationListRenderer
 from main.renderer import IndividualListRenderer, AccessionListRenderer
+from main.renderer import PhenotypeMatrixRenderer, JSONPhenotypeMatrixRenderer
 from main.models import Phenotype, Species, Population
-from main.models import Individual, Accession
+from main.models import Individual, Accession, Study
 
 import re,os,array
 import tempfile
@@ -277,7 +278,7 @@ def accession_list(request,format=None):
     """
     List all available accessions
     ---
-    serializer: PopulationListSerializer
+    serializer: AccessionListSerializer
     omit_serializer: false
     produces:
         - text/csv
@@ -304,7 +305,7 @@ def accession_detail(request,q,format=None):
           required: true
           type: string
           paramType: path
-    serializer: PhenotypeListSerializer
+    serializer: AccessionListSerializer
     omit_serializer: false
     produces:
         - text/csv
@@ -318,3 +319,51 @@ def accession_detail(request,q,format=None):
     if request.method == "GET":
         serializer = AccessionListSerializer(accession,many=False)
         return Response(serializer.data)
+
+'''
+List phenotype value matrix for entire study
+'''
+@api_view(['GET'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+@renderer_classes((PhenotypeMatrixRenderer,JSONPhenotypeMatrixRenderer))
+def population_phenotype_value_matrix(request,q,format=None):
+    """
+    Phenotype value matrix for entire population. Replace q by "wild" or "sam" to download all phenotypes for either the wild or cultivated populations. Alternatively replace q by a certain population id to download all phenotypic values for a certain population.
+    ---
+    parameters:
+        - name: q
+          description: wild or sam or population id
+          required: true
+          type: string
+          paramType: path
+    produces:
+        - text/csv
+        - application/json
+        - application/plink
+    """
+    if q.lower()=="sam":
+        study = Study.objects.get(pk=2)
+        if request.method == "GET":
+            df,df_pivot = study.get_matrix_and_accession_map(sam=True)
+            if format=="json":
+                return Response(df_pivot.to_json())
+            else:
+                return Response(df_pivot.to_csv())
+    elif q.lower()=="wild":
+        study = Study.objects.get(pk=1)
+        if request.method == "GET":
+            df,df_pivot = study.get_matrix_and_accession_map()
+            if format=="json":
+                return Response(df_pivot.to_json())
+            else:
+                return Response(df_pivot.to_csv())
+    else:
+        pop = Population.objects.get(population_id=q)
+        if request.method == "GET":
+            df,df_pivot = pop.get_matrix_and_accession_map()
+            if format=="json":
+                return Response(df_pivot.to_json())
+            else:
+                return Response(df_pivot.to_csv())
+        
+
