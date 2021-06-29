@@ -18,7 +18,7 @@ Install HeliantHOME with `cd HeliantHome && pip install -r requirements.txt`
 
 ## Development
 
-Start the HeliantHOME server with `cd HeliantHome && ./manage runreserver` (will run on localhost:8000)
+Start the HeliantHOME server with `cd helianthome && ./manage runreserver` (will run on localhost:8000)
 
 
 Once you start HeliantHOME server a new browser window should open the frontend part. 
