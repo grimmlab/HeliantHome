@@ -138,11 +138,13 @@
 </div>
 
 <script>
+    var test;
+    var chart;
     $(function(){
         var cat_string = "{{category_list}}".replaceAll("&quot;",'"');
         var categories = JSON.parse(cat_string);
         const ctx = document.getElementById('phenotype_doughnut').getContext('2d');
-        const chart = new Chart(ctx, {
+        chart = new Chart(ctx, {
           type: 'doughnut',
           data: {
             labels: categories,
@@ -172,6 +174,14 @@
             }
           }
         });
+
+        $("#phenotype_doughnut").click( 
+            function(evt){
+                var activePoints = chart.getActiveElements(evt);
+                //TODO Forwarding
+            }
+        );                 
+
         var markers = {{ map_data|safe }};
         $('#world-map').vectorMap({map: 'us_aea', backgroundColor: "", 
             regionStyle: {
