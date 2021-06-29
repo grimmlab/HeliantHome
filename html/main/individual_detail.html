@@ -12,14 +12,14 @@
     <li class="breadcrumb-item"><a href="/individuals/">Individuals Overview</a></li>
     <li class="breadcrumb-item active" aria-current="page">Individual Detail</li>
   </ol>
-        <a href="/rest/individual/id/{{ind.individual_id}}/" target="_blank" class="btn btn-outline-info float-end">Download Individual Meta Data <i class="bi bi-download"></i></a>
+        <a id="download_meta" href="/rest/individual/id/{{ind.individual_id}}/" target="_blank" class="btn btn-outline-info float-end">Download Individual Meta Data <i class="bi bi-download"></i></a>
 </nav>
 
 <div class="container mt-2 container-fluid content-row">
 <div class="row">
 
 <div class="col-sm-12 col-md-6 pt-2">
-    <div class="card h-100">
+    <div class="card h-100" id="details">
       <div class="card-header">
         Details for Individual: <span class="fw-bold">{{ind.individual_id}}</span>
       </div>
@@ -130,7 +130,7 @@
                   </div>
                 </div>
               {% else %}
-                <a href="/data/individuals/{{ind.individual_id}}.tar.gz" class="btn btn-outline-info float-end"> <i class="bi bi-download me-3 fs-6"></i>Download high-quality images</a>
+                <a href="/data/individuals/{{ind.individual_id}}.tar.gz" id="download_images" class="btn btn-outline-info float-end"> <i class="bi bi-download me-3 fs-6"></i>Download high-quality images</a>
               {% for im in ind.plantimage_set.all %}
                     <figure class="figure m-2 p-2" style="max-width:280px">
                      <img src="{{im.thumb_filename}}" class="figure-img img-fluid rounded-3 img-thumbnail" alt="{{im.category}}">
@@ -182,6 +182,28 @@
             markers: {{ map_data|safe }}
         });
     });
+    if (RegExp('multipage', 'gi').test(window.location.search)) {
+        var steps = [
+            {
+                element: '#details',
+                intro: 'Detailed information about the individual/accession, including links to population',
+            },
+            {
+                element: '#download_meta',
+                intro: 'Here you can download meta-information about the individual',
+            },
+            {
+                element: '#download_images',
+                intro: 'Here you can download high-quality images of this individual',
+            },
+
+        ];
+        var intro = introJs();
+        intro.setOptions({doneLabel:'Done',steps:steps,"tooltipPosition":"top"});
+        intro.start().oncomplete(function() {
+          window.location.href = '/';
+        });
+    }
 </script>
 
 {% endblock content %}

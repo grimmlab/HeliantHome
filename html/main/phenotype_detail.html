@@ -13,7 +13,7 @@
     <li class="breadcrumb-item active" aria-current="page">Phenotype Detail</li>
   </ol>
 {% ifnotequal message "no_pheno" %}
-        <span class="float-end">
+        <span class="float-end" id="download_buttons">
         <a href="/rest/phenotype/id/{{pheno.id}}" target="_blank" class="btn btn-outline-info m-1">Meta Data <i class="bi bi-download"></i></a>
         <a href="/rest/phenotype/id/{{pheno.id}}/values" target="_blank" class="btn btn-outline-secondary m-1">Values as CSV <i class="bi bi-download"></i></a>
         <a href="/rest/phenotype/id/{{pheno.id}}/values.plink" target="_blank" class="btn btn-outline-success m-1">Values as PLINK <i class="bi bi-download"></i></a>
@@ -421,7 +421,11 @@
         var steps = [
             {
                 element: '#details',
-                intro: 'Detailed information about the phenotype.',
+                intro: 'Detailed information about the phenotype, including links to GWAS results on easyGWAS and links to ontologies etc.',
+            },
+            {
+                element: '#download_buttons',
+                intro: 'Here you can download meta-information about the phenotype as well as all phenotypic values for all available accessions/individuals in CSV and PLINK format. More download options can be found in the REST API',
             },
             {
                 element: '#histogram',
