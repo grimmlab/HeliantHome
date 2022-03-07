@@ -3,7 +3,7 @@ requests==2.25.1
 numpy==1.21.0
 scipy==1.2.3
 pandas
-django==4.0.3
+django==3.2.12
 python-decouple==3.4
 djangorestframework==3.12.2
 markdown==3.3.3
