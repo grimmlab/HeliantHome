@@ -27,5 +27,6 @@ Once you start HeliantHOME server a new browser window should open the frontend 
 ## Citation
 When using this work, please cite our publication:
 
-**HeliantHOME: a public centralized database Home of a comprehensive collection of phenotypes for different Sunflower species**  
-Natalia Bercovich, Nikita Genze, Marco Todesco, Gregory L. Owens, Jean-Sébastien Légaré, Kaichi Huang, Loren H. Rieseberg, Dominik G. Grimm
+**HeliantHOME a public and centralized database of phenotypic sunflower data**  
+Natalia Bercovich, Nikita Genze, Marco Todesco, Gregory L. Owens, Jean-Sébastien Légaré, Kaichi Huang, Loren H. Rieseberg, Dominik G. Grimm  
+Under preparation
