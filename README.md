@@ -1,7 +1,7 @@
 # HeliantHOME: a public centralized database Home of a comprehensive collection of phenotypes for different Sunflower species
 
 [![Python 3.8](https://img.shields.io/badge/Python-3.8-3776AB)](https://www.python.org/downloads/release/python-388/)
-[![Django 4.0.3](https://img.shields.io/badge/django-4.0.3-orange)](https://www.djangoproject.com)
+[![Django 3.2.12](https://img.shields.io/badge/django-3.2.12-orange)](https://www.djangoproject.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 HeliantHOME: a public and centralized database Home of a comprehensive collection of phenotypes for different Sunflower species.  
@@ -10,7 +10,7 @@ HeliantHOME: a public and centralized database Home of a comprehensive collectio
 
 ## Requirements
 
-HeliantHome requires Python 3.8 and Django 3.2.4 to be installed 
+HeliantHome requires Python 3.8 and Django 3.2.12 to be installed 
 
 ## Installation
 
