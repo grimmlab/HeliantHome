@@ -15,12 +15,12 @@ def marker_color(species):
         return "#3C813E"
         #return "#af1384"
     elif species == "Helianthus petiolaris subsp. fallax":
-        #return "#1a57e1"
-        return "#496A89"
+        return "#1a57e1"
     elif species == "Helianthus petiolaris subsp. petiolaris":
         return "#57AFA6"
     elif species == "Helianthus niveus subsp. canescens":
-        return "#496A89"
+        #return "#496A89"
+        return "#e36268"
     else:
         return "yellow"
 
