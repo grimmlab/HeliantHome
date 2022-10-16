@@ -279,6 +279,7 @@ class Phenotype(models.Model):
     type = models.PositiveSmallIntegerField(choices=PHENOTYPE_TYPE, blank=True, null=True,  db_index=True) #type/category of the phenotype
     description = models.TextField(blank=True, null=True)
     method = models.TextField(blank=True, null=True) #how was the scoring of the phenotype done
+    unit = models.TextField(blank=True, null=True) #how was the scoring of the phenotype done
     category = models.CharField(max_length=255, blank=True,null=True)
     sub_category = models.CharField(max_length=255, blank=True,null=True)
     shapiro_test_statistic = models.FloatField(blank=True, null=True) #Shapiro Wilk test for normality

@@ -184,6 +184,7 @@ def store_phenotype_values(filename,study):
                     pheno.type = p['type']
                     pheno.description = p['description']
                     pheno.method = p['method']
+                    pheno.unit = p['unit']
                     pheno.category = p['category']
                     pheno.sub_category = p['sub_category']
                     try:

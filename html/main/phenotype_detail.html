@@ -139,6 +139,42 @@
                 <span style="white-space:nowrap"><a href="{{pheno.ontology.get_info_url}}" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.ontology.name}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
                 </div>
             </div>
+            <div class="row">
+                <div class="col">
+                Unit:
+                </div>
+                <div class="col">
+                {% if pheno.unit == "leaves" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000189" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} (count unit) <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "branches" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000189" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} (count unit) <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "days" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_1000033" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "cm" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000015" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "mm" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000016" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "cm2" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000081" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "nm" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000018" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "ordinal scale 0-4" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000186" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "leaves/day" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000186" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "ligules/inflorescence" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000186" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "presence/absence" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0000186" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "mm2/mg" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0010006" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% elif pheno.unit == "trichomes/cm2" %}
+                    <span style="white-space:nowrap"><a href="http://purl.obolibrary.org/obo/UO_0010006" target="_blank" class="fw-lighter text-decoration-none"> {{pheno.unit}} <i class="bi bi-box-arrow-up-right m-1 fs-6"></i></a></span>
+                {% else %}
+                    No unit available
+                {% endif %}
+                </div>
+            </div>
             
             <div class="row pt-2">
                 <div class="col">
